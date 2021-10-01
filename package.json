@@ -1,6 +1,6 @@
 {
   "name": "adapcon-utils-js",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "utils for javascript",
   "main": "dist/adapcon-utils-js.ssr.js",
   "browser": "dist/adapcon-utils-js.esm.js",
