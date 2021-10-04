@@ -1,6 +1,6 @@
 {
   "name": "adapcon-utils-js",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "utils for javascript",
   "main": "dist/adapcon-utils-js.ssr.js",
   "browser": "dist/adapcon-utils-js.esm.js",
@@ -41,6 +41,7 @@
     "@babel/preset-env": "^7.15.6",
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-replace": "^3.0.0",
+    "aws-sdk": "^2.999.0",
     "core-js": "^3.18.1",
     "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
