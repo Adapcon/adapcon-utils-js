@@ -1,6 +1,5 @@
 // rollup.config.js
 import fs from 'fs';
-import path from 'path';
 import replace from '@rollup/plugin-replace';
 import babel from '@rollup/plugin-babel';
 import { terser } from 'rollup-plugin-terser';
@@ -10,22 +9,20 @@ import minimist from 'minimist';
 const esbrowserslist = fs.readFileSync('./.browserslistrc')
   .toString()
   .split('\n')
-  .filter((entry) => entry && entry.substring(0, 2) !== 'ie');
+  .filter(entry => entry && entry.substring(0, 2) !== 'ie');
 
 // Extract babel preset-env config, to combine with esbrowserslist
 const babelPresetEnvConfig = require('../babel.config')
-  .presets.filter((entry) => entry[0] === '@babel/preset-env')[0][1];
+  .presets.filter(entry => entry[0] === '@babel/preset-env')[0][1];
 
 const argv = minimist(process.argv.slice(2));
-
-const projectRoot = path.resolve(__dirname, '..');
 
 const baseConfig = {
   input: 'src/entry.js',
   plugins: {
     replace: {
       'process.env.NODE_ENV': JSON.stringify('production'),
-      preventAssignment: true
+      preventAssignment: true,
     },
     babel: {
       exclude: 'node_modules/**',
