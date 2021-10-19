@@ -1,0 +1,55 @@
+{
+  "name": "adapcon-utils-js",
+  "version": "0.0.10",
+  "description": "Utils library for Javascript",
+  "keywords": [],
+  "author": {
+    "name": "Adapcon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adapcon-team/adapcon-utils-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/adapcon-team/adapcon-utils-js/issues"
+  },
+  "main": "dist/",
+  "scripts": {
+    "start": "node -r dotenv/config dist/main",
+    "dev": "ts-node-dev --respawn --transpile-only --clear -r dotenv/config --inspect=0.0.0.0:9229 src/main",
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsc -p tsconfig-build.json",
+    "prepare": "husky install",
+    "check": "npm-check -s -u",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix",
+    "test": "jest --passWithNoTests --no-cache --runInBand",
+    "test:watch": "npm t -- --watch",
+    "test:staged": "npm t -- --findRelatedTests",
+    "test:coverage": "npm t -- --coverage"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1010.0"
+  },
+  "devDependencies": {
+    "@types/aws-sdk": "^2.7.0",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.7.13",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "dotenv": "^10.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard-with-typescript": "^21.0.1",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "husky": "^7.0.2",
+    "jest": "^27.1.1",
+    "lint-staged": "^11.1.2",
+    "ts-jest": "^27.0.5",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.4.2"
+  },
+  "engines": {
+    "node": "16.x"
+  }
+}
