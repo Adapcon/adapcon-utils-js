@@ -1,0 +1,32 @@
+name: pull-request
+
+on:
+  pull_request:
+    types: [opened, synchronize, edited, reopened]
+    branches-ignore:
+      - master
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+      - '*.md'
+      - '**/*.sql'
+      - '*.sql'
+
+jobs:
+  unitTests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Commit Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.x'
+
+      - name: npm install
+        run: npm ci
+
+      - name: Set force reload
+        run: npm run test
