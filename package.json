@@ -23,7 +23,6 @@
     "build": "run-p build:*",
     "build:main": "npm run clean && tsc -p tsconfig.json",
     "build:module": "npm run clean && tsc -p tsconfig.module.json",
-    "check": "npm-check -s -u",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "test": "jest --passWithNoTests --no-cache --runInBand",
