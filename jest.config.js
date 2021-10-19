@@ -18,5 +18,13 @@ module.exports = {
     '\\.ts$': 'ts-jest'
   },
   clearMocks: true,
-  setupFiles: ['dotenv/config']
+  setupFiles: ['dotenv/config'],
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 100
+    }
+  }
 }
