@@ -30,3 +30,9 @@ jobs:
 
       - name: npm run test
         run: npm run test
+
+      - name: coverage
+      - uses: artiomtr/jest-coverage-report-action@v2.0-rc.5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          threshold: 100
