@@ -14,7 +14,7 @@ on:
 
 jobs:
   unitTests:
-    name: Run tests
+    name: Tests from pull-request
     runs-on: ubuntu-latest
     steps:
       - name: Commit Checkout
@@ -28,5 +28,5 @@ jobs:
       - name: npm install
         run: npm ci
 
-      - name: Set force reload
+      - name: npm run test
         run: npm run test
