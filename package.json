@@ -13,12 +13,16 @@
   "bugs": {
     "url": "https://github.com/adapcon-team/adapcon-utils-js/issues"
   },
-  "main": "dist/",
+  "main": "build/main/index.js",
+  "typings": "build/main/index.d.ts",
+  "module": "build/module/index.js",
   "scripts": {
     "start": "node -r dotenv/config dist/main",
     "dev": "ts-node-dev --respawn --transpile-only --clear -r dotenv/config --inspect=0.0.0.0:9229 src/main",
     "clean": "rimraf dist",
-    "build": "npm run clean && tsc -p tsconfig-build.json",
+    "build": "run-p build:*",
+    "build:main": "npm run clean && tsc -p tsconfig.json",
+    "build:module": "npm run clean && tsc -p tsconfig.module.json",
     "check": "npm-check -s -u",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
@@ -43,6 +47,7 @@
     "eslint-plugin-promise": "^5.1.0",
     "git-commit-msg-linter": "^3.2.8",
     "jest": "^27.1.1",
+    "npm-run-all": "^4.1.5",
     "ts-jest": "^27.0.5",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.4.2"
