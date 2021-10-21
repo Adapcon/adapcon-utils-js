@@ -1,4 +1,4 @@
-import { isNumber } from '@/number'
+import { isNumber } from '../../src/number'
 
 describe('isNumber', () => {
   const validNumbers = [123, 1, 2, 5, Number(1), 100000000, 123.31]
