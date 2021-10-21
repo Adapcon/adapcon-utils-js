@@ -6,13 +6,12 @@ module.exports = {
   coverageDirectory: 'coverage',
   coverageProvider: 'babel',
   moduleNameMapper: {
-    '@/tests/(.+)': '<rootDir>/tests/$1',
     '@/(.+)': '<rootDir>/src/$1'
   },
   testMatch: ['**/*.test.ts'],
   roots: [
     '<rootDir>/src',
-    '<rootDir>/tests'
+    '<rootDir>/__tests__'
   ],
   transform: {
     '\\.ts$': 'ts-jest'
