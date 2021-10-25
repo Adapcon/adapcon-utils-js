@@ -31,6 +31,7 @@
     "test:coverage": "npm t -- --coverage"
   },
   "dependencies": {
+    "aws-dynamodb-factory-js": "^2.0.2",
     "aws-sdk": "^2.1010.0",
     "rimraf": "^3.0.2"
   },
