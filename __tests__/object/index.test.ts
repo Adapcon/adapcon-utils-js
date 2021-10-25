@@ -1,4 +1,4 @@
-import { isObject } from '../../src/object';
+import { isObject, objToStr } from '../../src/object';
 
 describe('isObject', () => {
   const validObjects = [{}, { music: 'on' }, { list: [1, 2, 3] }];
@@ -10,5 +10,15 @@ describe('isObject', () => {
 
   test.each(invalidObjects)('Should return false if parameter is not a object', (param) => {
     expect(isObject(param)).toEqual(false)
+  });
+});
+
+describe('objToStr', () => {
+  it('Should return the object formatted to a string', () => {
+    expect(objToStr({ error: 'Invalid value',  })).toEqual('{\"error\":\"Invalid value\"}')
+  });
+
+  it('Should return the object formatted to a string', () => {
+    expect(objToStr('Invalid value')).toEqual('Invalid value')
   });
 });
