@@ -47,7 +47,7 @@ describe('invoke', () => {
     expect(lambdaRespError({ status: 404, message: 'User Not Found' })).toEqual({ statusCode: 404, body: '{\"error\":\"User Not Found\"}' });
   });
 
-  it('Should returns lambda response error formatted with status coda and error', () => {
+  it('Should returns lambda response error formatted with status code and error', () => {
     expect(lambdaRespError({ statusCode: 404, error: { user: 'Not Found' }})).toEqual({ statusCode: 404, body: '{\"error\":{\"user\":\"Not Found\"}}' });
   });
 
