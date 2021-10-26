@@ -3,7 +3,7 @@ import dbClient from 'aws-dynamodb-factory-js';
 import { error } from '../../error';
 
 interface Params {
-  TableName?: any,
+  TableName: any,
   Key?: any,
   Limit?: number,
   ExclusiveStartKey?: object,
@@ -88,7 +88,7 @@ export class DynamoDBGenericDao {
     return data.reduce((acc: any, i) => acc.concat(i), []);
   }
 
-  static async put({ params = {} }: { params: Params }): Promise<object> {
+  static async put({ params }: { params: Params }): Promise<object> {
     try {
       await dbClient.doc().put(params).promise();
 
@@ -99,7 +99,7 @@ export class DynamoDBGenericDao {
     }
   }
 
-  static async update({ params = {} }: { params: Params }): Promise<any> {
+  static async update({ params }: { params: Params }): Promise<any> {
     try {
       await dbClient.doc().update(params).promise();
     } catch (err) {
@@ -107,7 +107,7 @@ export class DynamoDBGenericDao {
     }
   }
 
-  static async delete({ params = {} }: { params: Params }): Promise<object> {
+  static async delete({ params }: { params: Params }): Promise<object> {
     try {
       await dbClient.doc().delete(params).promise();
 
@@ -329,10 +329,10 @@ export class DynamoDBGenericDao {
     };
   }
 
-  static mountProjectionExpression({ fields = [], options = {} }: { fields?: Array<string>, options?: Params }): object {
+  static mountProjectionExpression({ fields = [], options }: { fields?: Array<string>, options?: Params }): object {
     if (fields.length > 0) {
       const ProjectionExpression = fields.map((_, index) => `#Projection_${index}`).join(',');
-      let { ExpressionAttributeNames } = options;
+      let { ExpressionAttributeNames } = options || {};
   
       if (!ExpressionAttributeNames) ExpressionAttributeNames = {};
   
