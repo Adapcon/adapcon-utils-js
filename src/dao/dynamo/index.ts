@@ -155,7 +155,9 @@ export class DynamoDBGenericDao {
 
   static async putBatch({ params, list }: { params: Params, list: Array<object> }): Promise<void> {
     let idx = 0;
+    
     // ? Pack 25 requests at a time (batchWrite limit)
+
     const packs: any = list.reduce((acc, param) => {
       if (acc[idx] && acc[idx].RequestItems[params.TableName].length >= 25) idx++;
 
