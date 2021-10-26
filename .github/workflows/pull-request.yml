@@ -24,6 +24,17 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '16.x'
+      
+      - name: Load AWS credentials
+        id: aws
+        run: sh .github/scripts/load-aws-env.sh '${{ toJson(secrets) }}'
+      
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ steps.aws.outputs.aws_key}}
+          aws-secret-access-key: ${{ steps.aws.outputs.aws_secret }}
+          aws-region: ${{ steps.aws.outputs.aws_region }}
 
       - name: npm install
         run: npm ci
