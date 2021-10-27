@@ -8,13 +8,21 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - name: Commit Checkout
+        uses: actions/checkout@v1
+      
+      - name: Set up node
+        uses: actions/setup-node@v1
         with:
           node-version: 14
-      - run: npm install
-      - run: npm run build
-      # - run: npm test
-      - uses: JS-DevTools/npm-publish@v1
+
+      - name: npm install
+        run: npm ci
+      
+      - name: npm run build
+        run: npm run build
+
+      - name: Publish new version in NPM
+        uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
