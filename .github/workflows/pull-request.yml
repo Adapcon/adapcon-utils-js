@@ -1,0 +1,46 @@
+name: pull-request
+
+on:
+  pull_request:
+    types: [opened, synchronize, edited, reopened]
+    branches-ignore:
+      - master
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+      - '*.md'
+      - '**/*.sql'
+      - '*.sql'
+
+jobs:
+  unitTests:
+    name: Tests from pull-request
+    runs-on: ubuntu-latest
+    steps:
+      - name: Commit Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.x'
+      
+      - name: Load AWS credentials
+        id: aws
+        run: sh .github/scripts/load-aws-env.sh '${{ toJson(secrets) }}'
+      
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ steps.aws.outputs.aws_key}}
+          aws-secret-access-key: ${{ steps.aws.outputs.aws_secret }}
+          aws-region: ${{ steps.aws.outputs.aws_region }}
+
+      - name: npm install
+        run: npm ci
+
+      - name: npm run test
+        run: npm run test
+
+      - name: npm run test:coverage
+        run: npm run test:coverage
