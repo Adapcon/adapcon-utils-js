@@ -1,1 +1,1 @@
-export const isNumber = (arg: number): boolean => !Number.isNaN(Number(arg))
+export const isNumber = (arg: any): boolean => !Number.isNaN(Number(arg))
