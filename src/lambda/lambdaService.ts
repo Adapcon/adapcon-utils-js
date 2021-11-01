@@ -5,7 +5,7 @@ import { formattedResponse } from './formatters';
 export class LambdaService {
   static async invoke({
     port = '',
-    region = 'us-east-1',
+    region = 'sa-east-1',
     functionName,
     invocationType = 'RequestResponse',
     headers = {},
