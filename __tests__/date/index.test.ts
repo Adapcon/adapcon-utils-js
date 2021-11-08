@@ -47,7 +47,7 @@ describe('changeDate', () => {
     ${new Date(1638327600000)}|${{millisecond: -3600}}|${new Date(1638327596400)}
     ${new Date(1636292510383)}|${{hour: -5, minute: -59}}|${new Date(1636270970383)}
     ${new Date(1609470000000)}|${{second: -1000}}|${new Date(1609469000000)}
-    ${new Date(2021,2)}|${{day: 1, millisecond: -1}}|${new Date(1614653999999)}
+    ${new Date(1614567600000)}|${{day: 1, millisecond: -1}}|${new Date(1614653999999)}
   `('returns $expected when $duration is added or reduced to $date', ({date,duration,expected}) => {
     expect(changeDate(date,duration)).toStrictEqual(expected)
   });
