@@ -1,12 +1,4 @@
-export interface Duration {
-  day?: number
-  month?: number
-  year?: number
-  hour?: number
-  minutes?: number
-  seconds?: number
-  milliseconds?: number
-}
+import type { Duration } from './duration'
 
 export const durationTypes = {
   day: 'Date',
@@ -24,10 +16,11 @@ export const increaseDate = (date: Date, duration: Duration): Date => {
 }
 
 export const decreaseDate = (date: Date, duration: Duration): Date => {
+  const decreases = {}
   for (const type in duration) {
-    duration[type] = duration[type] * -1
+    decreases[type] = duration[type] * -1
   }
-  date = changeDate(date, duration)
+  date = changeDate(date, decreases)
   return date
 }
 
