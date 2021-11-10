@@ -10,25 +10,26 @@ export const durationTypes = {
   millisecond: 'Milliseconds'
 }
 
-export const increaseDate = (date: Date, duration: Duration): Date => {
-  date = changeDate(date, duration)
-  return date
-}
+export const increaseDate = (date: Date, duration: Duration): Date => changeDate(date, duration)
 
 export const decreaseDate = (date: Date, duration: Duration): Date => {
   const decreases = {}
+
   for (const type in duration) {
     decreases[type] = duration[type] * -1
   }
-  date = changeDate(date, decreases)
-  return date
+
+  return changeDate(date, decreases)
 }
 
 export const changeDate = (date: Date, duration: Duration): Date => {
+  const updatedDate = date
+
   for (const type in duration) {
     const setDateType = `set${String(durationTypes[type])}`
     const getDateType = `get${String(durationTypes[type])}`
-    date[setDateType](Number(date[getDateType]()) + Number(duration[type]))
+    updatedDate[setDateType](Number(updatedDate[getDateType]()) + Number(duration[type]))
   }
-  return date
+
+  return updatedDate
 }
