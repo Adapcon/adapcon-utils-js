@@ -18,7 +18,7 @@ describe('invoke', () => {
      })).resolves.toEqual({status: 400, body: { code:  'undefined' }});
 
      */
-  });
+  })
 
   it('Should returns the function invoked with error', async () => {
     /**
@@ -35,7 +35,7 @@ describe('invoke', () => {
       isOffline: false,
     })).rejects.toBeTruthy();
     **/
-  });
+  })
 
   it('Should returns error to invoke without optional properties', async () => {
     /**
@@ -44,5 +44,5 @@ describe('invoke', () => {
       functionName: 'authenticate-api-generalValidateSession',
     })).rejects.toBeTruthy();
     **/
-  });
-});
+  })
+})
