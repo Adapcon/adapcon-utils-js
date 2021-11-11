@@ -21,7 +21,7 @@
     "dev": "ts-node-dev --respawn --transpile-only --clear -r dotenv/config --inspect=0.0.0.0:9229 src/main",
     "clean": "rimraf build",
     "build": "run-p build:*",
-    "build:main": "npm run clean && tsc -p tsconfig.json",
+    "build:main": "npm run clean && tsc -p tsconfig.main.json",
     "build:module": "npm run clean && tsc -p tsconfig.module.json",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
