@@ -3,8 +3,8 @@ import { Mailer } from '../../src/email'
 describe('send', () => {
   it('Should send an email with a simple message', async () => {
     await expect(Mailer.send({
-      from: 'test@homologacao.online',
-      to: ['test@homologacao.online'],
+      from: 'test@portaldocliente.online',
+      to: ['test@portaldocliente.online'],
       html: 'Test of email',
       subject: 'Email Test'
     })).resolves.toBeUndefined()
