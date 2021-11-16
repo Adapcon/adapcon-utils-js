@@ -26,7 +26,7 @@ export const lambdaRespError = (err: Error): ProxyResult => {
   err.statusCode = err.status || err.statusCode
   err.message = err.error || err.message
 
-  if (err && isNumber(err.statusCode)) return lambdaResp(err.statusCode || 500, (err.message) ? { error: err.message } : undefined)
+  if (err && isNumber(err.statusCode)) return lambdaResp(Number(err.statusCode), (err.message) ? { error: err.message } : undefined)
 
   return lambdaResp(500, (err.message) ? { error: err.message } : undefined)
 }
