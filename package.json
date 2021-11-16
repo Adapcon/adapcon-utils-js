@@ -1,6 +1,6 @@
 {
   "name": "adapcon-utils-js",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Utils library for Javascript",
   "keywords": [],
   "author": {
@@ -21,7 +21,7 @@
     "dev": "ts-node-dev --respawn --transpile-only --clear -r dotenv/config --inspect=0.0.0.0:9229 src/main",
     "clean": "rimraf build",
     "build": "run-p build:*",
-    "build:main": "npm run clean && tsc -p tsconfig.json",
+    "build:main": "npm run clean && tsc -p tsconfig.main.json",
     "build:module": "npm run clean && tsc -p tsconfig.module.json",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
@@ -36,10 +36,12 @@
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.85",
     "@types/aws-sdk": "^2.7.0",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.13",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "aws-lambda": "^1.0.7",
     "dotenv": "^10.0.0",
     "eslint": "^8.0.1",
     "eslint-config-standard-with-typescript": "^21.0.1",

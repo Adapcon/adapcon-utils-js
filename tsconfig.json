@@ -3,7 +3,7 @@
     "incremental": true,
     "target": "es2017",
     "outDir": "build/main",
-    "rootDir": "src",
+    "rootDirs": ["src", "__tests__"],
     "moduleResolution": "node",
     "module": "commonjs",
     "declaration": true,
@@ -46,7 +46,7 @@
     "types": ["node", "jest"],
     "typeRoots": ["node_modules/@types"],
   },
-  "include": ["src"],
+  "include": ["src", "./__tests__"],
   "exclude": ["node_modules/**"],
   "compileOnSave": false
 }
