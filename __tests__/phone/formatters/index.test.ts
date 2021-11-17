@@ -11,7 +11,7 @@ describe('formatPhone', () => {
     { input: '', output: '' }
   ]
 
-  test.each(data)('Should return the word with the first letter capitalize', (param) => {
+  test.each(data)('Should return the phone number formatted', (param) => {
     expect(formatPhone(param.input)).toBe(param.output)
   })
 })
