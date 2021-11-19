@@ -1,2 +1,2 @@
-export * from './lambdaService';
-export * from './formatters';
+export * from './lambdaService'
+export * from './formatters'
