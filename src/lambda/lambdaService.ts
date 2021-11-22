@@ -1,9 +1,10 @@
-import AWS from 'aws-sdk';
+import AWS from 'aws-sdk'
 
-import { formattedResponse } from './formatters';
+import { formattedResponse } from './formatters'
 
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class LambdaService {
-  static async invoke({
+  static async invoke ({
     port = '',
     region = 'sa-east-1',
     functionName,
@@ -12,26 +13,28 @@ export class LambdaService {
     body = {},
     pathParameters = {},
     queryStringParameters = {},
-    isOffline = false,
+    isOffline = false
   }: {
-    port?: string,
-    region?: string,
-    functionName: string,
-    invocationType?: string,
-    headers?: object,
-    body?: object,
-    pathParameters?: object,
-    queryStringParameters?: object,
-    isOffline?: boolean,
+    port?: string
+    region?: string
+    functionName: string
+    invocationType?: string
+    headers?: object
+    body?: object
+    pathParameters?: object
+    queryStringParameters?: object
+    isOffline?: boolean
   }): Promise<object> {
     try {
       const lambda = new AWS.Lambda({
         region,
-        ...(isOffline ? {
-          region: 'localhost',
-          endpoint: `http://localhost:${port}`,
-        } : {}),
-      });
+        ...(isOffline
+          ? {
+              region: 'localhost',
+              endpoint: `http://localhost:${port}`
+            }
+          : {})
+      })
 
       const response = await lambda.invoke({
         FunctionName: functionName,
@@ -41,15 +44,15 @@ export class LambdaService {
             headers,
             body,
             pathParameters,
-            queryStringParameters,
-          }),
-        ),
-      }).promise();
+            queryStringParameters
+          })
+        )
+      }).promise()
 
-      return formattedResponse(response);
+      return formattedResponse(response)
     } catch (error) {
-      console.log('Error LambdaService invoke', error);
-      throw error;
+      console.log('Error LambdaService invoke', error)
+      throw error
     }
   }
 };
