@@ -1,3 +1,4 @@
+export * from './cpfCnpj'
 export * from './dao'
 export * from './date'
 export * from './email'
