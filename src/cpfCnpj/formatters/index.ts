@@ -8,3 +8,13 @@ export const formatCnpj = (cnpj: string): string => {
   cnpj = cnpj.replace(/(\d{4})(\d)/, '$1-$2')
   return cnpj
 }
+
+export const formatCpf = (cpf: string): string => {
+  if (typeof cpf !== 'string' || cpf.length !== 11) return ''
+
+  cpf = cpf.replace(/\D/g, '');
+  cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+  cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+  cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+  return cpf;
+}
