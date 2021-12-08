@@ -21,7 +21,7 @@ export const isCpf = (cpf: string): boolean => {
   const firstCalc = calcDigitsPositionsCpf(firstNumbers)
   // do second calc init by 10 position
   const secondCalc = calcDigitsPositionsCpf(firstCalc, 11)
-  // concat the second digit on cnpj
+  // concat the second digit on cpf
   const cnpjCalculated = secondCalc
   // verify if cpf is the same from param
   if (cnpjCalculated === cpf) return true

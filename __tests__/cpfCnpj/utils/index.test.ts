@@ -40,10 +40,10 @@ describe('calcDigitsPositionsCpf', () => {
     { input: '3739505001', output: '37395050010' }
   ]
 
-  test.each(firstCalc)('Should return cnpj with first digit calculated', (param) => {
+  test.each(firstCalc)('Should return cpf with first digit calculated', (param) => {
     expect(calcDigitsPositionsCpf(param.input)).toBe(param.output)
   })
-  test.each(secondCalc)('Should return cnpj with two digits calculated', (param) => {
+  test.each(secondCalc)('Should return cpf with two digits calculated', (param) => {
     expect(calcDigitsPositionsCpf(param.input, 11)).toBe(param.output)
   })
 })
