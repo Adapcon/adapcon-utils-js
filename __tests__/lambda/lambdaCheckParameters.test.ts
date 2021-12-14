@@ -24,6 +24,20 @@ describe('lambdaCheckParameters', () => {
       },
       indexes: ['auth', 'app', 'body'],
       output: {}
+    },
+    {
+      eventObject: {
+        app: 'theAppId',
+        auth: 'zyx',
+        body: {
+          data1: 'data1',
+          data2: 'data2',
+          data3: 'data3'
+        },
+        date: 1639423222426
+      },
+      indexes: ['auth', 'app', 'date'],
+      output: {}
     }
   ]
 
@@ -41,7 +55,7 @@ describe('lambdaCheckParameters', () => {
         date: 1639423222426
       },
       indexes: ['auth', 'app', 'body'],
-      output: { body: { error: 'undefined' } }
+      output: { body: 'undefined' }
     },
     {
       eventObject: {
@@ -49,12 +63,21 @@ describe('lambdaCheckParameters', () => {
         date: 1639423222426
       },
       indexes: ['auth', 'app', 'body'],
-      output: { auth: { error: 'undefined' }, body: { error: 'undefined' } }
+      output: { auth: 'undefined', body: 'undefined' }
     },
     {
       eventObject: {},
       indexes: ['auth', 'app'],
-      output: { param: 'Object is empty' }
+      output: { object: 'undefined' }
+    },
+    {
+      eventObject: {
+        auth: {},
+        app: '',
+        date: 1639423222426
+      },
+      indexes: ['auth', 'app'],
+      output: {}
     }
   ]
 
