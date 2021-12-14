@@ -76,9 +76,56 @@ describe('lambdaGetParameters', () => {
       eventParams: {
         date: 'queryParameters'
       },
+      output: {}
+    },
+    {
+      event: {
+        pathParameters: {
+          auth: 'xyz',
+          app: 'theAppId'
+        }
+      },
+      eventParams: {},
+      output: {}
+    },
+    {
+      event: {
+        body: {
+          key1: 'data1',
+          key2: 'data2',
+          key3: 'data3'
+        }
+      },
+      eventParams: {
+        body: 'body'
+      },
       output: {
-        date: undefined
+        body: {
+          key1: 'data1',
+          key2: 'data2',
+          key3: 'data3'
+        }
       }
+    },
+    {
+      event: {},
+      eventParams: {},
+      output: {}
+    },
+    {
+      event: {
+        pathParameters: {
+          auth: 'xyz',
+          app: 'theAppId'
+        },
+        queryParameters: {
+          date: 1639423222426
+        }
+      },
+      eventParams: {
+        auth: 'zyx'
+      },
+      output: {}
     }
   ]
 

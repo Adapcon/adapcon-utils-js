@@ -2,7 +2,13 @@ export const lambdaGetParameters = ({ event, eventParams }: any): object => {
   const fedParams = {}
 
   for (const element in eventParams) {
-    fedParams[element] = eventParams[element] === 'body' ? event?.[eventParams[element]] : event?.[eventParams[element]]?.[element]
+    const path: string = eventParams[element]
+
+    if (path in event) {
+      const eventPathObject: object = event[path]
+      const fedParam: any = path === 'body' ? eventPathObject : eventPathObject[element]
+      fedParams[element] = fedParam
+    }
   }
 
   return fedParams
