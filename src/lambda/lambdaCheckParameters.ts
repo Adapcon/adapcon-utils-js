@@ -1,15 +1,13 @@
-import type { LambdaErrors } from './interfaces'
-
 export const lambdaCheckParameters = (object: object, indexes: string[]): object => {
-  const errors: LambdaErrors = {}
+  const errors = {}
   if (Object.keys(object).length > 0 && indexes.length > 0) {
     indexes.forEach(index => {
-      errors[index] = { ...(!object[index] ? { error: 'undefined' } : '') }
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      if (index in object) delete errors[index]
+      if (!(index in object)) {
+        errors[index] = 'undefined'
+      }
     })
-  } else {
-    errors.param = 'Object is empty'
+    return errors
   }
-  return errors
+
+  return { object: 'undefined' }
 }
