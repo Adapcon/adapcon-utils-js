@@ -1,0 +1,6 @@
+export const MESSAGE_UNAUTHORIZED = 'Unauthorized'
+export const MESSAGE_INVALID_SESSION = 'Invalid Session'
+export const MESSAGE_NOTFOUND = 'Not Found'
+export const MESSAGE_FORBIDDEN = 'Forbidden'
+export const MESSAGE_USER_NOT_FOUND = 'Usuário não encontrado'
+export const MESSAGE_INTEGRATION_ERROR = 'Ocorreu um erro de integração'
