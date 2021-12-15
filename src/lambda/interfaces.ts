@@ -1,5 +1,6 @@
-export interface LambdaResp {
-  statusCode: (number|undefined)
+export interface Error {
+  status?: number
+  statusCode?: number
+  error?: any
   message?: string
-  body?: object
 }
