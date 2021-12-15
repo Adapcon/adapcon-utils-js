@@ -1,4 +1,4 @@
-import { formatPhone } from '../../../src/phone'
+import { formatPhone } from '../../src/phone'
 
 describe('formatPhone', () => {
   const data = [
