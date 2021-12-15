@@ -1,4 +1,4 @@
-import { formatCnpj, formatCpf } from '../../../src/cpfCnpj'
+import { formatCnpj, formatCpf } from '../../src/cpfCnpj'
 
 describe('formatCnpj', () => {
   const validCnpj = [

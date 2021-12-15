@@ -1,4 +1,4 @@
-import { isCnpj, isCpf } from '../../../src/cpfCnpj'
+import { isCnpj, isCpf } from '../../src/cpfCnpj'
 
 describe('isCnpj', () => {
   const validCnpj = [

@@ -1,4 +1,4 @@
-import { calcDigitsPositionsCnpj, calcDigitsPositionsCpf } from '../../../src/cpfCnpj/utils'
+import { calcDigitsPositionsCnpj, calcDigitsPositionsCpf } from '../../src/cpfCnpj/utils'
 
 describe('calcDigitsPositionsCnpj', () => {
   const firstCalc = [
