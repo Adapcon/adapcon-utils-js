@@ -1,4 +1,4 @@
-import { lambdaGetParameters } from '../../src/lambda/lambdaGetParameters'
+import { lambdaGetParameters } from '../../src/lambda'
 
 describe('lambdaGetParameters', () => {
   const data = [
