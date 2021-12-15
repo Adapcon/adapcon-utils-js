@@ -1,4 +1,4 @@
-import { lambdaCheckParameters } from '../../src/lambda/lambdaCheckParameters'
+import { lambdaCheckParameters } from '../../src/lambda'
 
 describe('lambdaCheckParameters', () => {
   const data = [
