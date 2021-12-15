@@ -1,4 +1,5 @@
-export const lambdaGetParameters = ({ event, eventParams }: any): object => {
+import { camelize } from './../string/formatters/index';
+export const lambdaGetParameters = (event: object, eventParams: object): object => {
   const fedParams = {}
 
   for (const element in eventParams) {
@@ -7,7 +8,11 @@ export const lambdaGetParameters = ({ event, eventParams }: any): object => {
     if (path in event) {
       const eventPathObject: object = event[path]
       const fedParam: any = path === 'body' ? eventPathObject : eventPathObject[element]
-      fedParams[element] = fedParam
+      if (path === 'headers'){
+        fedParams[camelize(element)] = fedParam
+      }
+      else fedParams[element] = fedParam
+      
     }
   }
 
