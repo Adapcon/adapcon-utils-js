@@ -1,4 +1,4 @@
-import { isString } from '../../../src/string'
+import { isString } from '../../src/string'
 
 describe('isString', () => {
   const validStrings = ['cookie', '- 2', '5', String(1), '1 3 5', '123.31', '"1"']
