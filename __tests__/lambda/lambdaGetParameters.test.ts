@@ -126,6 +126,35 @@ describe('lambdaGetParameters', () => {
         auth: 'zyx'
       },
       output: {}
+    },
+    {
+      event: {
+        headers: {
+          test: 'adsd-aads',
+          'test-kebab-case': 42
+        },
+        pathParameters: {
+          auth: 'xyz',
+          app: 'theAppId'
+        },
+        queryParameters: {
+          date: 1639423222426
+        }
+      },
+      eventParams: {
+        auth: 'pathParameters',
+        app: 'pathParameters',
+        date: 'queryParameters',
+        test: 'headers',
+        'test-kebab-case': 'headers'
+      },
+      output: {
+        auth: 'xyz',
+        app: 'theAppId',
+        date: 1639423222426,
+        test: 'adsd-aads',
+        testKebabCase: 42
+      }
     }
   ]
 

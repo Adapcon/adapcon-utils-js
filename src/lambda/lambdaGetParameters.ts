@@ -8,9 +8,11 @@ export const lambdaGetParameters = (event: object, eventParams: object): object 
     if (path in event) {
       const eventPathObject: object = event[path]
       const fedParam: any = path === 'body' ? eventPathObject : eventPathObject[element]
+      let paramKey: string = element
       if (path === 'headers') {
-        fedParams[kebabCaseToCamelCase(element)] = fedParam
-      } else fedParams[element] = fedParam
+        paramKey = kebabCaseToCamelCase(element)
+      }
+      fedParams[paramKey] = fedParam
     }
   }
 
