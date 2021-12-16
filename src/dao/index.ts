@@ -1,1 +1,2 @@
-export * from './dynamo';
+export * from './dynamo'
+export * from './interfaces'
