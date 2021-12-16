@@ -1,8 +1,8 @@
-import { Mailer } from '../../src/email'
+import { awsSES, bodyTemplate } from '../../src/email'
 
 describe('send', () => {
   it('Should send an email with a simple message', async () => {
-    await expect(Mailer.send({
+    await expect(awsSES.send({
       from: 'test@portaldocliente.online',
       to: ['test@portaldocliente.online'],
       html: 'Test of email',
@@ -11,7 +11,7 @@ describe('send', () => {
   })
 
   it('Should return error for a incorrect sending email', async () => {
-    await expect(Mailer.send({
+    await expect(awsSES.send({
       from: 'test@portaldocliente',
       to: ['test@portaldocliente.online'],
       html: 'Test of email',
@@ -20,16 +20,16 @@ describe('send', () => {
   })
 
   it('Should return error for required params blank', async () => {
-    await expect(Mailer.send({
+    await expect(awsSES.send({
       from: '',
       to: [],
       html: '',
       subject: ''
     })).rejects.toEqual({
       error: {
-        from: 'undefined',
-        html: 'undefined',
-        subject: 'undefined',
+        from: 'null',
+        html: 'null',
+        subject: 'null',
         to: 'is empty'
       },
       statusCode: 400
@@ -39,14 +39,13 @@ describe('send', () => {
 
 describe('bodyTemplate', () => {
   it('Should send an email with a simple message', () => {
-    expect(Mailer.bodyTemplate('Test', 'Adapcon')).toBe(`
-      <body style=\"background:#fff; padding:0 20px; color:#555; font-family: Arial, Helvetica, sans-serif; font-weight:200;\">
+    expect(bodyTemplate('Test', 'Adapcon')).toBe(`
+      <body style="background:#fff; padding:0 20px; color:#555; font-family: Arial, Helvetica, sans-serif; font-weight:200;">
         <h2>Olá.</h2>
         <div>Test</div>
         <p>Qualquer dúvida estamos a disposição.</p>
         <p>Att.</p>
         Adapcon
-      </body>
-    `)
+      </body>`)
   })
 })
