@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter,kebabCaseToCamelCase } from '../../src/string'
+import { capitalizeFirstLetter, kebabCaseToCamelCase } from '../../src/string'
 
 describe('capitalizeFirstLetter', () => {
   const data = [{ input: 'teste', output: 'Teste' }, { input: 'TESTE', output: 'TESTE' }, { input: 'alan Reno Neves', output: 'Alan Reno Neves' }]
