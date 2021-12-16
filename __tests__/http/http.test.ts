@@ -1,103 +1,97 @@
-import { getDefaultResponse } from '../../src/http'
+import { getDefaultResponse, HttpNames } from '../../src/http'
 
 describe('getDefaultResponse', () => {
+  console.log(HttpNames)
   const data = [
     {
-      name: 'success',
+      name: HttpNames.success,
       output: {
         statusCode: 200,
         message: 'Success'
       }
     },
     {
-      name: 'created',
+      name: HttpNames.created,
       output: {
         statusCode: 201,
         message: 'Record Created'
       }
     },
     {
-      name: 'accepted',
+      name: HttpNames.accepted,
       output: {
         statusCode: 202,
         message: 'Request Accepted'
       }
     },
     {
-      name: 'badRequest',
+      name: HttpNames.badRequest,
       output: {
         statusCode: 400,
         message: 'Something went wrong'
       }
     },
     {
-      name: 'unauthorized',
+      name: HttpNames.unauthorized,
       output: {
         statusCode: 401,
         message: 'Unauthorized'
       }
     },
     {
-      name: 'invalidSession',
+      name: HttpNames.invalidSession,
       output: {
         statusCode: 401,
         message: 'Invalid Session'
       }
     },
     {
-      name: 'forbidden',
+      name: HttpNames.forbidden,
       output: {
         statusCode: 403,
         message: 'Forbidden'
       }
     },
     {
-      name: 'notFound',
+      name: HttpNames.notFound,
       output: {
         statusCode: 404,
         message: 'Not Found'
       }
     },
     {
-      name: 'userNotFound',
+      name: HttpNames.userNotFound,
       output: {
         statusCode: 404,
         message: 'User not found'
       }
     },
     {
-      name: 'integrationError',
+      name: HttpNames.integrationError,
       output: {
         statusCode: 406,
         message: 'An integration error occurred'
       }
     },
     {
-      name: 'teaPot',
+      name: HttpNames.teaPot,
       output: {
         statusCode: 418,
         message: 'Can\'t get it done'
       }
     },
     {
-      name: 'unprocessableEntity',
+      name: HttpNames.unprocessableEntity,
       output: {
         statusCode: 422,
         message: 'Validation error'
       }
     },
     {
-      name: 'internalError',
+      name: HttpNames.internalError,
       output: {
         statusCode: 500,
         message: 'I messed up (not your fault)'
-      }
-    },
-    {
-      name: 'anotherInvalidMessage',
-      output: {
-        statusCode: 418,
-        message: 'Can\'t get it done'
       }
     }
   ]

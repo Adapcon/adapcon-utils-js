@@ -1,6 +1,6 @@
-import { HttpMessages, HttpStatuses } from './enums'
+import { HttpMessages, HttpStatuses, HttpNames } from './enums'
 
-export const getDefaultResponse = (name: string): object => {
+export const getDefaultResponse = (name: HttpNames): object => {
   const defaultResponse: object = {
     statusCode: HttpStatuses[name] ?? HttpStatuses.teaPot,
     message: HttpMessages[name] ?? HttpMessages.teaPot
