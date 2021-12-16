@@ -77,7 +77,7 @@ describe('lambdaCheckParameters', () => {
         date: 1639423222426
       },
       indexes: ['auth', 'app'],
-      output: {}
+      output: { app: 'null' }
     }
   ]
 
