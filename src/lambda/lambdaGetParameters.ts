@@ -1,4 +1,4 @@
-import { camelize } from './../string/formatters/index';
+import { kebabCaseToCamelCase } from './../string/formatters';
 export const lambdaGetParameters = (event: object, eventParams: object): object => {
   const fedParams = {}
 
@@ -9,7 +9,7 @@ export const lambdaGetParameters = (event: object, eventParams: object): object 
       const eventPathObject: object = event[path]
       const fedParam: any = path === 'body' ? eventPathObject : eventPathObject[element]
       if (path === 'headers'){
-        fedParams[camelize(element)] = fedParam
+        fedParams[kebabCaseToCamelCase(element)] = fedParam
       }
       else fedParams[element] = fedParam
       
