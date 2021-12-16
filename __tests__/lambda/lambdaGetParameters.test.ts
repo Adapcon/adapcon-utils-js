@@ -130,6 +130,6 @@ describe('lambdaGetParameters', () => {
   ]
 
   test.each(data)('Should return an populated object, with parameters passed on eventParams', (param) => {
-    expect(lambdaGetParameters({ event: param.event, eventParams: param.eventParams })).toStrictEqual(param.output)
+    expect(lambdaGetParameters(param.event, param.eventParams)).toStrictEqual(param.output)
   })
 })
