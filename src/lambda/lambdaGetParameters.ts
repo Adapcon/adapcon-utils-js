@@ -1,4 +1,5 @@
-export const lambdaGetParameters = ({ event, eventParams }: any): object => {
+import { kebabCaseToCamelCase } from './../string/formatters'
+export const lambdaGetParameters = (event: object, eventParams: object): object => {
   const fedParams = {}
 
   for (const element in eventParams) {
@@ -7,7 +8,11 @@ export const lambdaGetParameters = ({ event, eventParams }: any): object => {
     if (path in event) {
       const eventPathObject: object = event[path]
       const fedParam: any = path === 'body' ? eventPathObject : eventPathObject[element]
-      fedParams[element] = fedParam
+      let paramKey: string = element
+      if (path === 'headers') {
+        paramKey = kebabCaseToCamelCase(element)
+      }
+      fedParams[paramKey] = fedParam
     }
   }
 
