@@ -32,4 +32,4 @@ export const calcDigitsPositionsCpf = (digits: string, positions = 10, sumDigits
   if (equalDigits) return '0'
 
   return digits + String(sumDigits)
-};
+}

@@ -1,4 +1,4 @@
-import { calcDigitsPositionsCnpj, calcDigitsPositionsCpf } from '../utils'
+import { calcDigitsPositionsCnpj, calcDigitsPositionsCpf } from './utils'
 
 export const isCnpj = (cnpj: string): boolean => {
   // get first 12 numbers from cnpj
