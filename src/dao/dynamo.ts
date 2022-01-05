@@ -43,7 +43,7 @@ const query = async ({
   return newItemsList
 }
 
-const getAll = async ({ params, list, fields = [] }: { params: DynamodbParams, list: object[], fields?: string[] }): Promise<any[]> => {
+const getAll = async ({ params, list, fields = [] }: { params: DynamodbParams, list: object[], fields?: string[] }) => {
   let idx = 0
 
   // ? Pack 25 requests at a time (batchGet limit)
