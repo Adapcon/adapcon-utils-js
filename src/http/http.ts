@@ -1,4 +1,5 @@
-import { HttpMessages, HttpStatuses, HttpNames } from './enums'
+import { HttpMessages, HttpStatuses } from './enums'
+import { HttpNames } from './types'
 
 export const getDefaultResponse = (name: HttpNames): object => {
   const statusCode = HttpStatuses[name]

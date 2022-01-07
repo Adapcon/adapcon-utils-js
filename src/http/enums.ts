@@ -29,19 +29,3 @@ export enum HttpStatuses {
   unprocessableEntity = 422,
   internalError = 500,
 }
-
-export enum HttpNames {
-  success = 'success',
-  created = 'created',
-  accepted = 'accepted',
-  badRequest = 'badRequest',
-  unauthorized = 'unauthorized',
-  invalidSession = 'invalidSession',
-  forbidden = 'forbidden',
-  notFound = 'notFound',
-  userNotFound = 'userNotFound',
-  integrationError = 'integrationError',
-  teaPot = 'teaPot',
-  unprocessableEntity = 'unprocessableEntity',
-  internalError = 'internalError',
-}
