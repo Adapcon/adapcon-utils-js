@@ -1,5 +1,5 @@
-import { lambdaGetParameters } from '../lambda/lambdaGetParameters'
-import { Event } from '../lambda/interfaces'
+import { lambdaGetParameters } from './lambdaGetParameters'
+import { Event } from './interfaces'
 
 export const lambdaCrudHandler = (event: Event): object => {
   return switchMethod(event)

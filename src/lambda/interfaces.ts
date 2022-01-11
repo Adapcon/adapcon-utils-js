@@ -5,18 +5,16 @@ export interface Error {
   message?: string
 }
 export interface Event {
-    body: any
-    headers: object
-    httpMethod: string
-    isBase64Encoded: boolean
-    multiValueHeaders: object
-    multiValueQueryStringParameters: object
-    path: string
-    pathParameters: object
-    queryStringParameters: object
-    requestContext: object
-    resource: string
-    stageVariables: object
+  body: any
+  headers: object
+  httpMethod: string
+  isBase64Encoded: boolean
+  multiValueHeaders: object
+  multiValueQueryStringParameters: object
+  path: string
+  pathParameters: object
+  queryStringParameters: object
+  requestContext: object
+  resource: string
+  stageVariables: object
 }
-  
-  
