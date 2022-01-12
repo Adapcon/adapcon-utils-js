@@ -1,11 +1,13 @@
 import { lambdaGetParameters } from './lambdaGetParameters'
-import { Event } from './interfaces'
+import { APIGatewayEvent } from 'aws-lambda'
+import { error } from '../error'
+import { getDefaultResponse, HttpNames } from '../http'
 
-export const lambdaCrudHandler = (event: Event): object => {
+export const lambdaCrudHandler = (event: APIGatewayEvent): object => {
   return switchMethod(event)
 }
 
-const switchMethod = (event: Event): object => {
+const switchMethod = (event: APIGatewayEvent): object => {
   const { httpMethod } = event
 
   switch (httpMethod) {
@@ -21,12 +23,15 @@ const switchMethod = (event: Event): object => {
     case 'DELETE':
       return deleteEvent(event)
 
-    default:
-      throw new Error()
+    default: {
+      const notImplemented = getDefaultResponse('notImplemented' as HttpNames)
+      // eslint-disable-next-line @typescript-eslint/no-throw-literal
+      throw error(notImplemented.statusCode, notImplemented.message)
+    }
   }
 }
 
-const getEvent = (event: Event): object => {
+const getEvent = (event: APIGatewayEvent): object => {
   const parameters = lambdaGetParameters(event,
     {
       sort: 'headers',
@@ -45,7 +50,7 @@ const getEvent = (event: Event): object => {
   }
 }
 
-const postEvent = (event: Event): object => {
+const postEvent = (event: APIGatewayEvent): object => {
   const parameters = lambdaGetParameters(event,
     {
       body: 'body'
@@ -57,7 +62,7 @@ const postEvent = (event: Event): object => {
   }
 }
 
-const putEvent = (event: Event): object => {
+const putEvent = (event: APIGatewayEvent): object => {
   const parameters = lambdaGetParameters(event,
     {
       body: 'body'
@@ -69,7 +74,7 @@ const putEvent = (event: Event): object => {
   }
 }
 
-const deleteEvent = (event: Event): object => {
+const deleteEvent = (event: APIGatewayEvent): object => {
   const parameters = lambdaGetParameters(event,
     {
       body: 'body'

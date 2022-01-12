@@ -12,6 +12,7 @@ export enum HttpMessages {
   teaPot = 'Can\'t get it done',
   unprocessableEntity = 'Validation error',
   internalError = 'I messed up (not your fault)',
+  notImplemented = 'The server does not support the functionality required to fulfill the request'
 }
 
 export enum HttpStatuses {
@@ -28,4 +29,5 @@ export enum HttpStatuses {
   teaPot = 418,
   unprocessableEntity = 422,
   internalError = 500,
+  notImplemented = 501
 }
