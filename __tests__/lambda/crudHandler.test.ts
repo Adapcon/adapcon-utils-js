@@ -1,193 +1,192 @@
-import { lambdaCrudHandler } from "../../src/lambda";
-import { APIGatewayEvent } from "aws-lambda";
+import { lambdaCrudHandler } from '../../src/lambda'
+import { APIGatewayEvent } from 'aws-lambda'
 
 const defaultValueEvent = {
   isBase64Encoded: false,
   multiValueHeaders: {},
   multiValueQueryStringParameters: {},
-  path: "",
+  path: '',
   queryStringParameters: {},
   requestContext: {
-    accountId: "",
-    apiId: "",
+    accountId: '',
+    apiId: '',
     authorizer: {
       claims: undefined,
       scopes: undefined,
-      principalId: "",
+      principalId: ''
     },
-    domainName: "",
-    domainPrefix: "",
-    extendedRequestId: "",
-    httpMethod: "",
+    domainName: '',
+    domainPrefix: '',
+    extendedRequestId: '',
+    httpMethod: '',
     identity: {
       accessKey: null,
-      accountId: "",
-      apiKey: "",
-      apiKeyId: "",
-      caller: "",
-      cognitoAuthenticationProvider: "",
-      cognitoAuthenticationType: "",
-      cognitoIdentityId: "",
-      cognitoIdentityPoolId: "",
+      accountId: '',
+      apiKey: '',
+      apiKeyId: '',
+      caller: '',
+      cognitoAuthenticationProvider: '',
+      cognitoAuthenticationType: '',
+      cognitoIdentityId: '',
+      cognitoIdentityPoolId: '',
       principalOrgId: null,
-      sourceIp: "",
-      user: "",
-      userAgent: "",
-      userArn: "",
+      sourceIp: '',
+      user: '',
+      userAgent: '',
+      userArn: '',
       clientCert: {
-        clientCertPem: "",
-        serialNumber: "",
-        subjectDN: "",
-        issuerDN: "",
+        clientCertPem: '',
+        serialNumber: '',
+        subjectDN: '',
+        issuerDN: '',
         validity: {
-          notAfter: "",
-          notBefore: "",
-        },
-      },
+          notAfter: '',
+          notBefore: ''
+        }
+      }
     },
-    path: "",
-    protocol: "",
-    requestId: "",
-    requestTime: "",
+    path: '',
+    protocol: '',
+    requestId: '',
+    requestTime: '',
     requestTimeEpoch: 1641927496169,
-    resourceId: "",
-    resourcePath: "",
-    stage: "",
+    resourceId: '',
+    resourcePath: '',
+    stage: ''
   },
-  resource: "",
-  stageVariables: {},
-};
+  resource: '',
+  stageVariables: {}
+}
 
-describe("lambdaCrudHandler", () => {
-  const param: { event: APIGatewayEvent; output: {} }[] = [
+describe('lambdaCrudHandler', () => {
+  const param: Array<{ event: APIGatewayEvent, output: {} }> = [
     {
       event: {
         body: JSON.stringify({
-          liveId: "c94f0038e5429e65337a2640529faddf",
-          entityCode: "26855624000184",
+          liveId: 'c94f0038e5429e65337a2640529faddf',
+          entityCode: '26855624000184',
           Infos:
             {
-              item: "14936",
-              quantity: "4",
-              value: 7.11,
-            },
+              item: '14936',
+              quantity: '4',
+              value: 7.11
+            }
         }),
         pathParameters: {},
         headers: {},
-        httpMethod: "PUT",
-        ...defaultValueEvent,
+        httpMethod: 'PUT',
+        ...defaultValueEvent
       },
       output: {
-        httpMethod: "PUT",
+        httpMethod: 'PUT',
         body: JSON.stringify({
-          liveId: "c94f0038e5429e65337a2640529faddf",
-          entityCode: "26855624000184",
+          liveId: 'c94f0038e5429e65337a2640529faddf',
+          entityCode: '26855624000184',
           Infos: {
-            item: "14936",
-            quantity: "4",
-            value: 7.11,
-          },
-        }),
-      },
+            item: '14936',
+            quantity: '4',
+            value: 7.11
+          }
+        })
+      }
     },
     {
       event: {
         body: JSON.stringify({
-          liveId: "c94f0038e5429e65337a2640529faddf",
-          entityCode: "26855624000184",
+          liveId: 'c94f0038e5429e65337a2640529faddf',
+          entityCode: '26855624000184',
           Infos:
             {
-              item: "14936",
-              quantity: "4",
-              value: 7.11,
-            },
+              item: '14936',
+              quantity: '4',
+              value: 7.11
+            }
         }),
         pathParameters: {},
         headers: {},
-        httpMethod: "POST",
-        ...defaultValueEvent,
+        httpMethod: 'POST',
+        ...defaultValueEvent
       },
       output: {
-        httpMethod: "POST",
+        httpMethod: 'POST',
         body: JSON.stringify({
-          liveId: "c94f0038e5429e65337a2640529faddf",
-          entityCode: "26855624000184",
+          liveId: 'c94f0038e5429e65337a2640529faddf',
+          entityCode: '26855624000184',
           Infos: {
-            item: "14936",
-            quantity: "4",
-            value: 7.11,
-          },
-        }),
-      },
+            item: '14936',
+            quantity: '4',
+            value: 7.11
+          }
+        })
+      }
     },
     {
       event: {
         body: JSON.stringify({
-          liveId: "c94f0038e5429e65337a2640529faddf",
-          entityCode: "26855624000184",
+          liveId: 'c94f0038e5429e65337a2640529faddf',
+          entityCode: '26855624000184',
           Infos:
             {
-              item: "14936",
-              quantity: "4",
-              value: 7.11,
-            },
+              item: '14936',
+              quantity: '4',
+              value: 7.11
+            }
         }),
         pathParameters: {},
         headers: {},
-        httpMethod: "DELETE",
-        ...defaultValueEvent,
+        httpMethod: 'DELETE',
+        ...defaultValueEvent
       },
       output: {
-        httpMethod: "DELETE",
+        httpMethod: 'DELETE',
         body: JSON.stringify({
-          liveId: "c94f0038e5429e65337a2640529faddf",
-          entityCode: "26855624000184",
+          liveId: 'c94f0038e5429e65337a2640529faddf',
+          entityCode: '26855624000184',
           Infos: {
-            item: "14936",
-            quantity: "4",
-            value: 7.11,
-          },
-        }),
-      },
+            item: '14936',
+            quantity: '4',
+            value: 7.11
+          }
+        })
+      }
     },
     {
       event: {
         body: '',
         pathParameters: {},
         headers: {},
-        httpMethod: "GET",
-        ...defaultValueEvent,
+        httpMethod: 'GET',
+        ...defaultValueEvent
       },
       output: {
-          httpMethod: 'GET',
-          sort: undefined,
-          limit: undefined,
-          page: undefined,
-          columns: undefined,
-          filters: undefined,
-          onlyConstructor: undefined,
-          onlyCount: undefined
-        },
+        httpMethod: 'GET',
+        sort: undefined,
+        limit: undefined,
+        page: undefined,
+        columns: undefined,
+        filters: undefined,
+        onlyConstructor: undefined,
+        onlyCount: undefined
+      }
     }
-  ];
-  test.each(param)("Should return an object (no errors)", (param) => {
-    expect(lambdaCrudHandler(param.event)).toStrictEqual(param.output);
-  });
-});
+  ]
+  test.each(param)('Should return an object (no errors)', (param) => {
+    expect(lambdaCrudHandler(param.event)).toStrictEqual(param.output)
+  })
+})
 
-
-describe("lambdaCrudHandler", () => {
-  const param: { event: APIGatewayEvent; }[] = [
-  {
-    event: {
-      body: '',
-      pathParameters: {},
-      headers: {},
-      httpMethod: "",
-      ...defaultValueEvent,
-    },
-  }]
-  test.each(param)("Should return an error", (param) => {
-    expect(() => lambdaCrudHandler(param.event)).toThrow();
-  });
+describe('lambdaCrudHandler', () => {
+  const param: Array<{ event: APIGatewayEvent }> = [
+    {
+      event: {
+        body: '',
+        pathParameters: {},
+        headers: {},
+        httpMethod: '',
+        ...defaultValueEvent
+      }
+    }]
+  test.each(param)('Should return an error', (param) => {
+    expect(() => lambdaCrudHandler(param.event)).toThrow()
+  })
 })
