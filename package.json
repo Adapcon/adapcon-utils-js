@@ -1,6 +1,6 @@
 {
   "name": "adapcon-utils-js",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "description": "Utils library for Javascript",
   "keywords": [],
   "author": {
@@ -33,11 +33,11 @@
   "dependencies": {
     "aws-dynamodb-factory-js": "^2.0.2",
     "aws-lambda": "^1.0.7",
-    "aws-sdk": "^2.1010.0",
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.85",
+    "aws-sdk": "^2.1010.0",
     "@types/aws-sdk": "^2.7.0",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.13",
