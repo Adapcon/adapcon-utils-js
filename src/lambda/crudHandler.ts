@@ -2,26 +2,30 @@ import { lambdaGetParameters } from './lambdaGetParameters'
 import { APIGatewayEvent } from 'aws-lambda'
 import { error } from '../error'
 import { getDefaultResponse, HttpNames } from '../http'
+import { PrismaInputParams } from '../'
 
-export const lambdaCrudHandler = (event: APIGatewayEvent): object => {
-  return switchMethod(event)
+export const lambdaCrudHandler = (
+  event: APIGatewayEvent,
+  customParameters: {[key: string]: string} = {}
+): PrismaInputParams => {
+  return switchMethod(event, customParameters)
 }
 
-const switchMethod = (event: APIGatewayEvent): object => {
+const switchMethod = (event: APIGatewayEvent, customParameters): PrismaInputParams => {
   const { httpMethod } = event
 
   switch (httpMethod) {
     case 'GET':
-      return getEvent(event)
+      return getEvent(event, customParameters)
 
     case 'POST':
-      return postEvent(event)
+      return postEvent(event, customParameters)
 
     case 'PUT':
-      return putEvent(event)
+      return putEvent(event, customParameters)
 
     case 'DELETE':
-      return deleteEvent(event)
+      return deleteEvent(event, customParameters)
 
     default: {
       const notImplemented = getDefaultResponse('notImplemented' as HttpNames)
@@ -31,7 +35,7 @@ const switchMethod = (event: APIGatewayEvent): object => {
   }
 }
 
-const getEvent = (event: APIGatewayEvent): object => {
+const getEvent = (event: APIGatewayEvent, customParameters): PrismaInputParams => {
   const parameters = lambdaGetParameters(event,
     {
       sort: 'headers',
@@ -39,49 +43,68 @@ const getEvent = (event: APIGatewayEvent): object => {
       page: 'headers',
       columns: 'headers',
       filters: 'headers',
-      'only-constructor': 'headers',
       'only-count': 'headers'
-    }
-  )
-  return {
-    httpMethod: 'GET',
-    ...event.pathParameters,
-    ...parameters
-  }
-}
-
-const postEvent = (event: APIGatewayEvent): object => {
-  const parameters = lambdaGetParameters(event,
-    {
-      body: 'body'
     })
   return {
-    httpMethod: 'POST',
-    ...event.pathParameters,
-    ...parameters
+    httpMethod: 'GET',
+    keys: { ...event.pathParameters },
+    ...parameters,
+    customParameters: {
+      ...lambdaGetParameters(event, {
+        ...customParameters
+      })
+    }
   }
 }
 
-const putEvent = (event: APIGatewayEvent): object => {
-  const parameters = lambdaGetParameters(event,
+const postEvent = (event: APIGatewayEvent, customParameters): PrismaInputParams => {
+  const parameters: {body?: string} = lambdaGetParameters(event, {
+    body: 'body'
+
+  })
+  return {
+    httpMethod: 'POST',
+    keys: { ...event.pathParameters },
+    entity: parameters.body ? JSON.parse(parameters.body) : {},
+    customParameters: {
+      ...lambdaGetParameters(event, {
+        ...customParameters
+      })
+    }
+  }
+}
+
+const putEvent = (event: APIGatewayEvent, customParameters): PrismaInputParams => {
+  const parameters: {body?: string} = lambdaGetParameters(event,
     {
       body: 'body'
+
     })
   return {
     httpMethod: 'PUT',
-    ...event.pathParameters,
-    ...parameters
+    keys: { ...event.pathParameters },
+    entity: parameters.body ? JSON.parse(parameters.body) : {},
+    customParameters: {
+      ...lambdaGetParameters(event, {
+        ...customParameters
+      })
+    }
   }
 }
 
-const deleteEvent = (event: APIGatewayEvent): object => {
+const deleteEvent = (event: APIGatewayEvent, customParameters): PrismaInputParams => {
   const parameters = lambdaGetParameters(event,
     {
-      body: 'body'
+
     })
   return {
     httpMethod: 'DELETE',
-    ...event.pathParameters,
-    ...parameters
+    keys: { ...event.pathParameters },
+    ...parameters,
+    customParameters: {
+      ...lambdaGetParameters(event, {
+        ...customParameters
+      })
+    }
   }
 }
