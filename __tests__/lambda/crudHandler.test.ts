@@ -79,7 +79,7 @@ describe('lambdaCrudHandler', () => {
       },
       output: {
         httpMethod: 'PUT',
-        body: JSON.stringify({
+        entity: {
           liveId: 'c94f0038e5429e65337a2640529faddf',
           entityCode: '26855624000184',
           Infos: {
@@ -87,7 +87,24 @@ describe('lambdaCrudHandler', () => {
             quantity: '4',
             value: 7.11
           }
-        })
+        },
+        customParameters: {},
+        keys: {}
+      }
+    },
+    {
+      event: {
+        body: '',
+        pathParameters: {},
+        headers: {},
+        httpMethod: 'PUT',
+        ...defaultValueEvent
+      },
+      output: {
+        httpMethod: 'PUT',
+        entity: {},
+        customParameters: {},
+        keys: {}
       }
     },
     {
@@ -109,7 +126,7 @@ describe('lambdaCrudHandler', () => {
       },
       output: {
         httpMethod: 'POST',
-        body: JSON.stringify({
+        entity: {
           liveId: 'c94f0038e5429e65337a2640529faddf',
           entityCode: '26855624000184',
           Infos: {
@@ -117,37 +134,38 @@ describe('lambdaCrudHandler', () => {
             quantity: '4',
             value: 7.11
           }
-        })
+        },
+        customParameters: {},
+        keys: {}
       }
     },
     {
       event: {
-        body: JSON.stringify({
-          liveId: 'c94f0038e5429e65337a2640529faddf',
-          entityCode: '26855624000184',
-          Infos:
-            {
-              item: '14936',
-              quantity: '4',
-              value: 7.11
-            }
-        }),
+        body: '',
         pathParameters: {},
+        headers: {},
+        httpMethod: 'POST',
+        ...defaultValueEvent
+      },
+      output: {
+        httpMethod: 'POST',
+        entity: {},
+        customParameters: {},
+        keys: {}
+      }
+    },
+    {
+      event: {
+        body: '',
+        pathParameters: { entityId: '1' },
         headers: {},
         httpMethod: 'DELETE',
         ...defaultValueEvent
       },
       output: {
         httpMethod: 'DELETE',
-        body: JSON.stringify({
-          liveId: 'c94f0038e5429e65337a2640529faddf',
-          entityCode: '26855624000184',
-          Infos: {
-            item: '14936',
-            quantity: '4',
-            value: 7.11
-          }
-        })
+        customParameters: {},
+        keys: { entityId: '1' }
       }
     },
     {
@@ -165,8 +183,9 @@ describe('lambdaCrudHandler', () => {
         page: undefined,
         columns: undefined,
         filters: undefined,
-        onlyConstructor: undefined,
-        onlyCount: undefined
+        onlyCount: undefined,
+        customParameters: {},
+        keys: {}
       }
     }
   ]
