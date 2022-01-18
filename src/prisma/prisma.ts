@@ -1,4 +1,10 @@
-import { EventFunctionType, EventsCrud, PrismaInputParams, PrismaOutputParams } from '.'
+import {
+  EventFunctionType,
+  EventsCrud,
+  PrismaInputParams,
+  PrismaOutputParams
+} from '.'
+import { HttpStatuses } from '..'
 
 export const prismaBuilderParameters = async (prismaInputParams: PrismaInputParams, events: EventsCrud): Promise<PrismaOutputParams> => {
   switch (prismaInputParams.httpMethod) {
@@ -69,5 +75,23 @@ const getCase = async (prismaInputParams: PrismaInputParams, event?: EventFuncti
         ...updatedPrismaInputParams.filters
       }
     }
+  }
+}
+
+export const getPrismaStatusCode = (method: PrismaOutputParams['method']): HttpStatuses => {
+  switch (method) {
+    case 'create':
+      return HttpStatuses.created
+    case 'delete':
+      return HttpStatuses.accepted
+    case 'update':
+      return HttpStatuses.accepted
+    case 'count':
+      return HttpStatuses.success
+    case 'findMany':
+      return HttpStatuses.success
+
+    default:
+      return HttpStatuses.internalError
   }
 }
