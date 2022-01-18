@@ -90,8 +90,5 @@ export const getPrismaStatusCode = (method: PrismaOutputParams['method']): HttpS
       return HttpStatuses.success
     case 'findMany':
       return HttpStatuses.success
-
-    default:
-      return HttpStatuses.internalError
   }
 }
