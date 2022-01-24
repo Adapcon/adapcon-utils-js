@@ -65,7 +65,7 @@ const postCase = async (prismaInputParams: PrismaInputParams, event?: EventFunct
 const getCase = async (prismaInputParams: PrismaInputParams, event?: EventFunctionType): Promise<PrismaOutputParams> => {
   const updatedPrismaInputParams: PrismaInputParams = event ? await event(prismaInputParams) : prismaInputParams
   return {
-    method: updatedPrismaInputParams.onlyCount ? 'count' : 'findMany',
+    method: updatedPrismaInputParams.onlyCount ? 'count' : 'findMany', // todo implement findUnique
     prismaParams: {
       take: updatedPrismaInputParams.limit ? Number(updatedPrismaInputParams.limit) : undefined,
       skip: updatedPrismaInputParams.page ? (Number(updatedPrismaInputParams.page) - 1) * Number(updatedPrismaInputParams.limit) : undefined,
@@ -78,17 +78,42 @@ const getCase = async (prismaInputParams: PrismaInputParams, event?: EventFuncti
   }
 }
 
-export const getPrismaStatusCode = (method: PrismaOutputParams['method']): HttpStatuses => {
+export const getPrismaStatusCode = <prismaEntity>(method: PrismaOutputParams['method'], prismaResult): {
+  statusCode: HttpStatuses
+  prismaResult: any
+} => {
   switch (method) {
     case 'create':
-      return HttpStatuses.created
+      return {
+        statusCode: HttpStatuses.created,
+        prismaResult: prismaResult as prismaEntity
+      }
     case 'delete':
-      return HttpStatuses.accepted
+      return {
+        statusCode: HttpStatuses.accepted,
+        prismaResult: prismaResult as prismaEntity
+      }
     case 'update':
-      return HttpStatuses.accepted
+      return {
+        statusCode: HttpStatuses.accepted,
+        prismaResult: prismaResult as prismaEntity
+      }
     case 'count':
-      return HttpStatuses.success
-    case 'findMany':
-      return HttpStatuses.success
+      return {
+        statusCode: HttpStatuses.success,
+        prismaResult: prismaResult as number
+      }
+    case 'findMany': {
+      if (!prismaResult.length) {
+        return {
+          statusCode: HttpStatuses.noContent,
+          prismaResult: prismaResult as prismaEntity[]
+        }
+      }
+      return {
+        statusCode: HttpStatuses.success,
+        prismaResult: prismaResult as prismaEntity[]
+      }
+    }
   }
 }
