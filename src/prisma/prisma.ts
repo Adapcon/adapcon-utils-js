@@ -78,25 +78,25 @@ const getCase = async (prismaInputParams: PrismaInputParams, event?: EventFuncti
   }
 }
 
-export const getPrismaStatusCode = <prismaEntity>(method: PrismaOutputParams['method'], prismaResult): {
+export const getPrismaStatusCode = <prismaEntity>(method: PrismaOutputParams['method'], prismaResult: prismaEntity | number | prismaEntity[]): {
   statusCode: HttpStatuses
-  prismaResult: any
+  prismaResult: prismaEntity | number | prismaEntity[]
 } => {
   switch (method) {
     case 'create':
       return {
         statusCode: HttpStatuses.created,
-        prismaResult: prismaResult as prismaEntity
+        prismaResult
       }
     case 'delete':
       return {
         statusCode: HttpStatuses.accepted,
-        prismaResult: prismaResult as prismaEntity
+        prismaResult
       }
     case 'update':
       return {
         statusCode: HttpStatuses.accepted,
-        prismaResult: prismaResult as prismaEntity
+        prismaResult
       }
     case 'count':
       return {
@@ -104,15 +104,15 @@ export const getPrismaStatusCode = <prismaEntity>(method: PrismaOutputParams['me
         prismaResult: prismaResult as number
       }
     case 'findMany': {
-      if (!prismaResult.length) {
+      if (Array.isArray(prismaResult) && !prismaResult.length) {
         return {
           statusCode: HttpStatuses.noContent,
-          prismaResult: prismaResult as prismaEntity[]
+          prismaResult
         }
       }
       return {
         statusCode: HttpStatuses.success,
-        prismaResult: prismaResult as prismaEntity[]
+        prismaResult
       }
     }
   }
