@@ -198,31 +198,31 @@ describe('getPrismaStatusCode', () => {
   const param: Array<{
     prismaMethod: PrismaOutputParams['method']
     prismaResult: any
-    result: {statusCode: HttpStatuses, prismaResult: any }
+    result: {statusCode: HttpStatuses, result: any }
   }> = [{
     prismaMethod: 'create',
     prismaResult: {},
-    result: { statusCode: 201, prismaResult: {} }
+    result: { statusCode: 201, result: {} }
   }, {
     prismaMethod: 'delete',
     prismaResult: {},
-    result: { statusCode: 202, prismaResult: {} }
+    result: { statusCode: 202, result: {} }
   }, {
     prismaMethod: 'update',
     prismaResult: {},
-    result: { statusCode: 202, prismaResult: {} }
+    result: { statusCode: 202, result: {} }
   }, {
     prismaMethod: 'count',
     prismaResult: 0,
-    result: { statusCode: 200, prismaResult: 0 }
+    result: { statusCode: 200, result: 0 }
   }, {
     prismaMethod: 'findMany',
     prismaResult: [{}],
-    result: { statusCode: 200, prismaResult: [{}] }
+    result: { statusCode: 200, result: [{}] }
   }, {
     prismaMethod: 'findMany',
     prismaResult: [],
-    result: { statusCode: 204, prismaResult: [] }
+    result: { statusCode: 204, result: [] }
   }]
   test.each(param)('Should return an object (no errors)', (param) => {
     return expect(getPrismaStatusCode(param.prismaMethod, param.prismaResult)).toStrictEqual(param.result)

@@ -80,39 +80,39 @@ const getCase = async (prismaInputParams: PrismaInputParams, event?: EventFuncti
 
 export const getPrismaStatusCode = <prismaEntity>(method: PrismaOutputParams['method'], prismaResult: prismaEntity | number | prismaEntity[]): {
   statusCode: HttpStatuses
-  prismaResult: prismaEntity | number | prismaEntity[]
+  result: prismaEntity | number | prismaEntity[]
 } => {
   switch (method) {
     case 'create':
       return {
         statusCode: HttpStatuses.created,
-        prismaResult
+        result: prismaResult
       }
     case 'delete':
       return {
         statusCode: HttpStatuses.accepted,
-        prismaResult
+        result: prismaResult
       }
     case 'update':
       return {
         statusCode: HttpStatuses.accepted,
-        prismaResult
+        result: prismaResult
       }
     case 'count':
       return {
         statusCode: HttpStatuses.success,
-        prismaResult: prismaResult as number
+        result: prismaResult
       }
     case 'findMany': {
       if (Array.isArray(prismaResult) && !prismaResult.length) {
         return {
           statusCode: HttpStatuses.noContent,
-          prismaResult
+          result: prismaResult
         }
       }
       return {
         statusCode: HttpStatuses.success,
-        prismaResult
+        result: prismaResult
       }
     }
   }
