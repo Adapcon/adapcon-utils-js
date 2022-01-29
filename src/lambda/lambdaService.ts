@@ -1,6 +1,7 @@
 import AWS from 'aws-sdk'
 
 import { formattedResponse } from './formatters'
+import { SecretManager } from './../secretsManager/index'
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class LambdaService {
@@ -13,7 +14,8 @@ export class LambdaService {
     body = {},
     pathParameters = {},
     queryStringParameters = {},
-    isOffline = false
+    isOffline = false,
+    serviceSecretArn = ''
   }: {
     port?: string
     region?: string
@@ -24,9 +26,14 @@ export class LambdaService {
     pathParameters?: object
     queryStringParameters?: object
     isOffline?: boolean
+    serviceSecretArn?: string
   }): Promise<object> {
     try {
-      const lambda = new AWS.Lambda({
+      const awsLambdaSettings: {
+        accessKeyId?: string
+        secretAccessKey?: string
+        region: string
+      } = {
         region,
         ...(isOffline
           ? {
@@ -34,7 +41,19 @@ export class LambdaService {
               endpoint: `http://localhost:${port}`
             }
           : {})
-      })
+      }
+      if (serviceSecretArn) {
+        const secretValue: {
+          accessKeyId?: string
+          secretAccessKey?: string
+        } = await SecretManager.getValue({ region, secretId: serviceSecretArn }) as {
+          accessKeyId?: string
+          secretAccessKey?: string
+        }
+        awsLambdaSettings.accessKeyId = secretValue.accessKeyId
+        awsLambdaSettings.secretAccessKey = secretValue.secretAccessKey
+      }
+      const lambda = new AWS.Lambda(awsLambdaSettings)
 
       const response = await lambda.invoke({
         FunctionName: functionName,
