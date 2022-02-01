@@ -1,5 +1,6 @@
 import {
   EventsCrud,
+  settingsCrud,
   prismaBuilderParameters,
   PrismaInputParams,
   getPrismaStatusCode,
@@ -9,14 +10,13 @@ import { HttpStatuses } from '../../src/http'
 
 describe('prismaBuilderParameters', () => {
   const param: Array<{ prismaInputParams: PrismaInputParams
-    events: EventsCrud
+    settings?: { events?: EventsCrud, settings?: settingsCrud }
     output: {}
   }> = [
     {
       prismaInputParams: {
         httpMethod: 'GET'
       },
-      events: {},
       output: {
         method: 'findMany',
         prismaParams: {
@@ -31,11 +31,10 @@ describe('prismaBuilderParameters', () => {
       prismaInputParams: {
         httpMethod: 'POST'
       },
-      events: {},
       output: {
         method: 'create',
         prismaParams: {
-          data: { jsondata: undefined }
+          data: { jsonData: undefined }
         }
       }
     },
@@ -44,7 +43,6 @@ describe('prismaBuilderParameters', () => {
         httpMethod: 'GET',
         onlyCount: true
       },
-      events: {},
       output: {
         method: 'count',
         prismaParams: {
@@ -59,7 +57,6 @@ describe('prismaBuilderParameters', () => {
       prismaInputParams: {
         httpMethod: 'DELETE'
       },
-      events: {},
       output: {
         method: 'delete',
         prismaParams: {
@@ -71,12 +68,52 @@ describe('prismaBuilderParameters', () => {
       prismaInputParams: {
         httpMethod: 'PUT'
       },
-      events: {},
       output: {
         method: 'update',
         prismaParams: {
-          data: { jsondata: undefined },
+          data: { jsonData: undefined },
           where: {}
+        }
+      }
+    },
+    {
+      prismaInputParams: {
+        httpMethod: 'PUT',
+        keys: {
+          appId: 'local',
+          templateId: 77
+        }
+      },
+      settings: { settings: { joinKeys: true } },
+      output: {
+        method: 'update',
+        prismaParams: {
+          data: { jsonData: undefined },
+          where: {
+            appId_templateId: {
+              appId: 'local',
+              templateId: 77
+            }
+          }
+        }
+      }
+    },
+    {
+      prismaInputParams: {
+        httpMethod: 'PUT',
+        keys: {
+          appId: 'local',
+          templateId: 77
+        }
+      },
+      output: {
+        method: 'update',
+        prismaParams: {
+          data: { jsonData: undefined },
+          where: {
+            appId: 'local',
+            templateId: 77
+          }
         }
       }
     },
@@ -85,22 +122,24 @@ describe('prismaBuilderParameters', () => {
         httpMethod: 'POST',
         entity: {}
       },
-      events: {
-        onPost: (prismaInputParams) => {
-          let { entity } = prismaInputParams
-          if (!entity) entity = {}
+      settings: {
+        events: {
+          onPost: (prismaInputParams) => {
+            let { entity } = prismaInputParams
+            if (!entity) entity = {}
 
-          entity.createdAt = 1642505518316
-          prismaInputParams.entity = entity
+            entity.createdAt = 1642505518316
+            prismaInputParams.entity = entity
 
-          return prismaInputParams
+            return prismaInputParams
+          }
         }
       },
       output: {
         method: 'create',
         prismaParams: {
           data: {
-            jsondata: { createdAt: 1642505518316 }
+            jsonData: { createdAt: 1642505518316 }
           }
         }
       }
@@ -110,11 +149,13 @@ describe('prismaBuilderParameters', () => {
         httpMethod: 'GET',
         onlyCount: true
       },
-      events: {
-        onGet: (prismaInputParams) => {
-          prismaInputParams.limit = '77'
-          prismaInputParams.page = '77'
-          return prismaInputParams
+      settings: {
+        events: {
+          onGet: (prismaInputParams) => {
+            prismaInputParams.limit = '77'
+            prismaInputParams.page = '77'
+            return prismaInputParams
+          }
         }
       },
       output: {
@@ -131,10 +172,12 @@ describe('prismaBuilderParameters', () => {
       prismaInputParams: {
         httpMethod: 'GET'
       },
-      events: {
-        onGet: (prismaInputParams) => {
-          prismaInputParams.columns = '["appId"]'
-          return prismaInputParams
+      settings: {
+        events: {
+          onGet: (prismaInputParams) => {
+            prismaInputParams.columns = '["appId"]'
+            return prismaInputParams
+          }
         }
       },
       output: {
@@ -151,13 +194,15 @@ describe('prismaBuilderParameters', () => {
       prismaInputParams: {
         httpMethod: 'DELETE'
       },
-      events: {
-        onDelete: (prismaInputParams) => {
-          prismaInputParams.keys = {
-            appId: 'amc',
-            itemId: 1
+      settings: {
+        events: {
+          onDelete: (prismaInputParams) => {
+            prismaInputParams.keys = {
+              appId: 'amc',
+              itemId: 1
+            }
+            return prismaInputParams
           }
-          return prismaInputParams
         }
       },
       output: {
@@ -174,23 +219,25 @@ describe('prismaBuilderParameters', () => {
       prismaInputParams: {
         httpMethod: 'PUT'
       },
-      events: {
-        onPut: (prismaInputParams) => {
-          prismaInputParams.entity = {}
-          return prismaInputParams
+      settings: {
+        events: {
+          onPut: (prismaInputParams) => {
+            prismaInputParams.entity = {}
+            return prismaInputParams
+          }
         }
       },
       output: {
         method: 'update',
         prismaParams: {
-          data: { jsondata: {} },
+          data: { jsonData: {} },
           where: {}
         }
       }
     }
   ]
   test.each(param)('Should return an object (no errors)', async (param) => {
-    return expect(prismaBuilderParameters(param.prismaInputParams, param.events)).resolves.toStrictEqual(param.output)
+    return expect(prismaBuilderParameters(param.prismaInputParams, param?.settings)).resolves.toStrictEqual(param.output)
   })
 })
 
