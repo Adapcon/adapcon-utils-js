@@ -4,13 +4,12 @@ export const SecretManager = {
   getValue: async ({ region = 'sa-east-1', secretId }) => {
     const client = new AWS.SecretsManager({ region })
 
-    return new Promise((resolve, reject) => {
-      client.getSecretValue(
-        { SecretId: secretId }, (err, data) => {
-          if (err || !data?.SecretString) reject(err || 'no value founded')
-          else resolve(JSON.parse(data?.SecretString))
-        }
-      )
-    })
+    // The SDK can also return a promise calling `promise`
+    const secret = await client.getSecretValue({SecretId: secretId}).promise()
+
+    if (!secret) throw new Error("Secret not found!")
+    if (!secret.SecretString) throw new Error("Secret without a value!")
+
+    return JSON.parse(secret.SecretString)
   }
 }
