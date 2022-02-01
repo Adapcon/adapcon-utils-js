@@ -118,3 +118,24 @@ export const getPrismaStatusCode = <prismaEntity>(method: PrismaOutputParams['me
     }
   }
 }
+
+const formatEntitiesKeys = (keys?: {[key: string]: string|number}, settings?: settingsCrud): {[key: string]: string|number|{[key: string]: string|number}} => {
+  const formattedKeys: {[key: string]: string|number} = keys ?? {}
+  if (keys) {
+    for (const key in keys) {
+      if (Object.prototype.hasOwnProperty.call(keys, key)) {
+        const keyValue = keys[key]
+        if (isNumber(keyValue)) { formattedKeys[key] = Number(keyValue) }
+      }
+    }
+  }
+
+  if (settings?.joinKeys) {
+    const keysArray = Object.keys(formattedKeys)
+    const keysInJoin = keysArray.join('_')
+    return {
+      [keysInJoin]: formattedKeys
+    }
+  }
+  return formattedKeys
+}
