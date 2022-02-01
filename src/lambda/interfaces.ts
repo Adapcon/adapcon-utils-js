@@ -4,3 +4,15 @@ export interface Error {
   error?: any
   message?: string
 }
+
+export interface lambdaParameters {
+  port?: ''
+  region?: 'sa-east-1'
+  functionName: string
+  invocationType?: 'RequestResponse'
+  headers?: {}
+  body?: {}
+  pathParameters?: {}
+  queryStringParameters?: {}
+  isOffline?: false
+}

@@ -24,3 +24,7 @@ export type EventsCrud = {
 }
 
 export type EventFunctionType = (prismaInputParams: PrismaInputParams) => PrismaInputParams
+
+export type settingsCrud = {
+  joinKeys: false | boolean
+}
