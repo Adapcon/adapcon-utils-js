@@ -43,7 +43,8 @@ const getEvent = (event: APIGatewayEvent, customParameters): PrismaInputParams =
       page: 'headers',
       columns: 'headers',
       filters: 'headers',
-      'only-count': 'headers'
+      'only-count': 'headers',
+      search: 'headers'
     })
   return {
     httpMethod: 'GET',

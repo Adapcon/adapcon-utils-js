@@ -2,28 +2,37 @@ import {
   EventFunctionType,
   EventsCrud,
   PrismaInputParams,
-  PrismaOutputParams
+  PrismaOutputParams,
+  settingsCrud
 } from '.'
 import { HttpStatuses } from '..'
+import { isNumber } from './../number/index'
 
-export const prismaBuilderParameters = async (prismaInputParams: PrismaInputParams, events: EventsCrud): Promise<PrismaOutputParams> => {
+export const prismaBuilderParameters = async (prismaInputParams: PrismaInputParams,
+  { events, settings }: {
+    events?: EventsCrud
+    settings?: settingsCrud
+  } = {}
+): Promise<PrismaOutputParams> => {
   switch (prismaInputParams.httpMethod) {
     case 'GET':
-      return getCase(prismaInputParams, events.onGet)
+      return getCase(prismaInputParams, events?.onGet)
 
     case 'POST':
-      return postCase(prismaInputParams, events.onPost)
+      return postCase(prismaInputParams, events?.onPost)
 
     case 'PUT':
-      return putCase(prismaInputParams, events.onPut)
+      return putCase(prismaInputParams, events?.onPut, settings)
 
     case 'DELETE':
-      return deleteCase(prismaInputParams, events.onDelete)
+      return deleteCase(prismaInputParams, events?.onDelete, settings)
   }
 }
 
-const deleteCase = async (prismaInputParams: PrismaInputParams, event?: EventFunctionType): Promise<PrismaOutputParams> => {
+const deleteCase = async (prismaInputParams: PrismaInputParams, event?: EventFunctionType, settings?: settingsCrud): Promise<PrismaOutputParams> => {
   const updatedPrismaInputParams: PrismaInputParams = event ? await event(prismaInputParams) : prismaInputParams
+  updatedPrismaInputParams.keys = formatEntitiesKeys(updatedPrismaInputParams.keys, settings)
+
   return {
     method: 'delete',
     prismaParams: {
@@ -34,8 +43,10 @@ const deleteCase = async (prismaInputParams: PrismaInputParams, event?: EventFun
   }
 }
 
-const putCase = async (prismaInputParams: PrismaInputParams, event?: EventFunctionType): Promise<PrismaOutputParams> => {
+const putCase = async (prismaInputParams: PrismaInputParams, event?: EventFunctionType, settings?: settingsCrud): Promise<PrismaOutputParams> => {
   const updatedPrismaInputParams: PrismaInputParams = event ? await event(prismaInputParams) : prismaInputParams
+  updatedPrismaInputParams.keys = formatEntitiesKeys(updatedPrismaInputParams.keys, settings)
+
   return {
     method: 'update',
     prismaParams: {
@@ -44,7 +55,7 @@ const putCase = async (prismaInputParams: PrismaInputParams, event?: EventFuncti
         ...updatedPrismaInputParams.filters
       },
       data: {
-        jsondata: updatedPrismaInputParams.entity
+        jsonData: updatedPrismaInputParams.entity
       }
     }
   }
@@ -52,11 +63,14 @@ const putCase = async (prismaInputParams: PrismaInputParams, event?: EventFuncti
 
 const postCase = async (prismaInputParams: PrismaInputParams, event?: EventFunctionType): Promise<PrismaOutputParams> => {
   const updatedPrismaInputParams: PrismaInputParams = event ? await event(prismaInputParams) : prismaInputParams
+  updatedPrismaInputParams.keys = formatEntitiesKeys(updatedPrismaInputParams.keys)
+
   return {
     method: 'create',
     prismaParams: {
       data: {
-        jsondata: updatedPrismaInputParams.entity
+        jsonData: updatedPrismaInputParams.entity,
+        ...updatedPrismaInputParams.keys
       }
     }
   }
@@ -64,6 +78,8 @@ const postCase = async (prismaInputParams: PrismaInputParams, event?: EventFunct
 
 const getCase = async (prismaInputParams: PrismaInputParams, event?: EventFunctionType): Promise<PrismaOutputParams> => {
   const updatedPrismaInputParams: PrismaInputParams = event ? await event(prismaInputParams) : prismaInputParams
+  updatedPrismaInputParams.keys = formatEntitiesKeys(updatedPrismaInputParams.keys)
+
   return {
     method: updatedPrismaInputParams.onlyCount ? 'count' : 'findMany', // todo implement findUnique
     prismaParams: {
@@ -116,4 +132,25 @@ export const getPrismaStatusCode = <prismaEntity>(method: PrismaOutputParams['me
       }
     }
   }
+}
+
+const formatEntitiesKeys = (keys?: {[key: string]: string|number}, settings?: settingsCrud): {[key: string]: string|number|{[key: string]: string|number}} => {
+  const formattedKeys: {[key: string]: string|number} = keys ?? {}
+  if (keys) {
+    for (const key in keys) {
+      if (Object.prototype.hasOwnProperty.call(keys, key)) {
+        const keyValue = keys[key]
+        if (isNumber(keyValue)) { formattedKeys[key] = Number(keyValue) }
+      }
+    }
+  }
+
+  if (settings?.joinKeys) {
+    const keysArray = Object.keys(formattedKeys)
+    const keysInJoin = keysArray.join('_')
+    return {
+      [keysInJoin]: formattedKeys
+    }
+  }
+  return formattedKeys
 }

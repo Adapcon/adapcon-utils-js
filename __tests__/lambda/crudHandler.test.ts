@@ -185,6 +185,7 @@ describe('lambdaCrudHandler', () => {
         filters: undefined,
         onlyCount: undefined,
         customParameters: {},
+        search: undefined,
         keys: {}
       }
     }
