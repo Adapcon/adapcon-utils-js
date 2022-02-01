@@ -56,7 +56,8 @@ const postCase = async (prismaInputParams: PrismaInputParams, event?: EventFunct
     method: 'create',
     prismaParams: {
       data: {
-        jsondata: updatedPrismaInputParams.entity
+        jsondata: updatedPrismaInputParams.entity,
+        ...updatedPrismaInputParams.keys
       }
     }
   }
