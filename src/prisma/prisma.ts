@@ -120,12 +120,6 @@ export const getPrismaStatusCode = <prismaEntity>(method: PrismaOutputParams['me
         result: prismaResult
       }
     case 'findMany': {
-      if (Array.isArray(prismaResult) && !prismaResult.length) {
-        return {
-          statusCode: HttpStatuses.noContent,
-          result: prismaResult
-        }
-      }
       return {
         statusCode: HttpStatuses.success,
         result: prismaResult
