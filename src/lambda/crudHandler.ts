@@ -2,16 +2,16 @@ import { lambdaGetParameters } from './lambdaGetParameters'
 import { APIGatewayEvent } from 'aws-lambda'
 import { error } from '../error'
 import { getDefaultResponse, HttpNames } from '../http'
-import { PrismaInputParams } from '../'
+import { CrudInputParams } from '.'
 
 export const lambdaCrudHandler = (
   event: APIGatewayEvent,
   customParameters: {[key: string]: string} = {}
-): PrismaInputParams => {
+): CrudInputParams => {
   return switchMethod(event, customParameters)
 }
 
-const switchMethod = (event: APIGatewayEvent, customParameters): PrismaInputParams => {
+const switchMethod = (event: APIGatewayEvent, customParameters): CrudInputParams => {
   const { httpMethod } = event
 
   switch (httpMethod) {
@@ -35,7 +35,7 @@ const switchMethod = (event: APIGatewayEvent, customParameters): PrismaInputPara
   }
 }
 
-const getEvent = (event: APIGatewayEvent, customParameters): PrismaInputParams => {
+const getEvent = (event: APIGatewayEvent, customParameters): CrudInputParams => {
   const parameters = lambdaGetParameters(event,
     {
       sort: 'headers',
@@ -58,7 +58,7 @@ const getEvent = (event: APIGatewayEvent, customParameters): PrismaInputParams =
   }
 }
 
-const postEvent = (event: APIGatewayEvent, customParameters): PrismaInputParams => {
+const postEvent = (event: APIGatewayEvent, customParameters): CrudInputParams => {
   const parameters: {body?: string} = lambdaGetParameters(event, {
     body: 'body'
 
@@ -75,7 +75,7 @@ const postEvent = (event: APIGatewayEvent, customParameters): PrismaInputParams 
   }
 }
 
-const putEvent = (event: APIGatewayEvent, customParameters): PrismaInputParams => {
+const putEvent = (event: APIGatewayEvent, customParameters): CrudInputParams => {
   const parameters: {body?: string} = lambdaGetParameters(event,
     {
       body: 'body'
@@ -93,7 +93,7 @@ const putEvent = (event: APIGatewayEvent, customParameters): PrismaInputParams =
   }
 }
 
-const deleteEvent = (event: APIGatewayEvent, customParameters): PrismaInputParams => {
+const deleteEvent = (event: APIGatewayEvent, customParameters): CrudInputParams => {
   const parameters = lambdaGetParameters(event,
     {
 
