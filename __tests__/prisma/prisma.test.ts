@@ -269,7 +269,7 @@ describe('getPrismaStatusCode', () => {
   }, {
     prismaMethod: 'findMany',
     prismaResult: [],
-    result: { statusCode: 204, result: [] }
+    result: { statusCode: 200, result: [] }
   }]
   test.each(param)('Should return an object (no errors)', (param) => {
     return expect(getPrismaStatusCode(param.prismaMethod, param.prismaResult)).toStrictEqual(param.result)
