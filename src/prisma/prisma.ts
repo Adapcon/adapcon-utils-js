@@ -1,14 +1,14 @@
 import {
   EventFunctionType,
   EventsCrud,
-  PrismaInputParams,
   PrismaOutputParams,
   settingsCrud
 } from '.'
+import { CrudInputParams } from '../lambda'
 import { HttpStatuses } from '..'
 import { isNumber } from './../number/index'
 
-export const prismaBuilderParameters = async (prismaInputParams: PrismaInputParams,
+export const prismaBuilderParameters = async (prismaInputParams: CrudInputParams,
   { events, settings }: {
     events?: EventsCrud
     settings?: settingsCrud
@@ -29,66 +29,66 @@ export const prismaBuilderParameters = async (prismaInputParams: PrismaInputPara
   }
 }
 
-const deleteCase = async (prismaInputParams: PrismaInputParams, event?: EventFunctionType, settings?: settingsCrud): Promise<PrismaOutputParams> => {
-  const updatedPrismaInputParams: PrismaInputParams = event ? await event(prismaInputParams) : prismaInputParams
-  updatedPrismaInputParams.keys = formatEntitiesKeys(updatedPrismaInputParams.keys, settings)
+const deleteCase = async (prismaInputParams: CrudInputParams, event?: EventFunctionType, settings?: settingsCrud): Promise<PrismaOutputParams> => {
+  const updatedCrudInputParams: CrudInputParams = event ? await event(prismaInputParams) : prismaInputParams
+  updatedCrudInputParams.keys = formatEntitiesKeys(updatedCrudInputParams.keys, settings)
 
   return {
     method: 'delete',
     prismaParams: {
       where: {
-        ...updatedPrismaInputParams.keys
+        ...updatedCrudInputParams.keys
       }
     }
   }
 }
 
-const putCase = async (prismaInputParams: PrismaInputParams, event?: EventFunctionType, settings?: settingsCrud): Promise<PrismaOutputParams> => {
-  const updatedPrismaInputParams: PrismaInputParams = event ? await event(prismaInputParams) : prismaInputParams
-  updatedPrismaInputParams.keys = formatEntitiesKeys(updatedPrismaInputParams.keys, settings)
+const putCase = async (prismaInputParams: CrudInputParams, event?: EventFunctionType, settings?: settingsCrud): Promise<PrismaOutputParams> => {
+  const updatedCrudInputParams: CrudInputParams = event ? await event(prismaInputParams) : prismaInputParams
+  updatedCrudInputParams.keys = formatEntitiesKeys(updatedCrudInputParams.keys, settings)
 
   return {
     method: 'update',
     prismaParams: {
       where: {
-        ...updatedPrismaInputParams.keys,
-        ...updatedPrismaInputParams.filters
+        ...updatedCrudInputParams.keys,
+        ...updatedCrudInputParams.filters
       },
       data: {
-        jsonData: updatedPrismaInputParams.entity
+        jsonData: updatedCrudInputParams.entity
       }
     }
   }
 }
 
-const postCase = async (prismaInputParams: PrismaInputParams, event?: EventFunctionType): Promise<PrismaOutputParams> => {
-  const updatedPrismaInputParams: PrismaInputParams = event ? await event(prismaInputParams) : prismaInputParams
-  updatedPrismaInputParams.keys = formatEntitiesKeys(updatedPrismaInputParams.keys)
+const postCase = async (prismaInputParams: CrudInputParams, event?: EventFunctionType): Promise<PrismaOutputParams> => {
+  const updatedCrudInputParams: CrudInputParams = event ? await event(prismaInputParams) : prismaInputParams
+  updatedCrudInputParams.keys = formatEntitiesKeys(updatedCrudInputParams.keys)
 
   return {
     method: 'create',
     prismaParams: {
       data: {
-        jsonData: updatedPrismaInputParams.entity,
-        ...updatedPrismaInputParams.keys
+        jsonData: updatedCrudInputParams.entity,
+        ...updatedCrudInputParams.keys
       }
     }
   }
 }
 
-const getCase = async (prismaInputParams: PrismaInputParams, event?: EventFunctionType): Promise<PrismaOutputParams> => {
-  const updatedPrismaInputParams: PrismaInputParams = event ? await event(prismaInputParams) : prismaInputParams
-  updatedPrismaInputParams.keys = formatEntitiesKeys(updatedPrismaInputParams.keys)
+const getCase = async (prismaInputParams: CrudInputParams, event?: EventFunctionType): Promise<PrismaOutputParams> => {
+  const updatedCrudInputParams: CrudInputParams = event ? await event(prismaInputParams) : prismaInputParams
+  updatedCrudInputParams.keys = formatEntitiesKeys(updatedCrudInputParams.keys)
 
   return {
-    method: updatedPrismaInputParams.onlyCount ? 'count' : 'findMany', // todo implement findUnique
+    method: updatedCrudInputParams.onlyCount ? 'count' : 'findMany', // todo implement findUnique
     prismaParams: {
-      take: updatedPrismaInputParams.limit ? Number(updatedPrismaInputParams.limit) : undefined,
-      skip: updatedPrismaInputParams.page ? (Number(updatedPrismaInputParams.page) - 1) * Number(updatedPrismaInputParams.limit) : undefined,
-      select: updatedPrismaInputParams.columns && JSON.parse(updatedPrismaInputParams.columns),
+      take: updatedCrudInputParams.limit ? Number(updatedCrudInputParams.limit) : undefined,
+      skip: updatedCrudInputParams.page ? (Number(updatedCrudInputParams.page) - 1) * Number(updatedCrudInputParams.limit) : undefined,
+      select: updatedCrudInputParams.columns && JSON.parse(updatedCrudInputParams.columns),
       where: {
-        ...updatedPrismaInputParams.keys,
-        ...updatedPrismaInputParams.filters
+        ...updatedCrudInputParams.keys,
+        ...updatedCrudInputParams.filters
       }
     }
   }
