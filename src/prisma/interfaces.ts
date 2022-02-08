@@ -1,3 +1,5 @@
+import type { CrudInputParams } from '../lambda'
+
 export type PrismaInputParams = {
   httpMethod: 'GET' | 'POST' | 'PUT' | 'DELETE'
   sort?: string
@@ -23,7 +25,7 @@ export type EventsCrud = {
   onGet?: EventFunctionType
 }
 
-export type EventFunctionType = (prismaInputParams: PrismaInputParams) => PrismaInputParams
+export type EventFunctionType = (prismaInputParams: CrudInputParams) => CrudInputParams
 
 export type settingsCrud = {
   joinKeys: false | boolean
