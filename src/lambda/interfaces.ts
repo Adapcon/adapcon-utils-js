@@ -6,15 +6,15 @@ export interface Error {
 }
 
 export interface lambdaParameters {
-  port?: ''
-  region?: 'sa-east-1'
+  port?: string
+  region?: string
   functionName: string
-  invocationType?: 'RequestResponse'
-  headers?: {}
-  body?: {}
-  pathParameters?: {}
-  queryStringParameters?: {}
-  isOffline?: false
+  invocationType?: string
+  headers?: {[key: string]: any}
+  body?: {[key: string]: any}
+  pathParameters?: {[key: string]: any}
+  queryStringParameters?: {[key: string]: any}
+  isOffline?: boolean
 }
 
 export type CrudInputParams = {
