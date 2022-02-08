@@ -33,6 +33,59 @@ export class LambdaService {
       throw error
     }
   }
+
+  static invokeAsync ({
+    port = '',
+    region = 'sa-east-1',
+    functionName,
+    invocationType = 'RequestResponse',
+    headers = {},
+    body = {},
+    pathParameters = {},
+    queryStringParameters = {},
+    isOffline = false
+  }: {
+    port?: string
+    region?: string
+    functionName: string
+    invocationType?: string
+    headers?: object
+    body?: object
+    pathParameters?: object
+    queryStringParameters?: object
+    isOffline?: boolean
+  }): { status: 200 } {
+    try {
+      const lambda = new AWS.Lambda({
+        region,
+        ...(isOffline
+          ? {
+              region: 'localhost',
+              endpoint: `http://localhost:${port}`
+            }
+          : {})
+      })
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      lambda.invoke({
+        FunctionName: functionName,
+        InvocationType: invocationType,
+        Payload: Buffer.from(
+          JSON.stringify({
+            headers,
+            body,
+            pathParameters,
+            queryStringParameters
+          })
+        )
+      }).promise()
+
+      return { status: 200 }
+    } catch (error) {
+      console.log('Error LambdaService invokeAsync', error)
+      throw error
+    }
+  }
 };
 
 const executeInvoke = async ({
