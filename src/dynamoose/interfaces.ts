@@ -1,5 +1,5 @@
 import { CrudInputParams } from '..'
-import {BasicOperators} from 'dynamoose/dist/Condition'
+import { BasicOperators } from 'dynamoose/dist/Condition'
 
 export interface DynamoObjectKeys {
   hash: string
