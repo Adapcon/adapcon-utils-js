@@ -4,15 +4,13 @@ import {
   dynamooseCrudHandler,
   getDynamooseStatusCode,
   DynamooseOutputParams,
-  DynamoObjectKeys
+  DynamoObjectKeys,
+  DynamooseCrudInputParams
 } from '../../src/dynamoose'
-import {
-  CrudInputParams
-} from '../../src/lambda'
 // import { HttpStatuses } from '../../src/http'
 
 describe('dynamooseCrudHandler', () => {
-  const param: Array<{ crudInputParams: CrudInputParams
+  const param: Array<{ crudInputParams: DynamooseCrudInputParams
     dynamooseObjectKeys: DynamoObjectKeys
     settings?: { events?: DynamooseEventsCrud }
     output: {}
