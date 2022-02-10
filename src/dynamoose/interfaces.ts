@@ -16,15 +16,15 @@ export type DynamooseOutputParams<dynamooseParamsType = {}> = {
   dynamooseData: dynamooseParamsType
 }
 
-type PromiseOrValue<Value> = Promise<Value> | Value
+export type PromiseOrValue<Value> = Promise<Value> | Value
 
 export interface DynamooseEventsCrud {
-  onPost?: PromiseOrValue<DynamooseEventFunctionType>
-  onPut?: PromiseOrValue<DynamooseEventFunctionType>
-  onDelete?: PromiseOrValue<DynamooseEventFunctionType>
-  onGet?: PromiseOrValue<DynamooseEventFunctionType>
+  onPost?: DynamooseEventFunctionType
+  onPut?: DynamooseEventFunctionType
+  onDelete?: DynamooseEventFunctionType
+  onGet?: DynamooseEventFunctionType
 }
 
-export type DynamooseEventFunctionType = (crudInputParams: CrudInputParams) => CrudInputParams
+export type DynamooseEventFunctionType = (crudInputParams: CrudInputParams) => PromiseOrValue<CrudInputParams>
 
 export type DynamooseQueryParams = keyof BasicOperators

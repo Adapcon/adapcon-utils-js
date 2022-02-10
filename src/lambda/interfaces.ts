@@ -19,7 +19,7 @@ export interface lambdaParameters {
 
 export type CrudInputParams = {
   httpMethod: 'GET' | 'POST' | 'PUT' | 'DELETE'
-  sort?: string
+  sort?: 'ascending' | 'descending'
   limit?: string
   page?: string
   columns?: string
