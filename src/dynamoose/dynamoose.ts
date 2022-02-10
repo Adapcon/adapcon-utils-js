@@ -1,11 +1,11 @@
 import { DynamooseEventsCrud, DynamooseQueryParams } from '.'
 import {
-  CrudInputParams,
   HttpStatuses,
   capitalizeFirstLetter
 } from '..'
 import {
   DynamoObjectKeys,
+  DynamooseCrudInputParams,
   DynamooseOutputParams,
   DynamooseEventFunctionType,
   DynamooseInputIndexes
@@ -15,7 +15,7 @@ import { Document } from 'dynamoose/dist/Document'
 import { QueryResponse } from 'aws-sdk/clients/timestreamquery'
 
 export const dynamooseCrudHandler = async (
-  crudInputParams: CrudInputParams,
+  crudInputParams: DynamooseCrudInputParams,
   dynamoObjectKeys: DynamoObjectKeys,
   events?: DynamooseEventsCrud
 ): Promise<DynamooseOutputParams> => {
@@ -35,11 +35,11 @@ export const dynamooseCrudHandler = async (
 }
 
 const postDefaultFunction = async (
-  crudInputParams: CrudInputParams,
+  crudInputParams: DynamooseCrudInputParams,
   dynamoObjectKeys: DynamoObjectKeys,
   event?: DynamooseEventFunctionType
 ): Promise<DynamooseOutputParams> => {
-  const updatedCrudInputParams: CrudInputParams = event ? await event?.(crudInputParams) : crudInputParams
+  const updatedCrudInputParams: DynamooseCrudInputParams = event ? await event?.(crudInputParams) : crudInputParams
 
   return {
     method: 'create',
@@ -52,11 +52,11 @@ const postDefaultFunction = async (
 }
 
 const putDefaultFunction = async (
-  crudInputParams: CrudInputParams,
+  crudInputParams: DynamooseCrudInputParams,
   dynamoObjectKeys: DynamoObjectKeys,
   event?: DynamooseEventFunctionType
 ): Promise<DynamooseOutputParams> => {
-  const updatedCrudInputParams: CrudInputParams = event ? await event(crudInputParams) : crudInputParams
+  const updatedCrudInputParams: DynamooseCrudInputParams = event ? await event(crudInputParams) : crudInputParams
 
   return {
     method: 'update',
@@ -69,11 +69,11 @@ const putDefaultFunction = async (
 }
 
 const deleteDefaultFunction = async (
-  crudInputParams: CrudInputParams,
+  crudInputParams: DynamooseCrudInputParams,
   dynamoObjectKeys: DynamoObjectKeys,
   event?: DynamooseEventFunctionType
 ): Promise<DynamooseOutputParams> => {
-  const updatedCrudInputParams: CrudInputParams = event ? await event(crudInputParams) : crudInputParams
+  const updatedCrudInputParams: DynamooseCrudInputParams = event ? await event(crudInputParams) : crudInputParams
 
   return {
     method: 'delete',
@@ -85,11 +85,11 @@ const deleteDefaultFunction = async (
 }
 
 const getDefaultFunction = async (
-  crudInputParams: CrudInputParams,
+  crudInputParams: DynamooseCrudInputParams,
   dynamoObjectKeys: DynamoObjectKeys,
   event?: DynamooseEventFunctionType
 ): Promise<DynamooseOutputParams> => {
-  const updatedCrudInputParams: CrudInputParams = event ? await event(crudInputParams) : crudInputParams
+  const updatedCrudInputParams: DynamooseCrudInputParams = event ? await event(crudInputParams) : crudInputParams
 
   const returnObject: DynamooseOutputParams = {
     dynamooseData: {}
@@ -141,7 +141,7 @@ export const prepareDynamoIndexes = (
   }
 }
 
-export const mountDynamooseQuery = <T extends Document>(crudInputParams: CrudInputParams, dynamoObjectKeys: DynamoObjectKeys, dynamooseModel: ModelType<T>) => {
+export const mountDynamooseQuery = <T extends Document>(crudInputParams: DynamooseCrudInputParams, dynamoObjectKeys: DynamoObjectKeys, dynamooseModel: ModelType<T>) => {
   const { keys, filters }: {[key: string]: any} = crudInputParams
   if (!crudInputParams?.filters?.length && !Object.keys(keys).length) { throw new Error('invalid filters sent') }
 
