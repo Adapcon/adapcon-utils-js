@@ -128,7 +128,7 @@ export const getPrismaStatusCode = <prismaEntity>(method: PrismaOutputParams['me
   }
 }
 
-const formatEntitiesKeys = (keys?: {[key: string]: string|number}, settings?: settingsCrud): {[key: string]: string|number|{[key: string]: string|number}} => {
+export const formatEntitiesKeys = (keys?: {[key: string]: string|number}, settings?: settingsCrud): {[key: string]: string|number|{[key: string]: string|number}} => {
   const formattedKeys: {[key: string]: string|number} = keys ?? {}
   if (keys) {
     for (const key in keys) {
