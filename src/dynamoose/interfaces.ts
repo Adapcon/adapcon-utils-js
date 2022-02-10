@@ -25,6 +25,10 @@ export interface DynamooseEventsCrud {
   onGet?: DynamooseEventFunctionType
 }
 
-export type DynamooseEventFunctionType = (crudInputParams: CrudInputParams) => PromiseOrValue<CrudInputParams>
+export type DynamooseEventFunctionType = (crudInputParams: DynamooseCrudInputParams) => PromiseOrValue<DynamooseCrudInputParams>
 
 export type DynamooseQueryParams = keyof BasicOperators
+
+export type DynamooseCrudInputParams = CrudInputParams & {
+  sort?: 'ascending' | 'descending'
+}
