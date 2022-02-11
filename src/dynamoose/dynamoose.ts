@@ -69,7 +69,7 @@ const putDefaultFunction = async (
 
   return {
     method: 'update',
-    dynamooseData: assembleEntityData(updatedCrudInputParams, dynamoObjectKeys)
+    dynamooseData: assembleEntityData(updatedCrudInputParams, dynamoObjectKeys, updatedCrudInputParams.entity)
   }
 }
 
