@@ -64,9 +64,7 @@ const postDefaultFunction = async (
 
   return {
     method: 'create',
-    dynamooseData: {
-      ...assembleEntityData(updatedCrudInputParams, dynamoObjectKeys)
-    }
+    dynamooseData: assembleEntityData(updatedCrudInputParams, dynamoObjectKeys)
   }
 }
 
@@ -79,9 +77,7 @@ const putDefaultFunction = async (
 
   return {
     method: 'update',
-    dynamooseData: {
-      ...assembleEntityData(updatedCrudInputParams, dynamoObjectKeys)
-    }
+    dynamooseData: assembleEntityData(updatedCrudInputParams, dynamoObjectKeys)
   }
 }
 
@@ -94,9 +90,7 @@ const deleteDefaultFunction = async (
 
   return {
     method: 'delete',
-    dynamooseData: {
-      ...assembleEntityKeys(updatedCrudInputParams, dynamoObjectKeys)
-    }
+    dynamooseData: assembleEntityKeys(updatedCrudInputParams, dynamoObjectKeys)
   }
 }
 
@@ -108,15 +102,11 @@ const getDefaultFunction = async (
   const updatedCrudInputParams: DynamooseCrudInputParams = event ? await event(crudInputParams) : crudInputParams
 
   const { filters } = crudInputParams
-  const returnObject: DynamooseOutputParams = {
+  // const returnObject: DynamooseOutputParams =
+  return {
     method: filters ? 'query' : 'get',
-    dynamooseData: {}
+    dynamooseData: assembleEntityKeys(updatedCrudInputParams, dynamoObjectKeys)
   }
-
-  returnObject.dynamooseData = {
-    ...assembleEntityKeys(updatedCrudInputParams, dynamoObjectKeys)
-  }
-  return returnObject
 }
 
 export const dynamooseQueryBuilder = (
