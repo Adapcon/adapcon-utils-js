@@ -2,6 +2,7 @@ import {
   EventFunctionType,
   EventsCrud,
   PrismaOutputParams,
+  SettingsCrud,
   BlockedMethods
 } from '.'
 import {
@@ -37,7 +38,7 @@ export const prismaBuilderParameters = async (prismaInputParams: CrudInputParams
   }
 }
 
-const deleteCase = async (prismaInputParams: CrudInputParams, event?: EventFunctionType, settings?: settingsCrud): Promise<PrismaOutputParams> => {
+const deleteCase = async (prismaInputParams: CrudInputParams, event?: EventFunctionType, settings?: SettingsCrud): Promise<PrismaOutputParams> => {
   const updatedCrudInputParams: CrudInputParams = event ? await event(prismaInputParams) : prismaInputParams
   updatedCrudInputParams.keys = formatEntitiesKeys(updatedCrudInputParams.keys, settings)
 
@@ -51,7 +52,7 @@ const deleteCase = async (prismaInputParams: CrudInputParams, event?: EventFunct
   }
 }
 
-const putCase = async (prismaInputParams: CrudInputParams, event?: EventFunctionType, settings?: settingsCrud): Promise<PrismaOutputParams> => {
+const putCase = async (prismaInputParams: CrudInputParams, event?: EventFunctionType, settings?: SettingsCrud): Promise<PrismaOutputParams> => {
   const updatedCrudInputParams: CrudInputParams = event ? await event(prismaInputParams) : prismaInputParams
   updatedCrudInputParams.keys = formatEntitiesKeys(updatedCrudInputParams.keys, settings)
 
@@ -136,7 +137,7 @@ export const getPrismaStatusCode = <prismaEntity>(method: PrismaOutputParams['me
   }
 }
 
-export const formatEntitiesKeys = (keys?: {[key: string]: string|number}, settings?: settingsCrud): {[key: string]: string|number|{[key: string]: string|number}} => {
+export const formatEntitiesKeys = (keys?: {[key: string]: string|number}, settings?: SettingsCrud): {[key: string]: string|number|{[key: string]: string|number}} => {
   const formattedKeys: {[key: string]: string|number} = keys ?? {}
   if (keys) {
     for (const key in keys) {
