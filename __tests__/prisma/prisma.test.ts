@@ -1,16 +1,17 @@
 import {
   EventsCrud,
-  settingsCrud,
+  SettingsCrud,
   prismaBuilderParameters,
   PrismaInputParams,
   getPrismaStatusCode,
-  PrismaOutputParams
+  PrismaOutputParams,
+  BlockedMethods
 } from '../../src/prisma'
 import { HttpStatuses } from '../../src/http'
 
 describe('prismaBuilderParameters', () => {
   const param: Array<{ prismaInputParams: PrismaInputParams
-    settings?: { events?: EventsCrud, settings?: settingsCrud }
+    settings?: { events?: EventsCrud, settings?: SettingsCrud }
     output: {}
   }> = [
     {
