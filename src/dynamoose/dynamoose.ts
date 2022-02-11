@@ -147,15 +147,27 @@ export const prepareDynamoIndexes = (
   }
 }
 
-export const mountDynamooseQuery = <T extends Document>(crudInputParams: DynamooseCrudInputParams, dynamoObjectKeys: DynamoObjectKeys, dynamooseModel: ModelType<T>) => {
-  const { keys, filters }: {[key: string]: any} = crudInputParams
+export const mountDynamooseQuery = <entityModel extends Document>(
+  crudInputParams: DynamooseCrudInputParams,
+  dynamoObjectKeys: DynamoObjectKeys,
+  dynamooseModel: ModelType<entityModel>
+) => {
+  const {
+    keys,
+    filters
+  }: {[key: string]: any} = crudInputParams
 
   const condition = dynamooseQueryBuilder(filters, keys, dynamoObjectKeys)
   const query = dynamooseModel.query(condition)
-  if (crudInputParams.limit) { query.settings = { ...query.settings, limit: Number(crudInputParams.limit) } }
-  if (crudInputParams.page) { query.settings = { ...query.settings, startAt: JSON.parse(crudInputParams.page) } }
-  if (crudInputParams.sort) { query.settings = { ...query.settings, sort: crudInputParams.sort } }
-  if (crudInputParams.onlyCount === true) { query.settings = { ...query.settings, count: true } }
+
+  const settings = {
+    ...query.settings,
+    ...(crudInputParams.limit ? { limit: Number(crudInputParams.limit) } : ''),
+    ...(crudInputParams.page ? { startAt: JSON.parse(crudInputParams.page) } : ''),
+    ...(crudInputParams.sort ? { sort: crudInputParams.sort } : ''),
+    ...(crudInputParams.onlyCount === true ? { count: true } : '')
+  }
+  query.settings = settings
   return query
 }
 

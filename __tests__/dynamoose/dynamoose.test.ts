@@ -597,7 +597,7 @@ describe('mountDynamooseQuery', () => {
         range: 'roleId'
       },
       dynamooseModel: { query: () => { return { hash: 'appId', range: 'roleId' } } },
-      result: { hash: 'appId', range: 'roleId' }
+      result: { hash: 'appId', range: 'roleId', settings: { } }
     },
     {
       crudInputParams: {
