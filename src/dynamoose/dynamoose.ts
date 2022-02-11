@@ -39,14 +39,14 @@ const postDefaultFunction = async (
   dynamoObjectKeys: DynamoObjectKeys,
   event?: DynamooseEventFunctionType
 ): Promise<DynamooseOutputParams> => {
-  const updatedCrudInputParams: DynamooseCrudInputParams = event ? await event?.(crudInputParams) : crudInputParams
+  const updatedCrudInputParams: DynamooseCrudInputParams = event ? await event(crudInputParams) : crudInputParams
 
   return {
     method: 'create',
     dynamooseData: {
       ...updatedCrudInputParams.entity,
-      [dynamoObjectKeys.hash]: updatedCrudInputParams?.keys?.[dynamoObjectKeys.hash],
-      [dynamoObjectKeys.range!]: updatedCrudInputParams?.keys?.[dynamoObjectKeys.range!]
+      [dynamoObjectKeys.hash]: updatedCrudInputParams.keys[dynamoObjectKeys.hash],
+      ...(dynamoObjectKeys.range ? { [dynamoObjectKeys.range]: updatedCrudInputParams.keys[dynamoObjectKeys.range] } : {})
     }
   }
 }
@@ -62,8 +62,8 @@ const putDefaultFunction = async (
     method: 'update',
     dynamooseData: {
       ...updatedCrudInputParams.entity,
-      [dynamoObjectKeys.hash]: updatedCrudInputParams?.keys?.[dynamoObjectKeys.hash],
-      [dynamoObjectKeys.range!]: updatedCrudInputParams?.keys?.[dynamoObjectKeys.range!]
+      [dynamoObjectKeys.hash]: updatedCrudInputParams.keys[dynamoObjectKeys.hash],
+      ...(dynamoObjectKeys.range ? { [dynamoObjectKeys.range]: updatedCrudInputParams.keys[dynamoObjectKeys.range] } : {})
     }
   }
 }
@@ -78,8 +78,8 @@ const deleteDefaultFunction = async (
   return {
     method: 'delete',
     dynamooseData: {
-      [dynamoObjectKeys.hash]: updatedCrudInputParams?.keys?.[dynamoObjectKeys.hash],
-      [dynamoObjectKeys.range!]: updatedCrudInputParams?.keys?.[dynamoObjectKeys.range!]
+      [dynamoObjectKeys.hash]: updatedCrudInputParams.keys[dynamoObjectKeys.hash],
+      ...(dynamoObjectKeys.range ? { [dynamoObjectKeys.range]: updatedCrudInputParams.keys[dynamoObjectKeys.range] } : {})
     }
   }
 }
@@ -91,14 +91,15 @@ const getDefaultFunction = async (
 ): Promise<DynamooseOutputParams> => {
   const updatedCrudInputParams: DynamooseCrudInputParams = event ? await event(crudInputParams) : crudInputParams
 
+  const { filters } = crudInputParams
   const returnObject: DynamooseOutputParams = {
+    method: filters ? 'query' : 'get',
     dynamooseData: {}
   }
 
-  returnObject.method = (crudInputParams?.filters?.length ? 'query' : 'get')
   returnObject.dynamooseData = {
-    [dynamoObjectKeys.hash]: updatedCrudInputParams?.keys?.[dynamoObjectKeys.hash],
-    ...(dynamoObjectKeys.range ? { [dynamoObjectKeys.range]: updatedCrudInputParams?.keys?.[dynamoObjectKeys.range] } : '')
+    [dynamoObjectKeys.hash]: updatedCrudInputParams.keys[dynamoObjectKeys.hash],
+    ...(dynamoObjectKeys.range ? { [dynamoObjectKeys.range]: updatedCrudInputParams.keys[dynamoObjectKeys.range] } : {})
   }
   return returnObject
 }
@@ -143,15 +144,13 @@ export const prepareDynamoIndexes = (
 
 export const mountDynamooseQuery = <T extends Document>(crudInputParams: DynamooseCrudInputParams, dynamoObjectKeys: DynamoObjectKeys, dynamooseModel: ModelType<T>) => {
   const { keys, filters }: {[key: string]: any} = crudInputParams
-  if (!crudInputParams?.filters?.length && !Object.keys(keys).length) { throw new Error('invalid filters sent') }
 
-  const condition = dynamooseQueryBuilder(JSON.parse(filters), keys, dynamoObjectKeys)
+  const condition = dynamooseQueryBuilder(filters, keys, dynamoObjectKeys)
   const query = dynamooseModel.query(condition)
-  if (crudInputParams.limit) { query.limit(Number(crudInputParams.limit)) }
-  if (crudInputParams?.customParameters?.gsi?.length) { query.using(crudInputParams.customParameters.gsi) }
-  if (crudInputParams.page) { query.startAt(JSON.parse(crudInputParams.page)) }
-  if (crudInputParams.sort) { query.sort(crudInputParams.sort) }
-  if (crudInputParams.onlyCount === true) { query.count() }
+  if (crudInputParams.limit) { query.settings = { ...query.settings, limit: Number(crudInputParams.limit) } }
+  if (crudInputParams.page) { query.settings = { ...query.settings, startAt: JSON.parse(crudInputParams.page) } }
+  if (crudInputParams.sort) { query.settings = { ...query.settings, sort: crudInputParams.sort } }
+  if (crudInputParams.onlyCount === true) { query.settings = { ...query.settings, count: true } }
   return query
 }
 
@@ -188,10 +187,5 @@ export const getDynamooseStatusCode = <dynamooseEntity>(method: DynamooseOutputP
         statusCode: HttpStatuses.success,
         result: { data, lastKey }
       } }
-    default:
-      return {
-        statusCode: HttpStatuses.notImplemented,
-        result: null
-      }
   }
 }

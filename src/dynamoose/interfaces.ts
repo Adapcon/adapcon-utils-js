@@ -12,7 +12,7 @@ export interface DynamooseInputIndexes {
 }
 
 export type DynamooseOutputParams<dynamooseParamsType = {}> = {
-  method?: 'get' | 'create' | 'update' | 'delete' | 'query'
+  method: 'get' | 'create' | 'update' | 'delete' | 'query'
   dynamooseData: dynamooseParamsType
 }
 
@@ -25,10 +25,11 @@ export interface DynamooseEventsCrud {
   onGet?: DynamooseEventFunctionType
 }
 
-export type DynamooseEventFunctionType = (crudInputParams: DynamooseCrudInputParams) => PromiseOrValue<DynamooseCrudInputParams>
+export type DynamooseEventFunctionType = (crudInputParams: DynamooseCrudInputParams) => DynamooseCrudInputParams
 
 export type DynamooseQueryParams = keyof BasicOperators
 
 export type DynamooseCrudInputParams = CrudInputParams & {
   sort?: 'ascending' | 'descending'
+  keys: {[key: string]: any}
 }
