@@ -32,4 +32,6 @@ export type SettingsCrud = {
   joinKeys: boolean
 }
 
+export type BlockedMethods = {
+  [methodMessage in CrudHttpMethods]?: string | boolean
 }

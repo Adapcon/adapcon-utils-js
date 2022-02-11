@@ -148,3 +148,19 @@ export const formatEntitiesKeys = (keys?: {[key: string]: string|number}, settin
   }
   return formattedKeys
 }
+
+const verifyBlockedMethods = (httpMethod: CrudHttpMethods, blockedMethods?: BlockedMethods) => {
+  if (blockedMethods) {
+    if (blockedMethods[httpMethod] !== undefined) {
+      const message = typeof blockedMethods[httpMethod] === 'string'
+        ? blockedMethods[httpMethod] as string
+        : ''
+      const blockMessage = message.length
+        ? message
+        : HttpMessages.notImplemented
+
+      // eslint-disable-next-line @typescript-eslint/no-throw-literal
+      throw error(HttpStatuses.notImplemented, blockMessage)
+    }
+  }
+}
