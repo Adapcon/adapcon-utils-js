@@ -97,7 +97,7 @@ const getDefaultFunction = async (
   // const returnObject: DynamooseOutputParams =
   return {
     method: filters ? 'query' : 'get',
-    dynamooseData: assembleEntityKeys(updatedCrudInputParams, dynamoObjectKeys)
+    dynamooseData: assembleEntityData(updatedCrudInputParams, dynamoObjectKeys)
   }
 }
 
