@@ -82,7 +82,7 @@ const deleteDefaultFunction = async (
 
   return {
     method: 'delete',
-    dynamooseData: assembleEntityKeys(updatedCrudInputParams, dynamoObjectKeys)
+    dynamooseData: assembleEntityData(updatedCrudInputParams, dynamoObjectKeys)
   }
 }
 
