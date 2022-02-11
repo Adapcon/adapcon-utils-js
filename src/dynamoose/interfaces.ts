@@ -1,5 +1,5 @@
 import { CrudInputParams } from '..'
-import {BasicOperators} from 'dynamoose/dist/Condition'
+import { BasicOperators } from 'dynamoose/dist/Condition'
 
 export interface DynamoObjectKeys {
   hash: string
@@ -12,19 +12,25 @@ export interface DynamooseInputIndexes {
 }
 
 export type DynamooseOutputParams<dynamooseParamsType = {}> = {
-  method?: 'get' | 'create' | 'update' | 'delete' | 'query'
+  method: 'get' | 'create' | 'update' | 'delete' | 'query'
   dynamooseData: dynamooseParamsType
 }
 
-type PromiseOrValue<Value> = Promise<Value> | Value
+export type PromiseOrValue<Value> = Promise<Value> | Value
 
 export interface DynamooseEventsCrud {
-  onPost?: PromiseOrValue<DynamooseEventFunctionType>
-  onPut?: PromiseOrValue<DynamooseEventFunctionType>
-  onDelete?: PromiseOrValue<DynamooseEventFunctionType>
-  onGet?: PromiseOrValue<DynamooseEventFunctionType>
+  onPost?: DynamooseEventFunctionType
+  onPut?: DynamooseEventFunctionType
+  onDelete?: DynamooseEventFunctionType
+  onGet?: DynamooseEventFunctionType
 }
 
-export type DynamooseEventFunctionType = (crudInputParams: CrudInputParams) => CrudInputParams
+export type DynamooseEventFunctionType = (crudInputParams: DynamooseCrudInputParams) => PromiseOrValue<DynamooseCrudInputParams>
 
 export type DynamooseQueryParams = keyof BasicOperators
+
+export type DynamooseCrudInputParams = CrudInputParams & {
+  sort?: 'ascending' | 'descending'
+  keys: object
+  filters?: object | string
+}
