@@ -2,18 +2,26 @@ import {
   EventFunctionType,
   EventsCrud,
   PrismaOutputParams,
-  settingsCrud
+  BlockedMethods
 } from '.'
-import { CrudInputParams } from '../lambda'
+import {
+  CrudInputParams,
+  CrudHttpMethods
+} from '../lambda'
 import { HttpStatuses } from '..'
-import { isNumber } from './../number/index'
+import { isNumber } from './../number'
+import { error } from './../error'
+import { HttpMessages } from './../http'
 
 export const prismaBuilderParameters = async (prismaInputParams: CrudInputParams,
-  { events, settings }: {
+  { events, settings, blockedMethods }: {
     events?: EventsCrud
-    settings?: settingsCrud
+    settings?: SettingsCrud
+    blockedMethods?: BlockedMethods
   } = {}
 ): Promise<PrismaOutputParams> => {
+  verifyBlockedMethods(prismaInputParams.httpMethod, blockedMethods)
+
   switch (prismaInputParams.httpMethod) {
     case 'GET':
       return getCase(prismaInputParams, events?.onGet)
