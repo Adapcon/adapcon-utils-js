@@ -1,3 +1,5 @@
+import { CrudHttpMethods } from '.'
+
 export interface Error {
   status?: number
   statusCode?: number
@@ -18,7 +20,7 @@ export interface lambdaParameters {
 }
 
 export type CrudInputParams = {
-  httpMethod: 'GET' | 'POST' | 'PUT' | 'DELETE'
+  httpMethod: CrudHttpMethods
   sort?: string
   limit?: string
   page?: string
