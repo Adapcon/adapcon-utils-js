@@ -37,7 +37,7 @@ export const dynamooseCrudHandler = async (
 const assembleEntityData = (
   crudInputParams: DynamooseCrudInputParams,
   dynamoObjectKeys: DynamoObjectKeys,
-  entity:DynamooseCrudInputParams['entity'] = {}
+  entity: DynamooseCrudInputParams['entity'] = {}
 ) => {
   return {
     ...entity,
@@ -45,7 +45,6 @@ const assembleEntityData = (
     ...(dynamoObjectKeys.range ? { [dynamoObjectKeys.range]: crudInputParams.keys[dynamoObjectKeys.range] } : {})
   }
 }
-
 
 const postDefaultFunction = async (
   crudInputParams: DynamooseCrudInputParams,
