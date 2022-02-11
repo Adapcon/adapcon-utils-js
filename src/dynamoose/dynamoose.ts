@@ -56,7 +56,7 @@ const postDefaultFunction = async (
 
   return {
     method: 'create',
-    dynamooseData: assembleEntityData(updatedCrudInputParams, dynamoObjectKeys)
+    dynamooseData: assembleEntityData(updatedCrudInputParams, dynamoObjectKeys, updatedCrudInputParams.entity)
   }
 }
 
