@@ -34,6 +34,27 @@ export const dynamooseCrudHandler = async (
   }
 }
 
+const assembleEntityData = (
+  crudInputParams: DynamooseCrudInputParams,
+  dynamoObjectKeys: DynamoObjectKeys
+) => {
+  return {
+    ...crudInputParams.entity,
+    [dynamoObjectKeys.hash]: crudInputParams.keys[dynamoObjectKeys.hash],
+    ...(dynamoObjectKeys.range ? { [dynamoObjectKeys.range]: crudInputParams.keys[dynamoObjectKeys.range] } : {})
+  }
+}
+
+const assembleEntityKeys = (
+  crudInputParams: DynamooseCrudInputParams,
+  dynamoObjectKeys: DynamoObjectKeys
+) => {
+  return {
+    [dynamoObjectKeys.hash]: crudInputParams.keys[dynamoObjectKeys.hash],
+    ...(dynamoObjectKeys.range ? { [dynamoObjectKeys.range]: crudInputParams.keys[dynamoObjectKeys.range] } : {})
+  }
+}
+
 const postDefaultFunction = async (
   crudInputParams: DynamooseCrudInputParams,
   dynamoObjectKeys: DynamoObjectKeys,
@@ -44,9 +65,7 @@ const postDefaultFunction = async (
   return {
     method: 'create',
     dynamooseData: {
-      ...updatedCrudInputParams.entity,
-      [dynamoObjectKeys.hash]: updatedCrudInputParams.keys[dynamoObjectKeys.hash],
-      ...(dynamoObjectKeys.range ? { [dynamoObjectKeys.range]: updatedCrudInputParams.keys[dynamoObjectKeys.range] } : {})
+      ...assembleEntityData(updatedCrudInputParams, dynamoObjectKeys)
     }
   }
 }
@@ -61,9 +80,7 @@ const putDefaultFunction = async (
   return {
     method: 'update',
     dynamooseData: {
-      ...updatedCrudInputParams.entity,
-      [dynamoObjectKeys.hash]: updatedCrudInputParams.keys[dynamoObjectKeys.hash],
-      ...(dynamoObjectKeys.range ? { [dynamoObjectKeys.range]: updatedCrudInputParams.keys[dynamoObjectKeys.range] } : {})
+      ...assembleEntityData(updatedCrudInputParams, dynamoObjectKeys)
     }
   }
 }
@@ -78,8 +95,7 @@ const deleteDefaultFunction = async (
   return {
     method: 'delete',
     dynamooseData: {
-      [dynamoObjectKeys.hash]: updatedCrudInputParams.keys[dynamoObjectKeys.hash],
-      ...(dynamoObjectKeys.range ? { [dynamoObjectKeys.range]: updatedCrudInputParams.keys[dynamoObjectKeys.range] } : {})
+      ...assembleEntityKeys(updatedCrudInputParams, dynamoObjectKeys)
     }
   }
 }
@@ -98,8 +114,7 @@ const getDefaultFunction = async (
   }
 
   returnObject.dynamooseData = {
-    [dynamoObjectKeys.hash]: updatedCrudInputParams.keys[dynamoObjectKeys.hash],
-    ...(dynamoObjectKeys.range ? { [dynamoObjectKeys.range]: updatedCrudInputParams.keys[dynamoObjectKeys.range] } : {})
+    ...assembleEntityKeys(updatedCrudInputParams, dynamoObjectKeys)
   }
   return returnObject
 }
