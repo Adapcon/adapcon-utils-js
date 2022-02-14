@@ -1,7 +1,8 @@
-import type { CrudInputParams } from '../lambda'
+
+import type { CrudInputParams, CrudHttpMethods } from '../lambda'
 
 export type PrismaInputParams = {
-  httpMethod: 'GET' | 'POST' | 'PUT' | 'DELETE'
+  httpMethod: CrudHttpMethods
   sort?: string
   limit?: string
   page?: string
@@ -27,6 +28,10 @@ export type EventsCrud = {
 
 export type EventFunctionType = (prismaInputParams: CrudInputParams) => CrudInputParams
 
-export type settingsCrud = {
-  joinKeys: false | boolean
+export type SettingsCrud = {
+  joinKeys: boolean
+}
+
+export type BlockedMethods = {
+  [methodMessage in CrudHttpMethods]?: string | boolean
 }

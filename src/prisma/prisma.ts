@@ -2,18 +2,27 @@ import {
   EventFunctionType,
   EventsCrud,
   PrismaOutputParams,
-  settingsCrud
+  SettingsCrud,
+  BlockedMethods
 } from '.'
-import { CrudInputParams } from '../lambda'
+import {
+  CrudInputParams,
+  CrudHttpMethods
+} from '../lambda'
 import { HttpStatuses } from '..'
-import { isNumber } from './../number/index'
+import { isNumber } from './../number'
+import { error } from './../error'
+import { HttpMessages } from './../http'
 
 export const prismaBuilderParameters = async (prismaInputParams: CrudInputParams,
-  { events, settings }: {
+  { events, settings, blockedMethods }: {
     events?: EventsCrud
-    settings?: settingsCrud
+    settings?: SettingsCrud
+    blockedMethods?: BlockedMethods
   } = {}
 ): Promise<PrismaOutputParams> => {
+  verifyBlockedMethods(prismaInputParams.httpMethod, blockedMethods)
+
   switch (prismaInputParams.httpMethod) {
     case 'GET':
       return getCase(prismaInputParams, events?.onGet)
@@ -29,7 +38,7 @@ export const prismaBuilderParameters = async (prismaInputParams: CrudInputParams
   }
 }
 
-const deleteCase = async (prismaInputParams: CrudInputParams, event?: EventFunctionType, settings?: settingsCrud): Promise<PrismaOutputParams> => {
+const deleteCase = async (prismaInputParams: CrudInputParams, event?: EventFunctionType, settings?: SettingsCrud): Promise<PrismaOutputParams> => {
   const updatedCrudInputParams: CrudInputParams = event ? await event(prismaInputParams) : prismaInputParams
   updatedCrudInputParams.keys = formatEntitiesKeys(updatedCrudInputParams.keys, settings)
 
@@ -43,7 +52,7 @@ const deleteCase = async (prismaInputParams: CrudInputParams, event?: EventFunct
   }
 }
 
-const putCase = async (prismaInputParams: CrudInputParams, event?: EventFunctionType, settings?: settingsCrud): Promise<PrismaOutputParams> => {
+const putCase = async (prismaInputParams: CrudInputParams, event?: EventFunctionType, settings?: SettingsCrud): Promise<PrismaOutputParams> => {
   const updatedCrudInputParams: CrudInputParams = event ? await event(prismaInputParams) : prismaInputParams
   updatedCrudInputParams.keys = formatEntitiesKeys(updatedCrudInputParams.keys, settings)
 
@@ -128,7 +137,7 @@ export const getPrismaStatusCode = <prismaEntity>(method: PrismaOutputParams['me
   }
 }
 
-export const formatEntitiesKeys = (keys?: {[key: string]: string|number}, settings?: settingsCrud): {[key: string]: string|number|{[key: string]: string|number}} => {
+export const formatEntitiesKeys = (keys?: {[key: string]: string|number}, settings?: SettingsCrud): {[key: string]: string|number|{[key: string]: string|number}} => {
   const formattedKeys: {[key: string]: string|number} = keys ?? {}
   if (keys) {
     for (const key in keys) {
@@ -147,4 +156,20 @@ export const formatEntitiesKeys = (keys?: {[key: string]: string|number}, settin
     }
   }
   return formattedKeys
+}
+
+const verifyBlockedMethods = (httpMethod: CrudHttpMethods, blockedMethods?: BlockedMethods) => {
+  if (blockedMethods) {
+    if (blockedMethods[httpMethod] !== undefined) {
+      const message = typeof blockedMethods[httpMethod] === 'string'
+        ? blockedMethods[httpMethod] as string
+        : ''
+      const blockMessage = message.length
+        ? message
+        : HttpMessages.notImplemented
+
+      // eslint-disable-next-line @typescript-eslint/no-throw-literal
+      throw error(HttpStatuses.notImplemented, blockMessage)
+    }
+  }
 }
