@@ -1,16 +1,17 @@
 import {
   EventsCrud,
-  settingsCrud,
+  SettingsCrud,
   prismaBuilderParameters,
   PrismaInputParams,
   getPrismaStatusCode,
-  PrismaOutputParams
+  PrismaOutputParams,
+  BlockedMethods
 } from '../../src/prisma'
 import { HttpStatuses } from '../../src/http'
 
 describe('prismaBuilderParameters', () => {
   const param: Array<{ prismaInputParams: PrismaInputParams
-    settings?: { events?: EventsCrud, settings?: settingsCrud }
+    settings?: { events?: EventsCrud, settings?: SettingsCrud }
     output: {}
   }> = [
     {
@@ -239,6 +240,45 @@ describe('prismaBuilderParameters', () => {
   test.each(param)('Should return an object (no errors)', async (param) => {
     return expect(prismaBuilderParameters(param.prismaInputParams, param?.settings)).resolves.toStrictEqual(param.output)
   })
+})
+
+describe('throws prismaBuilderParameters', () => {
+  const param: Array<{
+    prismaInputParams: PrismaInputParams
+    blockedMethods: BlockedMethods
+    throw: object
+  }> = [
+    {
+      prismaInputParams: {
+        httpMethod: 'DELETE'
+      },
+      blockedMethods: {
+        DELETE: true
+      },
+      throw: { message: 'The server does not support the functionality required to fulfill the request', statusCode: 501 }
+    },
+    {
+      prismaInputParams: {
+        httpMethod: 'PUT'
+      },
+      blockedMethods: {
+        PUT: ''
+      },
+      throw: { message: 'The server does not support the functionality required to fulfill the request', statusCode: 501 }
+    },
+    {
+      prismaInputParams: {
+        httpMethod: 'GET'
+      },
+      blockedMethods: {
+        GET: 'Não de get plz!!!'
+      },
+      throw: { message: 'Não de get plz!!!', statusCode: 501 }
+    }
+  ]
+  test.each(param)('Should return an throw', async (param) => expect(
+    prismaBuilderParameters(param.prismaInputParams, { ...param })
+  ).rejects.toStrictEqual(param.throw))
 })
 
 describe('getPrismaStatusCode', () => {
