@@ -46,7 +46,8 @@ const executeInvoke = async ({
   body = {},
   pathParameters = {},
   queryStringParameters = {},
-  isOffline = false
+  isOffline = false,
+  httpMethod = ''
 }: {
   accessKeyId?: string
   secretAccessKey?: string
@@ -70,6 +71,7 @@ const executeInvoke = async ({
       JSON.stringify({
         headers,
         body,
+        httpMethod,
         pathParameters,
         queryStringParameters
       })
