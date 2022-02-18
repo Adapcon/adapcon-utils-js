@@ -10,6 +10,7 @@ export interface Error {
 export interface lambdaParameters {
   port?: string
   region?: string
+  httpMethod?: string
   functionName: string
   invocationType?: string
   headers?: {[key: string]: any}
