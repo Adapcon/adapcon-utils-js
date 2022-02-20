@@ -21,14 +21,14 @@ const send = async ({
   bccAddresses?: string[]
   serviceSecretArn?: string
 }): Promise<void> => {
+  checkParameters({ html, subject, from, to })
+
   const secretValue: {
     accessKeyId?: string
     secretAccessKey?: string
   } = await SecretManager.getValue({ region, secretId: serviceSecretArn })
 
   return new Promise((resolve, reject) => {
-    checkParameters({ html, subject, from, to })
-
     const ses = new AWS.SES({ region, ...secretValue })
 
     ses.sendEmail({
