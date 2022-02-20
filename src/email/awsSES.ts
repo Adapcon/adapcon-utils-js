@@ -26,7 +26,7 @@ const send = async ({
   const secretValue: {
     accessKeyId?: string
     secretAccessKey?: string
-  } = await SecretManager.getValue({ region, secretId: serviceSecretArn })
+  } = serviceSecretArn ? await SecretManager.getValue({ region, secretId: serviceSecretArn }) : {}
 
   return new Promise((resolve, reject) => {
     const ses = new AWS.SES({ region, ...secretValue })
