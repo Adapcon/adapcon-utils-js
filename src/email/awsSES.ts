@@ -1,4 +1,5 @@
 import AWS from 'aws-sdk'
+import { SecretManager } from '..'
 
 import { error } from '../error'
 import { lambdaCheckParameters } from './../lambda/lambdaCheckParameters'
@@ -9,7 +10,8 @@ const send = async ({
   subject,
   from,
   to,
-  bccAddresses = []
+  bccAddresses = [],
+  serviceSecretArn
 }: {
   region?: string
   html: string
@@ -17,11 +19,17 @@ const send = async ({
   from: string
   to: string[]
   bccAddresses?: string[]
+  serviceSecretArn?: string
 }): Promise<void> => {
+  const secretValue: {
+    accessKeyId?: string
+    secretAccessKey?: string
+  } = await SecretManager.getValue({ region, secretId: serviceSecretArn })
+
   return new Promise((resolve, reject) => {
     checkParameters({ html, subject, from, to })
 
-    const ses = new AWS.SES({ region })
+    const ses = new AWS.SES({ region, ...secretValue })
 
     ses.sendEmail({
       Destination: {
