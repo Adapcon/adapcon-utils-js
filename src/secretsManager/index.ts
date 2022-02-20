@@ -10,6 +10,6 @@ export const SecretManager = {
     if (!secret) throw new Error('Secret not found!')
     if (!secret.SecretString) throw new Error('Secret without a value!')
 
-    return JSON.parse(secret.SecretString)
+    return JSON.parse(secret.SecretString ?? '{}')
   }
 }
