@@ -12,22 +12,22 @@ const mockGetValue = jest
   })
 
 describe('send', () => {
-  it('Should send an email with a simple message', async () => {
-    await expect(awsSES.send({
-      from: 'test@portaldocliente.online',
-      to: ['test@portaldocliente.online'],
-      html: 'Test of email',
-      subject: 'Email Test'
-    })).resolves.toBeUndefined()
-  })
-
   it('Should use mock function!', async () => {
     await expect(awsSES.send({
       from: 'test@portaldocliente.online',
       to: ['test@portaldocliente.online'],
       html: 'Test of email',
       subject: 'Email Test',
-      serviceSecretArn: '123:resource'
+      serviceSecretArn: 'resource'
+    })).rejects.toThrow("Secrets Manager can't find the specified secret.")
+  })
+
+  it('Should send an email with a simple message', async () => {
+    await expect(awsSES.send({
+      from: 'test@portaldocliente.online',
+      to: ['test@portaldocliente.online'],
+      html: 'Test of email',
+      subject: 'Email Test'
     })).resolves.toBeUndefined()
   })
 
