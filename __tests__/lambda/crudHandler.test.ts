@@ -188,6 +188,29 @@ describe('lambdaCrudHandler', () => {
         search: undefined,
         keys: {}
       }
+    },
+    {
+      event: {
+        body: '',
+        pathParameters: {},
+        headers: {
+          'only-count': 'true'
+        },
+        httpMethod: 'GET',
+        ...defaultValueEvent
+      },
+      output: {
+        httpMethod: 'GET',
+        sort: undefined,
+        limit: undefined,
+        page: undefined,
+        columns: undefined,
+        filters: undefined,
+        onlyCount: true,
+        customParameters: {},
+        search: undefined,
+        keys: {}
+      }
     }
   ]
   test.each(param)('Should return an object (no errors)', (param) => {
