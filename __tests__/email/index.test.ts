@@ -1,6 +1,13 @@
 import { awsSES, bodyTemplate } from '../../src/email'
+import { SecretManager } from './../../src/secretsManager/index'
 
 describe('send', () => {
+  const mockGetValue = jest.spyOn(SecretManager, 'getValue')
+  mockGetValue.mockImplementation(async ({ region, secretId }: { region?: string, secretId: any }) => {
+    if (region ?? secretId) { return {} }
+    return {}
+  })
+
   it('Should send an email with a simple message', async () => {
     await expect(awsSES.send({
       from: 'test@portaldocliente.online',
@@ -35,6 +42,8 @@ describe('send', () => {
       statusCode: 400
     })
   })
+
+  mockGetValue.mockRestore()
 })
 
 describe('bodyTemplate', () => {
