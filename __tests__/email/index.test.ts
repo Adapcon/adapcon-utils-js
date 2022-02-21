@@ -14,7 +14,7 @@ describe('send', () => {
       to: ['test@portaldocliente.online'],
       html: 'Test of email',
       subject: 'Email Test',
-      serviceSecretArn: ''
+      serviceSecretArn: '123:resource'
     })).resolves.toBeUndefined()
   })
 
