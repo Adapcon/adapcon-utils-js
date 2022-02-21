@@ -13,7 +13,8 @@ describe('send', () => {
       from: 'test@portaldocliente.online',
       to: ['test@portaldocliente.online'],
       html: 'Test of email',
-      subject: 'Email Test'
+      subject: 'Email Test',
+      serviceSecretArn: ''
     })).resolves.toBeUndefined()
   })
 
