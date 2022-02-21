@@ -46,6 +46,9 @@ const getEvent = (event: APIGatewayEvent, customParameters): CrudInputParams => 
       'only-count': 'headers',
       search: 'headers'
     })
+
+  if (parameters.onlyCount) { parameters.onlyCount = true }
+
   return {
     httpMethod: 'GET',
     keys: { ...event.pathParameters },
