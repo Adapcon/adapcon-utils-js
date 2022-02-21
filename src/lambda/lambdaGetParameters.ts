@@ -1,5 +1,5 @@
 import { kebabCaseToCamelCase } from './../string/formatters'
-export const lambdaGetParameters = (event: object, eventParams: object): {} => {
+export const lambdaGetParameters = (event: object, eventParams: object): {[key: string]: any} => {
   const fedParams = {}
 
   for (const element in eventParams) {
