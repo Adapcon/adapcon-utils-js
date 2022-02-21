@@ -4,11 +4,24 @@ import { SecretManager } from './../../src/secretsManager/index'
 describe('send', () => {
   const mockGetValue = jest.spyOn(SecretManager, 'getValue')
   mockGetValue.mockImplementation(async ({ region, secretId }: { region?: string, secretId: any }) => {
-    if (region ?? secretId) { return {} }
-    return {}
+    console.log('mockGetValue', region, secretId)
+
+    return {
+      accessKeyId: undefined,
+      secretAccessKey: undefined
+    }
   })
 
   it('Should send an email with a simple message', async () => {
+    await expect(awsSES.send({
+      from: 'test@portaldocliente.online',
+      to: ['test@portaldocliente.online'],
+      html: 'Test of email',
+      subject: 'Email Test'
+    })).resolves.toBeUndefined()
+  })
+
+  it('Should use mock function!', async () => {
     await expect(awsSES.send({
       from: 'test@portaldocliente.online',
       to: ['test@portaldocliente.online'],
