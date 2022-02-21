@@ -1,5 +1,4 @@
 import { CrudInputParams } from '..'
-import { BasicOperators } from 'dynamoose/dist/Condition'
 
 export interface DynamoObjectKeys {
   hash: string
@@ -27,7 +26,24 @@ export interface DynamooseEventsCrud {
 
 export type DynamooseEventFunctionType = (crudInputParams: DynamooseCrudInputParams) => PromiseOrValue<DynamooseCrudInputParams>
 
-export type DynamooseQueryParams = keyof BasicOperators
+export type DynamooseQueryParams = 'and'
+|'or'
+|'not'
+|'parenthesis'
+|'group'
+|'where'
+|'filter'
+|'attribute'
+|'eq'
+|'lt'
+|'le'
+|'gt'
+|'ge'
+|'beginsWith'
+|'contains'
+|'exists'
+|'in'
+|'between'
 
 export type DynamooseCrudInputParams = CrudInputParams & {
   sort?: 'ascending' | 'descending'
