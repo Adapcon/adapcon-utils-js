@@ -1,6 +1,27 @@
 import { awsSES, bodyTemplate } from '../../src/email'
+import { SecretManager } from './../../src/secretsManager/index'
+const mockGetValue = jest
+  .spyOn(SecretManager, 'getValue')
+  .mockImplementation(async ({ region, secretId }: { region?: string, secretId: any }) => {
+    console.log('mockGetValue', region, secretId)
+
+    return {
+      accessKeyId: undefined,
+      secretAccessKey: undefined
+    }
+  })
 
 describe('send', () => {
+  it('Should use mock function!', async () => {
+    await expect(awsSES.send({
+      from: 'test@portaldocliente.online',
+      to: ['test@portaldocliente.online'],
+      html: 'Test of email',
+      subject: 'Email Test',
+      serviceSecretArn: 'resource'
+    })).rejects.toThrow("Secrets Manager can't find the specified secret.")
+  })
+
   it('Should send an email with a simple message', async () => {
     await expect(awsSES.send({
       from: 'test@portaldocliente.online',
@@ -49,3 +70,5 @@ describe('bodyTemplate', () => {
       </body>`)
   })
 })
+
+mockGetValue.mockRestore()
