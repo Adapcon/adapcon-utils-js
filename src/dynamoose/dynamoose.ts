@@ -10,8 +10,6 @@ import {
   DynamooseEventFunctionType,
   DynamooseInputIndexes
 } from './interfaces'
-import { ModelType } from 'dynamoose/dist/General'
-import { Document } from 'dynamoose/dist/Document'
 import { QueryResponse } from 'aws-sdk/clients/timestreamquery'
 
 export const dynamooseCrudHandler = async (
@@ -136,30 +134,6 @@ export const prepareDynamoIndexes = (
     hash: hashIndexes.join(indexNameConcatString ?? ''),
     ...(rangeIndexes.length ? { range: rangeIndexes.join(indexNameConcatString ?? '') } : '')
   }
-}
-
-export const mountDynamooseQuery = <entityModel extends Document>(
-  crudInputParams: DynamooseCrudInputParams,
-  dynamoObjectKeys: DynamoObjectKeys,
-  dynamooseModel: ModelType<entityModel>
-) => {
-  const {
-    keys,
-    filters
-  }: {[key: string]: any} = crudInputParams
-
-  const condition = dynamooseQueryBuilder(filters, keys, dynamoObjectKeys)
-  const query = dynamooseModel.query(condition)
-
-  const settings = {
-    ...query.settings,
-    ...(crudInputParams.limit ? { limit: Number(crudInputParams.limit) } : ''),
-    ...(crudInputParams.page ? { startAt: JSON.parse(crudInputParams.page) } : ''),
-    ...(crudInputParams.sort ? { sort: crudInputParams.sort } : ''),
-    ...(crudInputParams.onlyCount === true ? { count: true } : '')
-  }
-  query.settings = settings
-  return query
 }
 
 export const getDynamooseStatusCode = <dynamooseEntity>(method: DynamooseOutputParams['method'], dynamooseResult: dynamooseEntity | null | QueryResponse): {

@@ -9,11 +9,8 @@ import {
   DynamooseQueryParams,
   dynamooseQueryBuilder,
   prepareDynamoIndexes,
-  DynamooseInputIndexes,
-  mountDynamooseQuery
+  DynamooseInputIndexes
 } from '../../src/dynamoose'
-import { ModelType } from 'dynamoose/dist/General'
-import { Document } from 'dynamoose/dist/Document'
 
 describe('dynamooseCrudHandler', () => {
   const param: Array<{ crudInputParams: DynamooseCrudInputParams
@@ -576,95 +573,5 @@ describe('prepareDynamoIndexes', () => {
   ]
   test.each(param)('Should return an object containing the created Dynamo Indexes object (no errors)', (param) => {
     return expect(prepareDynamoIndexes(param.indexes, param?.indexNameConcatString)).toStrictEqual(param.result)
-  })
-})
-
-describe('mountDynamooseQuery', () => {
-  const param: Array<{
-    crudInputParams: DynamooseCrudInputParams
-    dynamoObjectKeys: DynamoObjectKeys
-    dynamooseModel: object
-    result: object
-  }> = [
-    {
-      crudInputParams: {
-        httpMethod: 'GET',
-        keys: { appId: 'local', roleId: 'admin' },
-        filters: { appId: 'eq', roleId: 'beginsWith' }
-      },
-      dynamoObjectKeys: {
-        hash: 'appId',
-        range: 'roleId'
-      },
-      dynamooseModel: { query: () => { return { hash: 'appId', range: 'roleId' } } },
-      result: { hash: 'appId', range: 'roleId', settings: { } }
-    },
-    {
-      crudInputParams: {
-        httpMethod: 'GET',
-        keys: { appId: 'local', roleId: 'admin' },
-        filters: { appId: 'eq', roleId: 'beginsWith' },
-        limit: '2'
-      },
-      dynamoObjectKeys: {
-        hash: 'appId',
-        range: 'roleId'
-      },
-      dynamooseModel: {
-        query: () => { return { hash: 'appId', range: 'roleId' } }
-      },
-      result: { hash: 'appId', range: 'roleId', settings: { limit: 2 } }
-    },
-    {
-      crudInputParams: {
-        httpMethod: 'GET',
-        keys: { appId: 'local', roleId: 'admin' },
-        filters: { appId: 'eq', roleId: 'beginsWith' },
-        page: '{ "appId": "local", "roleId": "amigos-da-lavinia" }'
-      },
-      dynamoObjectKeys: {
-        hash: 'appId',
-        range: 'roleId'
-      },
-      dynamooseModel: {
-        query: () => { return { hash: 'appId', range: 'roleId' } }
-      },
-      result: { hash: 'appId', range: 'roleId', settings: { startAt: { appId: 'local', roleId: 'amigos-da-lavinia' } } }
-    },
-    {
-      crudInputParams: {
-        httpMethod: 'GET',
-        keys: { appId: 'local', roleId: 'admin' },
-        filters: { appId: 'eq', roleId: 'beginsWith' },
-        sort: 'ascending'
-      },
-      dynamoObjectKeys: {
-        hash: 'appId',
-        range: 'roleId'
-      },
-      dynamooseModel: {
-        query: () => { return { hash: 'appId', range: 'roleId' } }
-      },
-      result: { hash: 'appId', range: 'roleId', settings: { sort: 'ascending' } }
-    },
-    {
-      crudInputParams: {
-        httpMethod: 'GET',
-        keys: { appId: 'local', roleId: 'admin' },
-        filters: { appId: 'eq', roleId: 'beginsWith' },
-        onlyCount: true
-      },
-      dynamoObjectKeys: {
-        hash: 'appId',
-        range: 'roleId'
-      },
-      dynamooseModel: {
-        query: () => { return { hash: 'appId', range: 'roleId' } }
-      },
-      result: { hash: 'appId', range: 'roleId', settings: { count: true } }
-    }
-  ]
-  test.each(param)('Should return an object containing the created Dynamo Indexes object (no errors)', (param) => {
-    return expect(mountDynamooseQuery(param.crudInputParams, param.dynamoObjectKeys, param.dynamooseModel as ModelType<Document>)).toStrictEqual(param.result)
   })
 })
