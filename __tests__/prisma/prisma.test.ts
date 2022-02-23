@@ -16,12 +16,29 @@ describe('prismaBuilderParameters', () => {
   }> = [
     {
       prismaInputParams: {
+        httpMethod: 'GET',
+        sort: '{"appId":"asc"}'
+      },
+      output: {
+        method: 'findMany',
+        prismaParams: {
+          select: undefined,
+          orderBy: { appId: 'asc' },
+          skip: undefined,
+          take: undefined,
+          where: {}
+        }
+      }
+    },
+    {
+      prismaInputParams: {
         httpMethod: 'GET'
       },
       output: {
         method: 'findMany',
         prismaParams: {
           select: undefined,
+          orderBy: undefined,
           skip: undefined,
           take: undefined,
           where: {}
@@ -48,6 +65,7 @@ describe('prismaBuilderParameters', () => {
         method: 'count',
         prismaParams: {
           select: undefined,
+          orderBy: undefined,
           skip: undefined,
           take: undefined,
           where: {}
@@ -163,6 +181,7 @@ describe('prismaBuilderParameters', () => {
         method: 'count',
         prismaParams: {
           select: undefined,
+          orderBy: undefined,
           skip: 5852,
           take: 77,
           where: {}
@@ -185,6 +204,7 @@ describe('prismaBuilderParameters', () => {
         method: 'findMany',
         prismaParams: {
           select: ['appId'],
+          orderBy: undefined,
           skip: undefined,
           take: undefined,
           where: {}
