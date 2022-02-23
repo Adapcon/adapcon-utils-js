@@ -95,6 +95,7 @@ const getCase = async (prismaInputParams: CrudInputParams, event?: EventFunction
       take: updatedCrudInputParams.limit ? Number(updatedCrudInputParams.limit) : undefined,
       skip: updatedCrudInputParams.page ? (Number(updatedCrudInputParams.page) - 1) * Number(updatedCrudInputParams.limit) : undefined,
       select: updatedCrudInputParams.columns && JSON.parse(updatedCrudInputParams.columns),
+      orderBy: updatedCrudInputParams.sort && JSON.parse(updatedCrudInputParams.sort),
       where: {
         ...updatedCrudInputParams.keys,
         ...updatedCrudInputParams.filters
