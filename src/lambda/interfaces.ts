@@ -18,6 +18,7 @@ export interface lambdaParameters {
   pathParameters?: {[key: string]: any}
   queryStringParameters?: {[key: string]: any}
   isOffline?: boolean
+  serviceSecretArn?: string
 }
 
 export type CrudInputParams = {
@@ -31,4 +32,9 @@ export type CrudInputParams = {
   filters?: {[key: string]: any}
   keys?: {[key: string]: any}
   customParameters?: {[key: string]: any}
+}
+
+export interface SecretValue {
+  accessKeyId?: string
+  secretAccessKey?: string
 }
