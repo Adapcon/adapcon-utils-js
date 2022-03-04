@@ -1,0 +1,19 @@
+{
+  "unversionedId": "Introduction",
+  "id": "Introduction",
+  "title": "Introduction",
+  "description": "adapcon-utils-js is a miscellaneous set of utilities created",
+  "source": "@site/docs/Introduction.mdx",
+  "sourceDirName": ".",
+  "slug": "/Introduction",
+  "permalink": "/docs/Introduction",
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/Introduction.mdx",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Translate your site",
+    "permalink": "/docs/tutorial-extras/translate-your-site"
+  }
+}

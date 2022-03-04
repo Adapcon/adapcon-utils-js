@@ -64,6 +64,16 @@ const executeInvoke = async ({
       : {})
   })
 
+  console.log('chegou aqui',
+      JSON.stringify({
+        headers,
+        body,
+        httpMethod,
+        pathParameters,
+        queryStringParameters
+      })
+  )
+
   const response = await lambda.invoke({
     FunctionName: functionName,
     InvocationType: invocationType,
