@@ -35,7 +35,7 @@ export type CrudInputParams = {
 }
 
 export interface AccessKey {
-  accessKeyId?: string
-  secretAccessKey?: string
+  accessKeyId: string
+  secretAccessKey: string
   region?: string
 }
