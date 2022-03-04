@@ -2,13 +2,13 @@ import AWS from 'aws-sdk'
 
 import { formattedResponse } from './formatters'
 import { SecretManager } from './../secretsManager/index'
-import { lambdaParameters, SecretValue } from '.'
+import { lambdaParameters, AccessKey } from '.'
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class LambdaService {
   static async invoke (lambdaParameters: lambdaParameters): Promise<object> {
     try {
-      const secretValue: SecretValue = lambdaParameters.serviceSecretArn
+      const accessKey: AccessKey = lambdaParameters.serviceSecretArn
         ? await SecretManager.getValue({
           region: lambdaParameters.region,
           secretId: lambdaParameters.serviceSecretArn
@@ -17,7 +17,7 @@ export class LambdaService {
 
       return executeInvoke({
         ...lambdaParameters,
-        ...secretValue
+        ...accessKey
       })
     } catch (error) {
       console.log('Error LambdaService invoke', error)
