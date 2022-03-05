@@ -10,7 +10,7 @@ export class LambdaService {
     try {
       return executeInvoke({
         ...lambdaParameters,
-        ...SecretManager.getAccessKey(lambdaParameters)
+        ...await SecretManager.getAccessKey(lambdaParameters)
       })
     } catch (error) {
       console.log('Error LambdaService invoke', error)
