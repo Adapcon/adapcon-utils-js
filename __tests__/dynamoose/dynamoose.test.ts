@@ -212,7 +212,7 @@ describe('dynamooseCrudHandler', () => {
       crudInputParams: {
         httpMethod: 'GET',
         keys: { appId: 'stage', roleId: 'amigos-da-catarina' },
-        filters: { appId: 'eq', roleId: 'beginsWith' }
+        filters: '{ "appId": "eq", "roleId": "beginsWith" }'
       },
       dynamooseObjectKeys: {
         hash: 'appId',
@@ -230,7 +230,7 @@ describe('dynamooseCrudHandler', () => {
       crudInputParams: {
         httpMethod: 'GET',
         keys: { appId: 'stage', roleId: 'amigos-da-catarina' },
-        filters: { }
+        filters: '{ }'
       },
       dynamooseObjectKeys: {
         hash: 'appId',
@@ -248,7 +248,7 @@ describe('dynamooseCrudHandler', () => {
       crudInputParams: {
         httpMethod: 'GET',
         keys: { appId: 'stage' },
-        filters: { }
+        filters: '{ }'
       },
       dynamooseObjectKeys: {
         hash: 'appId'
