@@ -40,6 +40,7 @@ describe('prismaBuilderParameters', () => {
         prismaParams: {
           select: undefined,
           skip: undefined,
+          orderBy: undefined,
           take: undefined,
           where: { appId: 'local' }
         }
@@ -54,7 +55,7 @@ describe('prismaBuilderParameters', () => {
         method: 'findMany',
         prismaParams: {
           select: { appId: true },
-          orderBy: { appId: 'asc' },
+          orderBy: undefined,
           skip: undefined,
           take: undefined,
           where: {}
