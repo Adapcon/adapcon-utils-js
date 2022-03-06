@@ -2,15 +2,15 @@ import {
   EventsCrud,
   SettingsCrud,
   prismaBuilderParameters,
-  PrismaInputParams,
   getPrismaStatusCode,
   PrismaOutputParams,
   BlockedMethods
 } from '../../src/prisma'
 import { HttpStatuses } from '../../src/http'
+import { CrudInputParams } from '../../src/lambda'
 
 describe('prismaBuilderParameters', () => {
-  const param: Array<{ prismaInputParams: PrismaInputParams
+  const param: Array<{ prismaInputParams: CrudInputParams
     settings?: { events?: EventsCrud, settings?: SettingsCrud }
     output: {}
   }> = [
@@ -24,6 +24,38 @@ describe('prismaBuilderParameters', () => {
         prismaParams: {
           select: undefined,
           orderBy: { appId: 'asc' },
+          skip: undefined,
+          take: undefined,
+          where: {}
+        }
+      }
+    },
+    {
+      prismaInputParams: {
+        httpMethod: 'GET',
+        filters: '{"appId":"local"}'
+      },
+      output: {
+        method: 'findMany',
+        prismaParams: {
+          select: undefined,
+          skip: undefined,
+          orderBy: undefined,
+          take: undefined,
+          where: { appId: 'local' }
+        }
+      }
+    },
+    {
+      prismaInputParams: {
+        httpMethod: 'GET',
+        columns: '{"appId":true}'
+      },
+      output: {
+        method: 'findMany',
+        prismaParams: {
+          select: { appId: true },
+          orderBy: undefined,
           skip: undefined,
           take: undefined,
           where: {}
@@ -195,7 +227,7 @@ describe('prismaBuilderParameters', () => {
       settings: {
         events: {
           onGet: (prismaInputParams) => {
-            prismaInputParams.columns = '["appId"]'
+            prismaInputParams.columns = ['appId']
             return prismaInputParams
           }
         }
@@ -264,7 +296,7 @@ describe('prismaBuilderParameters', () => {
 
 describe('throws prismaBuilderParameters', () => {
   const param: Array<{
-    prismaInputParams: PrismaInputParams
+    prismaInputParams: CrudInputParams
     blockedMethods: BlockedMethods
     throw: object
   }> = [

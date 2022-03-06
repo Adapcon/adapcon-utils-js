@@ -29,13 +29,7 @@ export type CrudInputParams = {
   columns?: string
   onlyCount?: boolean
   entity?: {[key: string]: any}
-  filters?: {[key: string]: any}
+  filters?: string
   keys?: {[key: string]: any}
   customParameters?: {[key: string]: any}
-}
-
-export interface AccessKey {
-  accessKeyId: string
-  secretAccessKey: string
-  region?: string
 }

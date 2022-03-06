@@ -1,15 +1,15 @@
 
-import type { CrudInputParams, CrudHttpMethods } from '../lambda'
+import type { CrudHttpMethods } from '../lambda'
 
 export type PrismaInputParams = {
   httpMethod: CrudHttpMethods
-  sort?: string
+  sort?: object
   limit?: string
   page?: string
-  columns?: string
+  columns?: object
   onlyCount?: boolean
   entity?: {[key: string]: any}
-  filters?: {[key: string]: any}
+  filters?: object | []
   keys?: {[key: string]: any}
   customParameters?: {[key: string]: any}
 }
@@ -26,7 +26,7 @@ export type EventsCrud = {
   onGet?: EventFunctionType
 }
 
-export type EventFunctionType = (prismaInputParams: CrudInputParams) => CrudInputParams
+export type EventFunctionType = (prismaInputParams: PrismaInputParams) => PrismaInputParams | Promise<PrismaInputParams>
 
 export type SettingsCrud = {
   joinKeys: boolean
