@@ -3,13 +3,13 @@ import type { CrudInputParams, CrudHttpMethods } from '../lambda'
 
 export type PrismaInputParams = {
   httpMethod: CrudHttpMethods
-  sort?: string
+  sort?: string | object
   limit?: string
   page?: string
-  columns?: string
+  columns?: string | object
   onlyCount?: boolean
   entity?: {[key: string]: any}
-  filters?: {[key: string]: any}
+  filters?: string | object | []
   keys?: {[key: string]: any}
   customParameters?: {[key: string]: any}
 }

@@ -23,6 +23,10 @@ export const prismaBuilderParameters = async (prismaInputParams: CrudInputParams
 ): Promise<PrismaOutputParams> => {
   verifyBlockedMethods(prismaInputParams.httpMethod, blockedMethods)
 
+  if (prismaInputParams.filters && typeof prismaInputParams.filters === 'string') { prismaInputParams.filters = JSON.parse(prismaInputParams.filters) }
+  if (prismaInputParams.columns && typeof prismaInputParams.columns === 'string') { prismaInputParams.columns = JSON.parse(prismaInputParams.columns) }
+  if (prismaInputParams.sort && typeof prismaInputParams.sort === 'string') { prismaInputParams.sort = JSON.parse(prismaInputParams.sort) }
+
   switch (prismaInputParams.httpMethod) {
     case 'GET':
       return getCase(prismaInputParams, events?.onGet)
@@ -94,8 +98,8 @@ const getCase = async (prismaInputParams: CrudInputParams, event?: EventFunction
     prismaParams: {
       take: updatedCrudInputParams.limit ? Number(updatedCrudInputParams.limit) : undefined,
       skip: updatedCrudInputParams.page ? (Number(updatedCrudInputParams.page) - 1) * Number(updatedCrudInputParams.limit) : undefined,
-      select: updatedCrudInputParams.columns && JSON.parse(updatedCrudInputParams.columns),
-      orderBy: updatedCrudInputParams.sort && JSON.parse(updatedCrudInputParams.sort),
+      select: updatedCrudInputParams.columns,
+      orderBy: updatedCrudInputParams.sort,
       where: {
         ...updatedCrudInputParams.keys,
         ...updatedCrudInputParams.filters
