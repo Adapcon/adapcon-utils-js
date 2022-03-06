@@ -32,6 +32,37 @@ describe('prismaBuilderParameters', () => {
     },
     {
       prismaInputParams: {
+        httpMethod: 'GET',
+        filters: '{"appId":"local"}'
+      },
+      output: {
+        method: 'findMany',
+        prismaParams: {
+          select: undefined,
+          skip: undefined,
+          take: undefined,
+          where: { appId: 'local' }
+        }
+      }
+    },
+    {
+      prismaInputParams: {
+        httpMethod: 'GET',
+        columns: '{"appId":true}'
+      },
+      output: {
+        method: 'findMany',
+        prismaParams: {
+          select: { appId: true },
+          orderBy: { appId: 'asc' },
+          skip: undefined,
+          take: undefined,
+          where: {}
+        }
+      }
+    },
+    {
+      prismaInputParams: {
         httpMethod: 'GET'
       },
       output: {
