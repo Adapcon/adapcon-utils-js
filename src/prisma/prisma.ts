@@ -3,7 +3,8 @@ import {
   EventsCrud,
   PrismaOutputParams,
   SettingsCrud,
-  BlockedMethods
+  BlockedMethods,
+  PrismaInputParams
 } from '.'
 import {
   CrudInputParams,
@@ -23,27 +24,28 @@ export const prismaBuilderParameters = async (prismaInputParams: CrudInputParams
 ): Promise<PrismaOutputParams> => {
   verifyBlockedMethods(prismaInputParams.httpMethod, blockedMethods)
 
-  if (prismaInputParams.filters && typeof prismaInputParams.filters === 'string') { prismaInputParams.filters = JSON.parse(prismaInputParams.filters) }
-  if (prismaInputParams.columns && typeof prismaInputParams.columns === 'string') { prismaInputParams.columns = JSON.parse(prismaInputParams.columns) }
-  if (prismaInputParams.sort && typeof prismaInputParams.sort === 'string') { prismaInputParams.sort = JSON.parse(prismaInputParams.sort) }
+  const updatedCrudInputParams = prismaInputParams as PrismaInputParams
+  if (updatedCrudInputParams.filters && typeof updatedCrudInputParams.filters === 'string') { updatedCrudInputParams.filters = JSON.parse(updatedCrudInputParams.filters) }
+  if (updatedCrudInputParams.columns && typeof updatedCrudInputParams.columns === 'string') { updatedCrudInputParams.columns = JSON.parse(updatedCrudInputParams.columns) }
+  if (updatedCrudInputParams.sort && typeof updatedCrudInputParams.sort === 'string') { updatedCrudInputParams.sort = JSON.parse(updatedCrudInputParams.sort) }
 
-  switch (prismaInputParams.httpMethod) {
+  switch (updatedCrudInputParams.httpMethod) {
     case 'GET':
-      return getCase(prismaInputParams, events?.onGet)
+      return getCase(updatedCrudInputParams, events?.onGet)
 
     case 'POST':
-      return postCase(prismaInputParams, events?.onPost)
+      return postCase(updatedCrudInputParams, events?.onPost)
 
     case 'PUT':
-      return putCase(prismaInputParams, events?.onPut, settings)
+      return putCase(updatedCrudInputParams, events?.onPut, settings)
 
     case 'DELETE':
-      return deleteCase(prismaInputParams, events?.onDelete, settings)
+      return deleteCase(updatedCrudInputParams, events?.onDelete, settings)
   }
 }
 
-const deleteCase = async (prismaInputParams: CrudInputParams, event?: EventFunctionType, settings?: SettingsCrud): Promise<PrismaOutputParams> => {
-  const updatedCrudInputParams: CrudInputParams = event ? await event(prismaInputParams) : prismaInputParams
+const deleteCase = async (prismaInputParams: PrismaInputParams, event?: EventFunctionType, settings?: SettingsCrud): Promise<PrismaOutputParams> => {
+  const updatedCrudInputParams: PrismaInputParams = event ? await event(prismaInputParams) : prismaInputParams
   updatedCrudInputParams.keys = formatEntitiesKeys(updatedCrudInputParams.keys, settings)
 
   return {
@@ -56,8 +58,8 @@ const deleteCase = async (prismaInputParams: CrudInputParams, event?: EventFunct
   }
 }
 
-const putCase = async (prismaInputParams: CrudInputParams, event?: EventFunctionType, settings?: SettingsCrud): Promise<PrismaOutputParams> => {
-  const updatedCrudInputParams: CrudInputParams = event ? await event(prismaInputParams) : prismaInputParams
+const putCase = async (prismaInputParams: PrismaInputParams, event?: EventFunctionType, settings?: SettingsCrud): Promise<PrismaOutputParams> => {
+  const updatedCrudInputParams: PrismaInputParams = event ? await event(prismaInputParams) : prismaInputParams
   updatedCrudInputParams.keys = formatEntitiesKeys(updatedCrudInputParams.keys, settings)
 
   return {
@@ -74,8 +76,8 @@ const putCase = async (prismaInputParams: CrudInputParams, event?: EventFunction
   }
 }
 
-const postCase = async (prismaInputParams: CrudInputParams, event?: EventFunctionType): Promise<PrismaOutputParams> => {
-  const updatedCrudInputParams: CrudInputParams = event ? await event(prismaInputParams) : prismaInputParams
+const postCase = async (prismaInputParams: PrismaInputParams, event?: EventFunctionType): Promise<PrismaOutputParams> => {
+  const updatedCrudInputParams: PrismaInputParams = event ? await event(prismaInputParams) : prismaInputParams
   updatedCrudInputParams.keys = formatEntitiesKeys(updatedCrudInputParams.keys)
 
   return {
@@ -89,8 +91,8 @@ const postCase = async (prismaInputParams: CrudInputParams, event?: EventFunctio
   }
 }
 
-const getCase = async (prismaInputParams: CrudInputParams, event?: EventFunctionType): Promise<PrismaOutputParams> => {
-  const updatedCrudInputParams: CrudInputParams = event ? await event(prismaInputParams) : prismaInputParams
+const getCase = async (prismaInputParams: PrismaInputParams, event?: EventFunctionType): Promise<PrismaOutputParams> => {
+  const updatedCrudInputParams: PrismaInputParams = event ? await event(prismaInputParams) : prismaInputParams
   updatedCrudInputParams.keys = formatEntitiesKeys(updatedCrudInputParams.keys)
 
   return {

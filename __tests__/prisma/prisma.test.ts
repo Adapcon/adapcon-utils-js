@@ -2,15 +2,15 @@ import {
   EventsCrud,
   SettingsCrud,
   prismaBuilderParameters,
-  PrismaInputParams,
   getPrismaStatusCode,
   PrismaOutputParams,
   BlockedMethods
 } from '../../src/prisma'
 import { HttpStatuses } from '../../src/http'
+import { CrudInputParams } from '../../src/lambda'
 
 describe('prismaBuilderParameters', () => {
-  const param: Array<{ prismaInputParams: PrismaInputParams
+  const param: Array<{ prismaInputParams: CrudInputParams
     settings?: { events?: EventsCrud, settings?: SettingsCrud }
     output: {}
   }> = [
@@ -195,7 +195,7 @@ describe('prismaBuilderParameters', () => {
       settings: {
         events: {
           onGet: (prismaInputParams) => {
-            prismaInputParams.columns = '["appId"]'
+            prismaInputParams.columns = ['appId']
             return prismaInputParams
           }
         }
@@ -264,7 +264,7 @@ describe('prismaBuilderParameters', () => {
 
 describe('throws prismaBuilderParameters', () => {
   const param: Array<{
-    prismaInputParams: PrismaInputParams
+    prismaInputParams: CrudInputParams
     blockedMethods: BlockedMethods
     throw: object
   }> = [
