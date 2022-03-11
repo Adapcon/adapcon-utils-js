@@ -14,8 +14,8 @@ export const SecretManager = {
     return JSON.parse(secret.SecretString ?? '{}')
   },
 
-  getAccessKey: async ({ region, serviceSecretArn: secretId }: AccessKeyParam): Promise<AccessKey> => {
-    return secretId
+  getAccessKey: async ({ region, serviceSecretArn: secretId, isOffline }: AccessKeyParam & { isOffline: string }): Promise<AccessKey> => {
+    return (secretId && !isOffline)
       ? await SecretManager.getValue({
         region,
         secretId
