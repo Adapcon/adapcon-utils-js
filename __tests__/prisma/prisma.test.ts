@@ -135,7 +135,7 @@ describe('prismaBuilderParameters', () => {
           templateId: 77
         }
       },
-      settings: { settings: { joinKeys: true } },
+      settings: { settings: { joinKeys: true, keysList: ['appId', 'templateId'] } },
       output: {
         method: 'update',
         prismaParams: {
