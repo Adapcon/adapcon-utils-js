@@ -1,3 +1,5 @@
+import { getEmailDomain } from './formatters'
+
 export const isEmail = (arg: string): boolean => {
   if (!arg || typeof arg !== 'string') return false
 
@@ -5,28 +7,22 @@ export const isEmail = (arg: string): boolean => {
   return regex.test(arg)
 }
 
-export const getEmailDomain = (arg: string): string | undefined => {
-  return isEmail(arg) ? arg.toLowerCase().split('@').pop() : ''
-}
+export const hasPublicDomain = (email: string): boolean => {
+  if (!isEmail(email)) return false
+  const publicEmailDomain = [
+    'bol.com.br',
+    'gmail.com',
+    'hotmail.com',
+    'hotmail.com.br',
+    'live.com',
+    'outlook.com',
+    'terra.com.br',
+    'uol.com.br',
+    'yahoo.com',
+    'yahoo.com.br'
+  ]
+  const emailDomain = getEmailDomain(email)
 
-export const isPublicDomain = (email: string): boolean => {
-  if (isEmail(email)) {
-    const publicEmailDomain = [
-      'bol.com.br',
-      'gmail.com',
-      'hotmail.com',
-      'hotmail.com.br',
-      'live.com',
-      'outlook.com',
-      'terra.com.br',
-      'uol.com.br',
-      'yahoo.com',
-      'yahoo.com.br'
-    ]
-    const emailDomain = getEmailDomain(email)
-
-    const isPublic = publicEmailDomain.some(publicDomain => publicDomain === emailDomain)
-    return isPublic
-  }
-  return false
+  const isPublic = publicEmailDomain.some(publicDomain => publicDomain === emailDomain)
+  return isPublic
 }
