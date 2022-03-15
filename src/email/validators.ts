@@ -4,3 +4,29 @@ export const isEmail = (arg: string): boolean => {
   const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return regex.test(arg)
 }
+
+export const getEmailDomain = (arg: string): string | undefined => {
+  return isEmail(arg) ? arg.toLowerCase().split('@').pop() : ''
+}
+
+export const isPublicDomain = (email: string): boolean => {
+  if (isEmail(email)) {
+    const publicEmailDomain = [
+      'bol.com.br',
+      'gmail.com',
+      'hotmail.com',
+      'hotmail.com.br',
+      'live.com',
+      'outlook.com',
+      'terra.com.br',
+      'uol.com.br',
+      'yahoo.com',
+      'yahoo.com.br'
+    ]
+    const emailDomain = getEmailDomain(email)
+
+    const isPublic = publicEmailDomain.some(publicDomain => publicDomain === emailDomain)
+    return isPublic
+  }
+  return false
+}
