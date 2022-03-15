@@ -101,7 +101,9 @@ describe('assembleEntitySchema', () => {
       },
     },
     {
-      solicitation: {},
+      solicitation: {
+        jsonData: true,
+      },
       entitySchema: {
         appId: {
           type: 'string',
@@ -111,6 +113,72 @@ describe('assembleEntitySchema', () => {
         },
       },
       returnExpected: {},
+    },
+    {
+      solicitation: {
+        appId: true,
+      },
+      entitySchema: undefined,
+      returnExpected: {},
+    },
+    {
+      solicitation: {
+        test: {
+          children1: true,
+        },
+      },
+      entitySchema: {
+        test: {
+          type: 'array',
+          occult: false,
+          required: true,
+          label: 'teste',
+          contentArray: {
+            children1: {
+              type: 'string',
+              occult: false,
+              required: true,
+              label: 'teste',
+            },
+            children2: {
+              type: 'string',
+              occult: false,
+              required: true,
+              label: 'teste',
+            },
+          },
+        },
+      },
+      returnExpected: {
+        test: {
+          contentArray: {
+            children1: {
+              label: "teste",
+              occult: false,
+              required: true,
+              type: "string",
+            },
+            children2: {
+              label: "teste",
+              occult: false,
+              required: true,
+              type: "string",
+            },
+          },
+          contentObject: {
+            children1: {
+              label: "teste",
+              occult: false,
+              required: true,
+              type: "string",
+            },
+          },
+          label: "teste",
+          occult: false,
+          required: true,
+          type: "array",
+        },
+      },
     },
   ];
 
