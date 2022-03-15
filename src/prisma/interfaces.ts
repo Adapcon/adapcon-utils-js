@@ -30,6 +30,7 @@ export type EventFunctionType = (prismaInputParams: PrismaInputParams) => Prisma
 
 export type SettingsCrud = {
   joinKeys: boolean
+  keysList: string[]
 }
 
 export type BlockedMethods = {
