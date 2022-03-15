@@ -1,4 +1,4 @@
-import { assembleEntitySchema } from '../../src/entitySchema';
+import { EntitySchema } from '../../src/entitySchema';
 
 describe('assembleEntitySchema', () => {
   const validDefaultsObjects = [
@@ -183,6 +183,6 @@ describe('assembleEntitySchema', () => {
   ];
 
   test.each(validDefaultsObjects)('should returns validation of the provided specific entity schema', ({ solicitation, entitySchema, returnExpected }) => {
-    expect(assembleEntitySchema(solicitation, entitySchema)).toEqual(returnExpected);
+    expect(EntitySchema.assembleEntitySchema(solicitation, entitySchema)).toEqual(returnExpected);
   });
 });

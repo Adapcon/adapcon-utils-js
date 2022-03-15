@@ -1,4 +1,5 @@
-export const assembleEntitySchema = (solicitation: any, entitySchema: any): object => {
+export const EntitySchema = {
+  assembleEntitySchema(solicitation: any, entitySchema: any): object {
   const defaultObject = {};
   const properties = Object.keys(solicitation);
 
@@ -13,11 +14,11 @@ export const assembleEntitySchema = (solicitation: any, entitySchema: any): obje
       defaultObject[key] = {
         ...property,
         contentObject: {
-          ...assembleEntitySchema(solicitation[key], property.contentObject || property.contentArray),
+          ...EntitySchema.assembleEntitySchema(solicitation[key], property.contentObject || property.contentArray),
         },
       };
     } else defaultObject[key] = property;
   });
 
   return defaultObject;
-}
+}}
