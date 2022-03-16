@@ -10,19 +10,17 @@ export const isEmail = (arg: string): boolean => {
 export const hasPublicDomain = (email: string): boolean => {
   if (!isEmail(email)) return false
   const publicEmailDomain = [
-    'bol.com.br',
+    'bol.com',
     'gmail.com',
     'hotmail.com',
-    'hotmail.com.br',
     'live.com',
     'outlook.com',
-    'terra.com.br',
-    'uol.com.br',
-    'yahoo.com',
-    'yahoo.com.br'
+    'terra.com',
+    'uol.com',
+    'yahoo.com'
   ]
   const emailDomain = getEmailDomain(email)
 
-  const isPublic = publicEmailDomain.some(publicDomain => publicDomain === emailDomain)
+  const isPublic = publicEmailDomain.some(publicDomain => String(emailDomain).includes(publicDomain))
   return isPublic
 }
