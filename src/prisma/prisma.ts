@@ -70,7 +70,7 @@ const putCase = async (prismaInputParams: PrismaInputParams, event?: EventFuncti
         ...updatedCrudInputParams.filters
       },
       data: {
-        jsonData: updatedCrudInputParams.entity
+        ...updatedCrudInputParams.entity
       }
     }
   }
@@ -84,7 +84,7 @@ const postCase = async (prismaInputParams: PrismaInputParams, event?: EventFunct
     method: 'create',
     prismaParams: {
       data: {
-        jsonData: updatedCrudInputParams.entity,
+        ...updatedCrudInputParams.entity,
         ...updatedCrudInputParams.keys
       }
     }
