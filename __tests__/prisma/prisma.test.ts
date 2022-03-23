@@ -84,7 +84,7 @@ describe('prismaBuilderParameters', () => {
       output: {
         method: 'create',
         prismaParams: {
-          data: { jsonData: undefined }
+          data: {}
         }
       }
     },
@@ -122,7 +122,7 @@ describe('prismaBuilderParameters', () => {
       output: {
         method: 'update',
         prismaParams: {
-          data: { jsonData: undefined },
+          data: {},
           where: {}
         }
       }
@@ -139,7 +139,7 @@ describe('prismaBuilderParameters', () => {
       output: {
         method: 'update',
         prismaParams: {
-          data: { jsonData: undefined },
+          data: { },
           where: {
             appId_templateId: {
               appId: 'local',
@@ -160,7 +160,7 @@ describe('prismaBuilderParameters', () => {
       output: {
         method: 'update',
         prismaParams: {
-          data: { jsonData: undefined },
+          data: {},
           where: {
             appId: 'local',
             templateId: 77
@@ -190,7 +190,7 @@ describe('prismaBuilderParameters', () => {
         method: 'create',
         prismaParams: {
           data: {
-            jsonData: { createdAt: 1642505518316 }
+            createdAt: 1642505518316
           }
         }
       }
@@ -283,7 +283,7 @@ describe('prismaBuilderParameters', () => {
       output: {
         method: 'update',
         prismaParams: {
-          data: { jsonData: {} },
+          data: {},
           where: {}
         }
       }
