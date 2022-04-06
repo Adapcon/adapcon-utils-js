@@ -32,18 +32,18 @@ describe('dynamicVariableSwitcher', () => {
       inputString: '{{nome_de_contato}}, {{cpf}}, sua documentação esta pronta',
       dynamicVariables: {
         nome_de_contato: 'Marcos',
-        cpf: '063.091.879-10',
+        cpf: '000.000.000-00',
         email: 'digosw@gmail.com',
         teste: 'teste',
         outraString: 'OLHA QUE LEGAL!!!111ONZE!1'
       },
-      returnedString: 'Marcos, 063.091.879-10, sua documentação esta pronta'
+      returnedString: 'Marcos, 000.000.000-00, sua documentação esta pronta'
     },
     {
       inputString: '{{email}}',
       dynamicVariables: {
         nome_de_contato: 'Marcos',
-        cpf: '063.091.879-10',
+        cpf: '000.000.000-00',
         email: 'digosw@gmail.com',
         teste: 'teste',
         outraString: 'OLHA QUE LEGAL!!!111ONZE!1'
@@ -54,7 +54,7 @@ describe('dynamicVariableSwitcher', () => {
       inputString: '{{email}}',
       dynamicVariables: {
         nome_de_contato: 'Marcos',
-        cpf: '063.091.879-10',
+        cpf: '000.000.000-00',
         email: 'digosw@gmail.com',
         teste: 'teste',
         outraString: 'OLHA QUE LEGAL!!!111ONZE!1'
@@ -65,7 +65,7 @@ describe('dynamicVariableSwitcher', () => {
       inputString: '{{email}}{{teste}}{{teste2}}',
       dynamicVariables: {
         nome_de_contato: 'Marcos',
-        cpf: '063.091.879-10',
+        cpf: '000.000.000-00',
         email: 'digosw@gmail.com',
         teste: 'teste',
         outraString: 'OLHA QUE LEGAL!!!111ONZE!1'
@@ -76,7 +76,7 @@ describe('dynamicVariableSwitcher', () => {
       inputString: '{{outraString}} {{testes}}',
       dynamicVariables: {
         nome_de_contato: 'Marcos',
-        cpf: '063.091.879-10',
+        cpf: '000.000.000-00',
         email: 'digosw@gmail.com',
         teste: 'teste',
         outraString: 'OLHA QUE LEGAL!!!111ONZE!1'
