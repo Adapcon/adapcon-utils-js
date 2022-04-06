@@ -51,17 +51,6 @@ describe('dynamicVariableSwitcher', () => {
       returnedString: 'digosw@gmail.com'
     },
     {
-      inputString: '{{email}}',
-      dynamicVariables: {
-        nome_de_contato: 'Marcos',
-        cpf: '000.000.000-00',
-        email: 'digosw@gmail.com',
-        teste: 'teste',
-        outraString: 'OLHA QUE LEGAL!!!111ONZE!1'
-      },
-      returnedString: 'digosw@gmail.com'
-    },
-    {
       inputString: '{{email}}{{teste}}{{teste2}}',
       dynamicVariables: {
         nome_de_contato: 'Marcos',
