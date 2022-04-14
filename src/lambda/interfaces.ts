@@ -14,7 +14,7 @@ export interface lambdaParameters {
   functionName: string
   invocationType?: string
   headers?: {[key: string]: any}
-  body?: {[key: string]: any}
+  body?: {[key: string]: any} | string
   pathParameters?: {[key: string]: any}
   queryStringParameters?: {[key: string]: any}
   isOffline?: boolean
