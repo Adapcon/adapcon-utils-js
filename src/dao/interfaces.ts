@@ -4,6 +4,7 @@ export interface DynamodbParams {
   Limit?: number
   ExclusiveStartKey?: object
   ExpressionAttributeNames?: object
+  ExpressionAttributeValues?: object
   KeyConditionExpression?: string
   Item?: object
 }
