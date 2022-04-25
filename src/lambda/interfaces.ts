@@ -19,6 +19,9 @@ export interface lambdaParameters {
   queryStringParameters?: {[key: string]: any}
   isOffline?: boolean
   serviceSecretArn?: string
+  path?: string
+  requestContext?: object
+  shouldStringifyBody?: boolean
 }
 
 export type CrudInputParams = {
