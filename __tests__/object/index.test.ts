@@ -71,4 +71,12 @@ describe('isObjEqual', () => {
   it('Should return false to different keys', () => {
     expect(isObjEqual({ name: 'João' }, { name: 'João', age: '20' })).toEqual(false)
   })
+
+  it('Should return false to different keys', () => {
+    expect(isObjEqual(undefined, undefined)).toEqual(true)
+  })
+
+  it('Should return false to different keys', () => {
+    expect(isObjEqual(null, null)).toEqual(true)
+  })
 })
