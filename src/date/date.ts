@@ -29,7 +29,7 @@ export const getDiffDays = (date: string, initial?: string): number => {
   const initialDate = initial ? new Date(initial) : new Date()
   const target = new Date(date)
 
-  const diffTime = Math.abs(initialDate.getTime() - target.getTime())
+  const diffTime = initialDate.getTime() - target.getTime()
 
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 

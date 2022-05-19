@@ -58,8 +58,8 @@ describe('getDiffDays', () => {
   const dates = [
     { date: '2022-05-15', initial: '2022-05-19', output: 4 },
     { date: '2022-05-18', initial: '2022-05-19', output: 1 },
-    { date: '2022-05-20', initial: '2022-05-15', output: 5 },
-    { date: '2022-05-21', initial: '2022-05-20', output: 1 }
+    { date: '2022-05-20', initial: '2022-05-15', output: -5 },
+    { date: '2022-05-21', initial: '2022-05-20', output: -1 }
   ]
 
   test.each(dates)('Should return the difference between two dates', (param) => {
@@ -69,7 +69,7 @@ describe('getDiffDays', () => {
   const params = [
     { date: '2022-05-15', output: 4 },
     { date: '2022-05-18', output: 1 },
-    { date: '2022-05-22', output: 2 }
+    { date: '2022-05-22', output: -3 }
   ]
 
   test.each(params)('Should return the difference between the informed date and the actual date', (param) => {
