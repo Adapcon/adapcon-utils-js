@@ -25,9 +25,9 @@ export const changeDate = (date: Date, duration: Duration): Date => {
   return updatedDate
 }
 
-export const getDiffDays = (date: string, initial?: string): number => {
+export const getDiffDays = (date: string | Date, initial?: string): number => {
   const initialDate = initial ? new Date(initial) : new Date()
-  const target = new Date(date)
+  const target = date instanceof Date ? date : new Date(date)
 
   const diffTime = initialDate.getTime() - target.getTime()
 

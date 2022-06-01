@@ -6,7 +6,6 @@ describe('formatDate', () => {
     { input: '2022-05-15', format: 'YYYY-DD-MM', output: '2022-15-05' },
     { input: '2022-05-15', format: 'YYYY/MM/DD', output: '2022/05/15' },
     { input: '2022-05-15', format: 'MM/DD/YYYY', output: '05/15/2022' },
-    { input: '2022-05-15', format: 'MM/DD/YYYY', output: '05/15/2022' },
     { input: new Date(), format: 'DD-MM-YYYY', output: '01-06-2022' },
     { input: new Date(), format: 'YYYY-MM-DD', output: '2022-06-01' }
   ]
