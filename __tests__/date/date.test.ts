@@ -67,9 +67,9 @@ describe('getDiffDays', () => {
   })
 
   const params = [
-    { date: '2022-05-15', output: 4 },
-    { date: '2022-05-18', output: 1 },
-    { date: '2022-05-22', output: -3 }
+    { date: decreaseDate(new Date(), { day: 4 }), output: 4 },
+    { date: decreaseDate(new Date(), { day: 1 }), output: 1 },
+    { date: increaseDate(new Date(), { day: 3 }), output: -3 }
   ]
 
   test.each(params)('Should return the difference between the informed date and the actual date', (param) => {
