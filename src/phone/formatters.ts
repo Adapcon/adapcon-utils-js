@@ -16,3 +16,12 @@ export const formatPhone = (v: string): string => {
   }
   return value
 }
+
+export const removeFirstDigitFromPhone = (phone: string): string => {
+  if (phone.length === 8 || phone.length === 10) return phone
+
+  const ddd = phone.length === 11 ? phone.slice(0, 2) : ''
+  const phoneWithoutFirstDigit = ddd ? phone.slice(3) : phone.slice(1)
+
+  return `${ddd}${phoneWithoutFirstDigit}`
+}
