@@ -19,7 +19,9 @@ describe('isSamePhone', () => {
   const samePhones = [
     { phone1: '47996919816', phone2: '47996919816' },
     { phone1: '4796919816', phone2: '4796919816' },
-    { phone1: '47996919816', phone2: '4796919816' }
+    { phone1: '47996919816', phone2: '4796919816' },
+    { phone1: '5547996919816', phone2: '47996919816' },
+    { phone1: '5547996919816', phone2: '4796919816' }
   ]
 
   const differentPhones = [

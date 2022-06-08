@@ -13,5 +13,8 @@ export const isBrazilianCellPhoneFormat = (arg: string | number): boolean => {
 }
 
 export const isSamePhone = (phone1: string, phone2: string): boolean => {
-  return removeFirstDigitFromPhone(phone1) === removeFirstDigitFromPhone(phone2)
+  const phone1Formatted = phone1.slice(0, 2) === '55' ? phone1.slice(2) : phone1
+  const phone2Formatted = phone2.slice(0, 2) === '55' ? phone2.slice(2) : phone2
+
+  return removeFirstDigitFromPhone(phone1Formatted) === removeFirstDigitFromPhone(phone2Formatted)
 }
