@@ -11,7 +11,8 @@ describe('formatDate', () => {
     { input: '2022-05-15', format: 'YYYY/MM/DD', output: '2022/05/15' },
     { input: '2022-05-15', format: 'MM/DD/YYYY', output: '05/15/2022' },
     { input: currentDate, format: 'DD-MM-YYYY', output: `${day < 10 ? `0${day}` : day}-${month < 10 ? `0${month}` : month}-${currentDate.getFullYear()}` },
-    { input: currentDate, format: 'YYYY-MM-DD', output: `${currentDate.getFullYear()}-${month < 10 ? `0${month}` : month}-${day < 10 ? `0${day}` : day}` }
+    { input: currentDate, format: 'YYYY-MM-DD', output: `${currentDate.getFullYear()}-${month < 10 ? `0${month}` : month}-${day < 10 ? `0${day}` : day}` },
+    { input: new Date('2022/07/07'), format: 'DD-MM-YYYY', output: '07-07-2022' }
   ]
 
   test.each(dates)('Should return formatted date passing the format', (param) => {
