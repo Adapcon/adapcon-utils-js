@@ -27,5 +27,5 @@ module.exports = {
       statements: 100
     }
   },
-  coveragePathIgnorePatterns: ['<rootDir>/src/dao', '<rootDir>/src/lambda/lambdaService', '<rootDir>/src/secretsManager/secretManager']
+  coveragePathIgnorePatterns: ['<rootDir>/src/dao', '<rootDir>/src/lambda/lambdaService', '<rootDir>/src/secretsManager/secretManager', '<rootDir>/src/promise']
 }
