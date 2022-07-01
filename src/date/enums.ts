@@ -7,3 +7,13 @@ export enum DurationTypes {
   second = 'Seconds',
   millisecond = 'Milliseconds'
 }
+
+export enum TranslatedWeekDays {
+  sunday = 'domingo',
+  monday = 'segunda-feira',
+  tuesday = 'terça-feira',
+  wednesday = 'quarta-feira',
+  thursday = 'quinta-feira',
+  friday = 'sexta-feira',
+  saturday = 'sábado',
+}
