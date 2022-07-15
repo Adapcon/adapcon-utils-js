@@ -17,6 +17,7 @@ export interface lambdaParameters {
   body?: {[key: string]: any} | string
   pathParameters?: {[key: string]: any}
   queryStringParameters?: {[key: string]: any}
+  multiValueQueryStringParameters?: {[key: string]: any}
   isOffline?: boolean
   serviceSecretArn?: string
   path?: string

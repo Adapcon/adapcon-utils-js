@@ -30,6 +30,7 @@ const executeInvoke = async ({
   body = {},
   pathParameters = {},
   queryStringParameters = {},
+  multiValueQueryStringParameters = {},
   isOffline = false,
   httpMethod = '',
   path,
@@ -61,6 +62,7 @@ const executeInvoke = async ({
         httpMethod,
         pathParameters,
         queryStringParameters,
+        multiValueQueryStringParameters,
         path,
         requestContext,
         multiValueHeaders: Object.entries(headers).reduce((previous, current) => {
