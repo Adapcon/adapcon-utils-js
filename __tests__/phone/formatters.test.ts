@@ -19,6 +19,8 @@ describe('formatPhone', () => {
 
 describe('removeFirstDigitFromPhone', () => {
   const data = [
+    { input: '5547996919816', output: '554796919816' },
+    { input: '554796919816', output: '554796919816' },
     { input: '47996919816', output: '4796919816' },
     { input: '4796919816', output: '4796919816' },
     { input: '996919816', output: '96919816' },
