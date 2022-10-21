@@ -18,10 +18,13 @@ export const formatPhone = (v: string): string => {
 }
 
 export const removeFirstDigitFromPhone = (phone: string): string => {
-  if (phone.length === 8 || phone.length === 10) return phone
+  if (phone.length === 8 || phone.length === 10 || phone.length === 12) return phone
 
   const ddd = phone.length === 11 ? phone.slice(0, 2) : ''
-  const phoneWithoutFirstDigit = ddd ? phone.slice(3) : phone.slice(1)
+  const ddi = phone.length === 13 ? phone.slice(0, 4) : ''
+  let phoneWithoutFirstDigit = ''
 
-  return `${ddd}${phoneWithoutFirstDigit}`
+  if (ddi) { phoneWithoutFirstDigit = phone.slice(5) } else if (ddd) { phoneWithoutFirstDigit = phone.slice(3) } else phoneWithoutFirstDigit = phone.slice(1)
+
+  return `${ddi}${ddd}${phoneWithoutFirstDigit}`
 }
