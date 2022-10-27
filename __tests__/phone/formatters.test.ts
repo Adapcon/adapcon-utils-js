@@ -1,4 +1,4 @@
-import { formatPhone, removeFirstDigitFromPhone } from '../../src/phone'
+import { formatPhone, removeFirstDigitFromPhone, addFirstDigitToPhone } from '../../src/phone'
 
 describe('formatPhone', () => {
   const data = [
@@ -29,5 +29,20 @@ describe('removeFirstDigitFromPhone', () => {
 
   test.each(data)('Should return the phone without the first digit', (param) => {
     expect(removeFirstDigitFromPhone(param.input)).toBe(param.output)
+  })
+})
+
+describe('addFirstDigitToPhone', () => {
+  const data = [
+    { input: '996919816', output: '996919816' },
+    { input: '96919816', output: '996919816' },
+    { input: '47996919816', output: '47996919816' },
+    { input: '4796919816', output: '47996919816' },
+    { input: '5547996919816', output: '5547996919816' },
+    { input: '554796919816', output: '5547996919816' }
+  ]
+
+  test.each(data)('Should return the phone with the first digit', (param) => {
+    expect(addFirstDigitToPhone(param.input)).toBe(param.output)
   })
 })
