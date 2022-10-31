@@ -7,7 +7,7 @@ describe('isValidName', () => {
     expect(isValidName(name)).toBeTruthy()
   })
 
-  const invalidNames = ['Patríc1a', 'An4 Pau1a', '007',  'jOÃO c4rlos']
+  const invalidNames = ['Patríc1a', 'An4 Pau1a', '007', 'jOÃO c4rlos', 307]
 
   test.each(invalidNames)('Should return false if the name is invalid', (notName) => {
     expect(isValidName(notName as any)).toBeFalsy()
