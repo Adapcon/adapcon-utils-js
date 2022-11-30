@@ -13,6 +13,12 @@ export const formatPhone = (v: string): string => {
     value = value.replace(/(\d{5})(\d)/, '$1-$2')
   } else if (value.length === 8) {
     value = value.replace(/(\d{4})(\d)/, '$1-$2')
+  } else if (value.length === 12) {
+    value = value.replace(/(\d{2})(\d{2})/, '+$1 ($2) ')
+    value = value.replace(/(\d{4})(\d)/, '$1-$2')
+  } else if (value.length === 13) {
+    value = value.replace(/(\d{2})(\d{2})/, '+$1 ($2) ')
+    value = value.replace(/(\d{5})(\d)/, '$1-$2')
   }
   return value
 }
