@@ -1,6 +1,3 @@
-
-// invokeEventCheck
-
 import { invokeEventCheck } from '../../src/lambda'
 
 describe('invokeEventCheck', () => {
