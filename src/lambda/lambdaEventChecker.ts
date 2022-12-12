@@ -1,4 +1,10 @@
 export const invokeEventCheck = (event: {[key: string]: any}): {invoke: boolean} => {
-  if (!event?.httpMethod) return { invoke: true }
-  return { invoke: false }
+  if ('requestContext' in event) {
+    if (Object.keys(event.requestContext as object).length) {
+      return {
+        invoke: false
+      }
+    }
+  }
+  return { invoke: true }
 }

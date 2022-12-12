@@ -160,6 +160,26 @@ describe('invokeEventCheck', () => {
       output: {
         invoke: true
       }
+    },
+    {
+      event: {
+        headers: {},
+        body: {},
+        pathParameters: { appId: 'local' },
+        queryStringParameters: {},
+        multiValueQueryStringParameters: {},
+        requestContext: {},
+        multiValueHeaders: {}
+      },
+      output: {
+        invoke: true
+      }
+    },
+    {
+      event: {},
+      output: {
+        invoke: true
+      }
     }
   ]
 
