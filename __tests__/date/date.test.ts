@@ -1,7 +1,8 @@
 import {
   increaseDate,
   decreaseDate,
-  changeDate
+  changeDate,
+  getDiffDays
 } from '../../src/date'
 
 describe('increaseDate', () => {
@@ -52,3 +53,27 @@ describe('changeDate', () => {
     expect(changeDate(date, duration)).toStrictEqual(expected)
   })
 })
+
+describe('getDiffDays', () => {
+  const dates = [
+    { date: '2022-05-15', initial: '2022-05-19', output: 4 },
+    { date: '2022-05-18', initial: '2022-05-19', output: 1 },
+    { date: '2022-05-20', initial: '2022-05-15', output: -5 },
+    { date: '2022-05-21', initial: '2022-05-20', output: -1 }
+  ]
+
+  test.each(dates)('Should return the difference between two dates', (param) => {
+    expect(getDiffDays(param.date, param.initial)).toBe(param.output)
+  })
+
+  const params = [
+    { date: decreaseDate(new Date(), { day: 4 }), output: 4 },
+    { date: decreaseDate(new Date(), { day: 1 }), output: 1 },
+    { date: increaseDate(new Date(), { day: 3 }), output: -3 }
+  ]
+
+  test.each(params)('Should return the difference between the informed date and the actual date', (param) => {
+    expect(getDiffDays(param.date)).toBe(param.output)
+  })
+})
+

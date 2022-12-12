@@ -1,4 +1,4 @@
-import { formatPhone } from '../../src/phone'
+import { formatPhone, removeFirstDigitFromPhone, addFirstDigitToPhone } from '../../src/phone'
 
 describe('formatPhone', () => {
   const data = [
@@ -9,10 +9,42 @@ describe('formatPhone', () => {
     { input: '999616039', output: '99961-6039' },
     { input: '(47)99719283', output: '(47) 9971-9283' },
     { input: '(47)999719283', output: '(47) 99971-9283' },
+    { input: '5547992219292', output: '+55 (47) 99221-9292' },
+    { input: '554792219292', output: '+55 (47) 9221-9292' },
     { input: '', output: '' }
   ]
 
   test.each(data)('Should return the phone number formatted', (param) => {
     expect(formatPhone(param.input)).toBe(param.output)
+  })
+})
+
+describe('removeFirstDigitFromPhone', () => {
+  const data = [
+    { input: '5547996919816', output: '554796919816' },
+    { input: '554796919816', output: '554796919816' },
+    { input: '47996919816', output: '4796919816' },
+    { input: '4796919816', output: '4796919816' },
+    { input: '996919816', output: '96919816' },
+    { input: '96919816', output: '96919816' }
+  ]
+
+  test.each(data)('Should return the phone without the first digit', (param) => {
+    expect(removeFirstDigitFromPhone(param.input)).toBe(param.output)
+  })
+})
+
+describe('addFirstDigitToPhone', () => {
+  const data = [
+    { input: '996919816', output: '996919816' },
+    { input: '96919816', output: '996919816' },
+    { input: '47996919816', output: '47996919816' },
+    { input: '4796919816', output: '47996919816' },
+    { input: '5547996919816', output: '5547996919816' },
+    { input: '554796919816', output: '5547996919816' }
+  ]
+
+  test.each(data)('Should return the phone with the first digit', (param) => {
+    expect(addFirstDigitToPhone(param.input)).toBe(param.output)
   })
 })

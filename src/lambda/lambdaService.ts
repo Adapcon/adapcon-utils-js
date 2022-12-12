@@ -30,8 +30,12 @@ const executeInvoke = async ({
   body = {},
   pathParameters = {},
   queryStringParameters = {},
+  multiValueQueryStringParameters = {},
   isOffline = false,
-  httpMethod = ''
+  httpMethod = '',
+  path,
+  requestContext = {},
+  shouldStringifyBody
 }: {
   accessKeyId?: string
   secretAccessKey?: string
@@ -54,10 +58,18 @@ const executeInvoke = async ({
     Payload: Buffer.from(
       JSON.stringify({
         headers,
-        body,
+        body: shouldStringifyBody ? JSON.stringify(body) : body,
         httpMethod,
         pathParameters,
-        queryStringParameters
+        queryStringParameters,
+        multiValueQueryStringParameters,
+        path,
+        requestContext,
+        multiValueHeaders: Object.entries(headers).reduce((previous, current) => {
+          const [header, value] = current
+          previous[header] = [value]
+          return previous
+        }, {})
       })
     )
   }).promise()
