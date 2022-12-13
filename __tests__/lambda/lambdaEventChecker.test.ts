@@ -1,5 +1,5 @@
 import { invokeEventCheck } from '../../src/lambda'
-import { lambdaRequestEventExample, lambdaInvokeEventExample } from '../../src/lambda/event'
+import { lambdaRequestEventExample, lambdaInvokeEventExample } from './eventMock'
 
 describe('invokeEventCheck', () => {
   const data = [
