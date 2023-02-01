@@ -47,9 +47,9 @@ const sqlQuote = (arg: string): string => `\`${arg}\``
 
 const operatorIN = ({ columnName, value }: { columnName: string, value: string[] | string }) => `${columnName} IN(${Array.isArray(value) ? value.map(() => '?').toString() : '?'})`
 
-const operatorLIKE = ({ columnName, value }: { columnName: string, value: string[] | string}) => [...Array.isArray(value) ? value : [value]].map(() => `${columnName} LIKE ?`)
+const operatorLIKE = ({ columnName, value }: { columnName: string, value: string[] | string }) => [...Array.isArray(value) ? value : [value]].map(() => `${columnName} LIKE ?`)
 
-const sqlOperators = (): { IN: Function, LIKE: Function} => ({ IN: operatorIN, LIKE: operatorLIKE })
+const sqlOperators = (): { IN: Function, LIKE: Function } => ({ IN: operatorIN, LIKE: operatorLIKE })
 
 const normalizeLIKE = (values: string[] | string) => (Array.isArray(values) ? values.map(value => `%${value}%`) : `%${values}%`)
 
@@ -57,7 +57,7 @@ const sqlNormalizers = { LIKE: normalizeLIKE }
 
 const normalizeSqlValues = (operator: string, values: string[] | string) => (sqlNormalizers[operator] ? sqlNormalizers[operator](values) : values)
 
-const composeCondition = (column: string, condition: { operator: string, value: string}, table: string) => {
+const composeCondition = (column: string, condition: any, table: string) => {
   const operators = sqlOperators()
   const columnName = normalizeColumnName(column, table)
 
@@ -76,6 +76,7 @@ const composeCondition = (column: string, condition: { operator: string, value: 
 
   if (operator !== '') {
     return {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       condition: `${columnName} ${operator} ?`,
       value
     }
@@ -84,13 +85,13 @@ const composeCondition = (column: string, condition: { operator: string, value: 
   return defaultReturn
 }
 
-const composeConditions = (column: string, conditions: { operator: string, value: string }, table: string) => {
+const composeConditions = (column: string, conditions: any, table: string) => {
   if (Array.isArray(conditions)) return conditions.map(condition => composeConditions(column, condition, table)).flat()
 
   return [composeCondition(column, conditions, table)]
 }
 
-const decomposeWhere = (where: { [key: string]: string}, table: string) => Object.keys(where || {}).reduce((acc, key) => {
+const decomposeWhere = (where: { [key: string]: string }, table: string) => Object.keys(where || {}).reduce((acc, key) => {
   const value = where[key]
 
   const conditions = composeConditions(key, value, table)
