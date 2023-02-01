@@ -1,6 +1,6 @@
 {
   "name": "adapcon-utils-js",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "Utils library for Javascript",
   "keywords": [],
   "author": {
@@ -39,7 +39,7 @@
     "@types/aws-lambda": "^8.10.85",
     "@types/aws-sdk": "^2.7.0",
     "@types/jest": "^27.0.1",
-    "@types/node": "^16.7.13",
+    "@types/node": "^16.18.11",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "aws-sdk": "^2.1010.0",
     "dotenv": "^10.0.0",
