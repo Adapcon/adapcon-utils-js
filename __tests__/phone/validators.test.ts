@@ -1,8 +1,7 @@
-import { isBrazilianCellPhoneFormat, isSamePhone } from '../../src/phone'
+import { isBrazilianCellPhoneFormat, isValidPhoneFormat, isSamePhone } from '../../src/phone'
 
 describe('isBrazilianPhone', () => {
-  const validPhones = [47996184675, 4794567456, '47995643784', '479956-4378', '47 99565-3403', '47 9565-3453', '47 95653453', '47 995653453'
-  ]
+  const validPhones = [47996184675, 4794567456, '47995643784', '479956-4378', '47 99565-3403', '47 9565-3453', '47 95653453', '47 995653453']
 
   test.each(validPhones)('Should return true if the phone is in the brazilian format', (phone) => {
     expect(isBrazilianCellPhoneFormat(phone)).toBeTruthy()
@@ -12,6 +11,20 @@ describe('isBrazilianPhone', () => {
 
   test.each(invalidPhones)('Should return false if the phone is not in the brazilian format', (notPhone) => {
     expect(isBrazilianCellPhoneFormat(notPhone as any)).toBeFalsy()
+  })
+})
+
+describe('isValidPhoneFormat', () => {
+  const validPhones = [47996184675, 4794567456, '47995643784', '479956-4378', '47 99565-3403', '47 9565-3453', '47 95653453', '47 995653453', '321332233221', '5547991445577', '55 47 991445577', '55 47 91445577']
+
+  test.each(validPhones)('Should return true if the phone has a valid format', (phone) => {
+    expect(isValidPhoneFormat(phone)).toBeTruthy()
+  })
+
+  const invalidPhones = ['96969696', 12345, undefined, '4799736784a']
+
+  test.each(invalidPhones)('Should return false if the phone has not a valid format', (notPhone) => {
+    expect(isValidPhoneFormat(notPhone as any)).toBeFalsy()
   })
 })
 
