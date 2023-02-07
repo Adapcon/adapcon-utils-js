@@ -28,3 +28,5 @@ export interface SqlErr {
   sql: string
   stack: string
 }
+
+export interface SqlError { statusCode: number, error: {} }
