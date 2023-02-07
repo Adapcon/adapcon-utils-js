@@ -12,3 +12,19 @@ export interface DynamodbParams {
 export interface DynamodbResponseBatch {
   UnprocessedItems: object
 }
+
+export interface Operators {
+  columnName: string
+  value: string[] | string
+}
+
+export interface Where {
+  [key: string]: string
+}
+
+export interface SqlErr {
+  code: number
+  message: string
+  sql: string
+  stack: string
+}

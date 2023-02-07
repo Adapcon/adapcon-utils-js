@@ -1,11 +1,7 @@
 import { isObject } from '../object'
+import { Operators, SqlErr, Where } from './interfaces'
 
-const sqlError = (err: {
-  code: number
-  message: string
-  sql: string
-  stack: string
-}): { statusCode: number, error: {} } => {
+const sqlError = (err: SqlErr): { statusCode: number, error: {} } => {
   const obj = {
     code: err.code,
     message: err.message,
@@ -13,7 +9,7 @@ const sqlError = (err: {
     stack: err.stack
   }
 
-  if (process.env.DEBUG ?? process.env.IS_OFFLINE) {
+  if (process.env.IS_OFFLINE) {
     obj.sql = err.sql
     obj.stack = err.stack
     console.error('SQL ERROR:', obj)
@@ -45,9 +41,9 @@ const normalizeColumnName = (column: string, table: string): string => {
 
 const sqlQuote = (arg: string): string => `\`${arg}\``
 
-const operatorIN = ({ columnName, value }: { columnName: string, value: string[] | string }) => `${columnName} IN(${Array.isArray(value) ? value.map(() => '?').toString() : '?'})`
+const operatorIN = ({ columnName, value }: Operators) => `${columnName} IN(${Array.isArray(value) ? value.map(() => '?').toString() : '?'})`
 
-const operatorLIKE = ({ columnName, value }: { columnName: string, value: string[] | string }) => [...Array.isArray(value) ? value : [value]].map(() => `${columnName} LIKE ?`)
+const operatorLIKE = ({ columnName, value }: Operators) => [...Array.isArray(value) ? value : [value]].map(() => `${columnName} LIKE ?`)
 
 const sqlOperators = (): { IN: Function, LIKE: Function } => ({ IN: operatorIN, LIKE: operatorLIKE })
 
@@ -91,7 +87,7 @@ const composeConditions = (column: string, conditions: any, table: string) => {
   return [composeCondition(column, conditions, table)]
 }
 
-const decomposeWhere = (where: { [key: string]: string }, table: string) => Object.keys(where || {}).reduce((acc, key) => {
+const decomposeWhere = (where: Where, table: string) => Object.keys(where || {}).reduce((acc, key) => {
   const value = where[key]
 
   const conditions = composeConditions(key, value, table)
