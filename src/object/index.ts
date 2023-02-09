@@ -19,7 +19,7 @@ export const isObjEqual = (a: any, b: any): boolean => {
 
 export const hasOwnProperty = (obj: any, key: string) => Object.prototype.hasOwnProperty.call(obj, key)
 
-export const compareJsonDiff = ({ baseObject = {}, compareObject = {} }: { baseObject: any, compareObject: any }) => {
+export const compareJsonDiff = ({ baseObject, compareObject }: { baseObject: object, compareObject: object }) => {
   const diff = {}
   const removed: string[] = []
   Object.keys(compareObject).forEach(i => {
@@ -32,8 +32,7 @@ export const compareJsonDiff = ({ baseObject = {}, compareObject = {} }: { baseO
         !(JSON.stringify(compareObject[i]) === JSON.stringify(baseObject[i])) &&
         !(!compareObject[i] && !baseObject[i])
       ) {
-        if (compareObject[i] === '') removed.push(i)
-        else diff[i] = compareObject[i]
+        diff[i] = compareObject[i]
       }
     }
   })
