@@ -1,3 +1,4 @@
+import { HttpStatuses } from '@/http'
 import { isObject } from '../object'
 import { SqlOperators, SqlErrorParameters, SqlErrorResponse, SqlWhere } from './interfaces'
 
@@ -15,7 +16,7 @@ const sqlError = (err: SqlErrorParameters): SqlErrorResponse => {
     console.error('SQL ERROR:', obj)
   }
 
-  return { statusCode: 500, error: obj }
+  return { statusCode: HttpStatuses.internalError, error: obj }
 }
 
 const normalizeQuery = (query: string): string => query.replace(/(?:\\[rn]|[\r\n\t]+)+/g, ' ').replace(/  +/g, ' ').trim()
