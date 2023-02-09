@@ -13,20 +13,20 @@ export interface DynamodbResponseBatch {
   UnprocessedItems: object
 }
 
-export interface Operators {
+export interface SqlOperators {
   columnName: string
   value: string[] | string
 }
 
-export interface Where {
+export interface SqlWhere {
   [key: string]: string
 }
 
-export interface SqlErr {
+export interface SqlErrorParameters {
   code: number
   message: string
   sql: string
   stack: string
 }
 
-export interface SqlError { statusCode: number, error: {} }
+export interface SqlErrorResponse { statusCode: number, error: {} }

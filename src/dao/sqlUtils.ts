@@ -1,5 +1,5 @@
 import { isObject } from '../object'
-import { Operators, SqlErr, SqlError, Where } from './interfaces'
+import { SqlOperators, SqlErrorParameters, SqlErrorResponse, SqlWhere } from './interfaces'
 
 const sqlError = (err: SqlErrorParameters): SqlErrorResponse => {
   const obj = {
@@ -20,7 +20,7 @@ const sqlError = (err: SqlErrorParameters): SqlErrorResponse => {
 
 const normalizeQuery = (query: string): string => query.replace(/(?:\\[rn]|[\r\n\t]+)+/g, ' ').replace(/  +/g, ' ').trim()
 
-const stringifyStatement = (args: string, delimiter = ', '): string => {
+const stringifyStatement = (args: string[], delimiter = ', '): string => {
   if (!args) return ''
   if (Array.isArray(args)) return args.join(delimiter)
 
@@ -41,9 +41,9 @@ const normalizeColumnName = (column: string, table: string): string => {
 
 const sqlQuote = (arg: string): string => `\`${arg}\``
 
-const operatorIN = ({ columnName, value }: Operators) => `${columnName} IN(${Array.isArray(value) ? value.map(() => '?').toString() : '?'})`
+const operatorIN = ({ columnName, value }: SqlOperators) => `${columnName} IN(${Array.isArray(value) ? value.map(() => '?').toString() : '?'})`
 
-const operatorLIKE = ({ columnName, value }: Operators) => [...Array.isArray(value) ? value : [value]].map(() => `${columnName} LIKE ?`)
+const operatorLIKE = ({ columnName, value }: SqlOperators) => [...Array.isArray(value) ? value : [value]].map(() => `${columnName} LIKE ?`)
 
 const sqlOperators = (): { IN: Function, LIKE: Function } => ({ IN: operatorIN, LIKE: operatorLIKE })
 
@@ -87,7 +87,7 @@ const composeConditions = (column: string, conditions: any, table: string) => {
   return [composeCondition(column, conditions, table)]
 }
 
-const decomposeWhere = (where: Where, table: string) => Object.keys(where || {}).reduce((acc, key) => {
+const decomposeWhere = (where: SqlWhere, table: string) => Object.keys(where || {}).reduce((acc, key) => {
   const value = where[key]
 
   const conditions = composeConditions(key, value, table)
@@ -104,6 +104,67 @@ const decomposeWhere = (where: Where, table: string) => Object.keys(where || {})
   }
 }, { conditions: [], values: [] })
 
+const parseResponse = (resultSet = []) => {
+  const resultMapped = resultSet.reduce((acc: any[], i: any) => {
+    const newItem = { ...i }
+
+    Object.entries(newItem).forEach(([key, value]) => {
+      if (key.includes('.')) {
+        set(newItem, key, value)
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+        delete newItem[key]
+      }
+    })
+
+    acc.push(newItem)
+    return acc
+  }, [])
+
+  return resultMapped
+}
+
+const set = (obj: any, path: any, value: any) => {
+  if (!isObject(obj)) return obj
+
+  const arrayPath = (Array.isArray(path)
+    ? path
+    : path.toString().match(/[^.[\]]+/g) || []
+  )
+
+  if (!arrayPath.length) return obj
+
+  // eslint-disable-next-line no-return-assign
+  arrayPath.slice(0, -1).reduce((a: any, c: any, i: any) => (Object(a[c]) === a[c]
+    ? a[c]
+    : a[c] = Math.abs(arrayPath[i++]) >> 0 === +arrayPath[i++]
+      ? []
+      : {}
+  ), obj)[arrayPath[arrayPath.length - 1]] = value
+
+  return obj
+}
+
+const decomposeInsertObject = object => {
+  const {
+    keys,
+    values
+  } = decomposeObject(object)
+
+  return {
+    fields: keys.map(field => sqlQuote(field)),
+    values
+  }
+}
+
+const decomposeObject = (object = {}) => {
+  if (!isObject(object)) return { keys: [], values: [] }
+
+  return {
+    keys: Object.keys(object),
+    values: Object.values(object)
+  }
+}
+
 export const sqlUtils = {
   sqlError,
   normalizeQuery,
@@ -117,5 +178,8 @@ export const sqlUtils = {
   operatorLIKE,
   operatorIN,
   sqlQuote,
+  decomposeInsertObject,
+  parseResponse,
+  set,
   normalizeColumnName
 }
