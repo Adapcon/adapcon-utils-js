@@ -1,7 +1,7 @@
 import { isObject } from '../object'
 import { Operators, SqlErr, SqlError, Where } from './interfaces'
 
-const sqlError = (err: SqlErr): SqlError => {
+const sqlError = (err: SqlErrorParameters): SqlErrorResponse => {
   const obj = {
     code: err.code,
     message: err.message,
