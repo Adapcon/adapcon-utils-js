@@ -19,7 +19,7 @@ export interface SqlOperators {
 }
 
 export interface SqlWhere {
-  [key: string]: string
+  [key: string]: string | number | boolean
 }
 
 export interface SqlErrorParameters {

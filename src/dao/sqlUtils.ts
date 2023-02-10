@@ -2,27 +2,19 @@ import { HttpStatuses } from '@/http'
 import { isObject } from '../object'
 import { SqlOperators, SqlErrorParameters, SqlErrorResponse, SqlWhere } from './interfaces'
 
-const sqlError = (err: SqlErrorParameters): SqlErrorResponse => {
-  const obj = {
+const sqlError = (err: SqlErrorParameters): SqlErrorResponse => ({
+  statusCode: HttpStatuses.internalError,
+  error: {
     code: err.code,
     message: err.message,
     sql: err.sql,
     stack: err.stack
   }
-
-  if (process.env.IS_OFFLINE) {
-    obj.sql = err.sql
-    obj.stack = err.stack
-    console.error('SQL ERROR:', obj)
-  }
-
-  return { statusCode: HttpStatuses.internalError, error: obj }
-}
+})
 
 const normalizeQuery = (query: string): string => query.replace(/(?:\\[rn]|[\r\n\t]+)+/g, ' ').replace(/  +/g, ' ').trim()
 
-const stringifyStatement = (args: string[], delimiter = ', '): string => {
-  if (!args) return ''
+const stringifyStatement = (args: string[] | string, delimiter = ', '): string => {
   if (Array.isArray(args)) return args.join(delimiter)
 
   return args
@@ -46,7 +38,7 @@ const operatorIN = ({ columnName, value }: SqlOperators) => `${columnName} IN(${
 
 const operatorLIKE = ({ columnName, value }: SqlOperators) => [...Array.isArray(value) ? value : [value]].map(() => `${columnName} LIKE ?`)
 
-const sqlOperators = (): { IN: Function, LIKE: Function } => ({ IN: operatorIN, LIKE: operatorLIKE })
+const sqlOperators = { IN: operatorIN, LIKE: operatorLIKE }
 
 const normalizeLIKE = (values: string[] | string) => (Array.isArray(values) ? values.map(value => `%${value}%`) : `%${values}%`)
 
@@ -55,40 +47,35 @@ const sqlNormalizers = { LIKE: normalizeLIKE }
 const normalizeSqlValues = (operator: string, values: string[] | string) => (sqlNormalizers[operator] ? sqlNormalizers[operator](values) : values)
 
 const composeCondition = (column: string, condition: any, table: string) => {
-  const operators = sqlOperators()
   const columnName = normalizeColumnName(column, table)
 
   const defaultReturn = { condition: `${columnName} = ?`, value: condition }
 
-  if (!isObject(condition)) return defaultReturn
-
   const { operator, value } = condition
 
-  if (operators[operator]) {
+  if (!isObject(condition) || !operator) return defaultReturn
+
+  if (sqlOperators[operator]) {
     return {
-      condition: operators[operator]({ columnName, value }),
+      condition: sqlOperators[operator]({ columnName, value }),
       value: normalizeSqlValues(operator, value)
     }
   }
 
-  if (operator !== '') {
-    return {
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      condition: `${columnName} ${operator} ?`,
-      value
-    }
+  return {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    condition: `${columnName} ${operator} ?`,
+    value
   }
-
-  return defaultReturn
 }
 
 const composeConditions = (column: string, conditions: any, table: string) => {
-  if (Array.isArray(conditions)) return conditions.map(condition => composeConditions(column, condition, table)).flat()
+  if (Array.isArray(conditions)) return conditions.map(condition => composeCondition(column, condition, table)).flat()
 
   return [composeCondition(column, conditions, table)]
 }
 
-const decomposeWhere = (where: SqlWhere, table: string) => Object.keys(where || {}).reduce((acc, key) => {
+const decomposeWhere = (where: SqlWhere, table: string) => Object.keys(where).reduce((acc, key) => {
   const value = where[key]
 
   const conditions = composeConditions(key, value, table)
@@ -105,7 +92,7 @@ const decomposeWhere = (where: SqlWhere, table: string) => Object.keys(where || 
   }
 }, { conditions: [], values: [] })
 
-const parseResponse = (resultSet = []) => {
+const parseResponse = (resultSet: any[]) => {
   const resultMapped = resultSet.reduce((acc: any[], i: any) => {
     const newItem = { ...i }
 
@@ -135,9 +122,13 @@ const set = (obj: any, path: any, value: any) => {
   if (!arrayPath.length) return obj
 
   // eslint-disable-next-line no-return-assign
-  arrayPath.slice(0, -1).reduce((a: any, c: any, i: any) => (Object(a[c]) === a[c]
-    ? a[c]
-    : a[c] = Math.abs(arrayPath[i++]) >> 0 === +arrayPath[i++]
+  arrayPath.slice(0, -1).reduce((
+    acc: any,
+    curr: any,
+    index: number
+  ) => (acc[curr]
+    ? acc[curr]
+    : acc[curr] = Math.abs(arrayPath[index++]) >> 0 === +arrayPath[index++]
       ? []
       : {}
   ), obj)[arrayPath[arrayPath.length - 1]] = value
@@ -176,11 +167,13 @@ export const sqlUtils = {
   normalizeSqlValues,
   normalizeLIKE,
   sqlOperators,
+  sqlNormalizers,
   operatorLIKE,
   operatorIN,
   sqlQuote,
   decomposeInsertObject,
   parseResponse,
   set,
-  normalizeColumnName
+  normalizeColumnName,
+  decomposeObject
 }
