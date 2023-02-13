@@ -1,4 +1,4 @@
-import { HttpStatuses } from '@/http'
+import { HttpStatuses } from '../http'
 import { isObject } from '../object'
 import { SqlOperators, SqlErrorParameters, SqlErrorResponse, SqlWhere } from './interfaces'
 
