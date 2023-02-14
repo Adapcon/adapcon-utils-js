@@ -1,4 +1,48 @@
-import { isObject, objToStr, isObjEqual } from '../../src/object'
+import { isObject, objToStr, isObjEqual, hasOwnProperty, compareJsonDiff } from '../../src/object'
+
+const objectA = {
+  name: 'adapcon',
+  city: 'jaragua',
+  state: 'sc',
+  country: undefined
+}
+
+const objectB = {
+  name: 'simplifica',
+  city: 'jaragua'
+}
+
+const objectC = {
+  name: 'simplifica',
+  city: 'jaragua',
+  state: 'sc',
+  country: null,
+  street: ''
+}
+
+describe('hasOwnProperty', () => {
+  it('Should return true if object has property', () => {
+    expect(hasOwnProperty(objectA, 'name')).toBeTruthy()
+  })
+  it('Should return false if object hasn\'t property', () => {
+    expect(hasOwnProperty(objectA, 'region')).toBeFalsy()
+  })
+})
+
+describe('compareJsonDiff', () => {
+  it('Should return the difference between object and the removed properties', () => {
+    expect(compareJsonDiff({ baseObject: objectA, compareObject: objectC })).toEqual({ diff: { name: 'simplifica' }, removed: [] })
+  })
+  it('Should return the difference between object and the removed properties', () => {
+    expect(compareJsonDiff({ baseObject: objectA, compareObject: objectB })).toEqual({ diff: { name: 'simplifica' }, removed: ['state', 'country'] })
+  })
+  it('Should return the difference between object and the removed properties', () => {
+    expect(compareJsonDiff({ baseObject: {}, compareObject: objectB })).toEqual({ diff: { name: 'simplifica', city: 'jaragua' }, removed: [] })
+  })
+  it('Should return the difference between object and the removed properties', () => {
+    expect(compareJsonDiff({ baseObject: {}, compareObject: {} })).toEqual({ diff: {}, removed: [] })
+  })
+})
 
 describe('isObject', () => {
   const validObjects = [{}, { music: 'on' }, { list: [1, 2, 3] }]
