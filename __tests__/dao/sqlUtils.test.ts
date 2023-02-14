@@ -22,8 +22,14 @@ describe('composeConditions', () => {
   it('Should return the IN sql condition formatted', () => {
     expect(sqlUtils.composeConditions('banana', { operator: 'IN', value: true }, 'cesta')).toEqual([{ condition: '`cesta`.`banana` IN(?)', value: true }])
   })
+  it('Should return the IN sql condition formatted', () => {
+    expect(sqlUtils.composeConditions('banana', { operator: 'IN', value: false }, 'cesta')).toEqual([{ condition: '`cesta`.`banana` IN(?)', value: false }])
+  })
   it('Should return the NOT sql condition formatted', () => {
     expect(sqlUtils.composeConditions('banana', { operator: 'NOT', value: true }, 'cesta')).toEqual([{ condition: '`cesta`.`banana` NOT ?', value: true }])
+  })
+  it('Should return the NOT sql condition formatted', () => {
+    expect(sqlUtils.composeConditions('banana', { operator: 'NOT', value: false }, 'cesta')).toEqual([{ condition: '`cesta`.`banana` NOT ?', value: false }])
   })
   it('Should return the array of LIKE and IN sql condition formatted', () => {
     expect(sqlUtils.composeConditions('uva', [{ operator: 'LIKE', value: 'pure' }, { operator: 'IN', value: 'pure' }], 'cesta')).toEqual(
