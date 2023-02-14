@@ -11,29 +11,29 @@ describe('stringifyStatement', () => {
 
 describe('normalizeColumnName', () => {
   it('Should return the column name', () => {
-    expect(sqlUtils.normalizeColumnName('cesta.banana', 'cesta')).toEqual('`cesta`.`banana`')
+    expect(sqlUtils.normalizeColumnName('cesta.banana', 'cesta')).toEqual('cesta.`banana`')
   })
   it('Should return the column name', () => {
-    expect(sqlUtils.normalizeColumnName('uva', 'cesta')).toEqual('`cesta`.`uva`')
+    expect(sqlUtils.normalizeColumnName('uva', 'cesta')).toEqual('cesta.`uva`')
   })
 })
 
 describe('composeConditions', () => {
   it('Should return the IN sql condition formatted', () => {
-    expect(sqlUtils.composeConditions('banana', { operator: 'IN', value: true }, 'cesta')).toEqual([{ condition: '`cesta`.`banana` IN(?)', value: true }])
+    expect(sqlUtils.composeConditions('banana', { operator: 'IN', value: true }, 'cesta')).toEqual([{ condition: 'cesta.`banana` IN(?)', value: true }])
   })
   it('Should return the IN sql condition formatted', () => {
-    expect(sqlUtils.composeConditions('banana', { operator: 'IN', value: false }, 'cesta')).toEqual([{ condition: '`cesta`.`banana` IN(?)', value: false }])
+    expect(sqlUtils.composeConditions('banana', { operator: 'IN', value: false }, 'cesta')).toEqual([{ condition: 'cesta.`banana` IN(?)', value: false }])
   })
   it('Should return the NOT sql condition formatted', () => {
-    expect(sqlUtils.composeConditions('banana', { operator: 'NOT', value: true }, 'cesta')).toEqual([{ condition: '`cesta`.`banana` NOT ?', value: true }])
+    expect(sqlUtils.composeConditions('banana', { operator: 'NOT', value: true }, 'cesta')).toEqual([{ condition: 'cesta.`banana` NOT ?', value: true }])
   })
   it('Should return the NOT sql condition formatted', () => {
-    expect(sqlUtils.composeConditions('banana', { operator: 'NOT', value: false }, 'cesta')).toEqual([{ condition: '`cesta`.`banana` NOT ?', value: false }])
+    expect(sqlUtils.composeConditions('banana', { operator: 'NOT', value: false }, 'cesta')).toEqual([{ condition: 'cesta.`banana` NOT ?', value: false }])
   })
   it('Should return the array of LIKE and IN sql condition formatted', () => {
     expect(sqlUtils.composeConditions('uva', [{ operator: 'LIKE', value: 'pure' }, { operator: 'IN', value: 'pure' }], 'cesta')).toEqual(
-      [{ condition: ['`cesta`.`uva` LIKE ?'], value: '%pure%' }, { condition: '`cesta`.`uva` IN(?)', value: 'pure' }]
+      [{ condition: ['cesta.`uva` LIKE ?'], value: '%pure%' }, { condition: 'cesta.`uva` IN(?)', value: 'pure' }]
     )
   })
 })
@@ -88,16 +88,16 @@ describe('parseResponse', () => {
 
 describe('decomposeWhere', () => {
   it('Should return the where formatted', () => {
-    expect(sqlUtils.decomposeWhere({ uva: true }, 'cesta')).toEqual({ conditions: ['`cesta`.`uva` = ?'], values: [true] })
+    expect(sqlUtils.decomposeWhere({ uva: true }, 'cesta')).toEqual({ conditions: ['cesta.`uva` = ?'], values: [true] })
   })
   it('Should return the where formatted', () => {
-    expect(sqlUtils.decomposeWhere({ uva: 'true' }, 'cesta')).toEqual({ conditions: ['`cesta`.`uva` = ?'], values: ['true'] })
+    expect(sqlUtils.decomposeWhere({ uva: 'true' }, 'cesta')).toEqual({ conditions: ['cesta.`uva` = ?'], values: ['true'] })
   })
   it('Should return the conditions and values blanked', () => {
     expect(sqlUtils.decomposeWhere({}, 'cesta')).toEqual({ conditions: [], values: [] })
   })
   it('Should return the where formatted', () => {
-    expect(sqlUtils.decomposeWhere({ uva: 123 }, 'cesta')).toEqual({ conditions: ['`cesta`.`uva` = ?'], values: [123] })
+    expect(sqlUtils.decomposeWhere({ uva: 123 }, 'cesta')).toEqual({ conditions: ['cesta.`uva` = ?'], values: [123] })
   })
 })
 
@@ -106,13 +106,13 @@ describe('sqlError', () => {
     expect(sqlUtils.sqlError({
       code: 500,
       message: 'deu BO',
-      sql: '`cesta`.`uva` IN(?)',
+      sql: 'cesta.`uva` IN(?)',
       stack: 'string'
     })).toEqual({
       error: {
         code: 500,
         message: 'deu BO',
-        sql: '`cesta`.`uva` IN(?)',
+        sql: 'cesta.`uva` IN(?)',
         stack: 'string'
       },
       statusCode: 500

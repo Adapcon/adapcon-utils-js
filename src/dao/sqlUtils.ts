@@ -29,7 +29,7 @@ const normalizeColumnName = (column: string, table: string): string => {
       : [table, column]
   )
 
-  return `${sqlQuote(tableName)}.${sqlQuote(columnName)}`
+  return `${tableName}.${sqlQuote(columnName)}`
 }
 
 const sqlQuote = (arg: string): string => `\`${arg}\``
