@@ -1,3 +1,5 @@
+import jsonBigInt from 'json-bigint'
+
 import { isObject } from '../object'
 
 export const formattedResponse = ({ StatusCode, Payload }: { StatusCode?: any, Payload?: any }): object => {
@@ -13,7 +15,7 @@ export const getBody = (event: { body: string } | string | any, defaultValue: an
   try {
     if (!isObject(event)) throw new Error('Event is not an object')
 
-    if (typeof event.body === 'string') return JSON.parse(event.body)
+    if (typeof event.body === 'string') return jsonBigInt.parse(event.body)
 
     if (!isObject(event.body)) return defaultValue
 
