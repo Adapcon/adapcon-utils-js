@@ -1,7 +1,7 @@
 import { isObject } from '../../object'
 import dbClient from 'aws-dynamodb-factory-js'
 import { error } from '../../error'
-import type { DynamodbParams, DynamodbResponseBatch } from '../interfaces'
+import type { DynamodbParams, DynamodbResponseBatch } from './types'
 
 const get = async ({
   params,
