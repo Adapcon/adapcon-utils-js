@@ -14,6 +14,10 @@ describe('stringToArray', () => {
       output: ['id', 'style', 'appId']
     },
     {
+      input: 'id, style, appId',
+      output: ['id', 'style', 'appId']
+    },
+    {
       input: '',
       output: []
     },
