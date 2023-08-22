@@ -2,7 +2,7 @@ import jsonBigInt from 'json-bigint'
 
 import { isObject } from '../object'
 
-export const formattedResponse = ({ StatusCode, Payload }: { StatusCode?: any, Payload?: any }): object => {
+export const formattedResponse = <T>({ StatusCode, Payload }: { StatusCode?: any, Payload?: any }): { status: number, body: T } => {
   const payloadFormatted = JSON.parse(Payload || '{}')
 
   return {

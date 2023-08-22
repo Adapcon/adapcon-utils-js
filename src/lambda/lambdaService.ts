@@ -6,9 +6,9 @@ import { lambdaParameters } from '.'
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class LambdaService {
-  static async invoke (lambdaParameters: lambdaParameters): Promise<object> {
+  static async invoke<T>(lambdaParameters: lambdaParameters) {
     try {
-      return executeInvoke({
+      return executeInvoke<T>({
         ...lambdaParameters,
         ...await SecretManager.getAccessKey(lambdaParameters)
       })
@@ -19,7 +19,7 @@ export class LambdaService {
   }
 }
 
-const executeInvoke = async ({
+const executeInvoke = async <T>({
   accessKeyId,
   secretAccessKey,
   port = '',
@@ -74,5 +74,5 @@ const executeInvoke = async ({
     )
   }).promise()
 
-  return formattedResponse(response)
+  return formattedResponse<T>(response)
 }
