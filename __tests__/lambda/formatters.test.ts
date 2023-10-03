@@ -11,14 +11,14 @@ describe('invoke', () => {
   it('Should returns response formatted with headers', () => {
     expect(formattedResponse({
       StatusCode: 200,
-      Payload: '{"headers":"{\\"total-count\\":\\"20\\"}"}'
+      Payload: '{"headers": {"total-count":"20"}}'
     })).toEqual({ headers: { 'total-count': '20' }, status: 200, body: {} })
   })
 
   it('Should returns response formatted with headers and body', () => {
     expect(formattedResponse({
       StatusCode: 200,
-      Payload: '{"headers": "{\\"total-count\\":\\"20\\"}","body": "{\\"name\\":\\"John Doe\\"}"}'
+      Payload: '{"headers": {"total-count":"20"},"body": "{\\"name\\":\\"John Doe\\"}"}'
     })).toEqual({ headers: { 'total-count': '20' }, status: 200, body: { name: 'John Doe' } })
   })
 
