@@ -7,6 +7,10 @@ export interface Error {
   message?: string
 }
 
+export type Headers = {
+  [header: string]: string | number | boolean
+}
+
 export interface lambdaParameters {
   port?: string
   region?: string
