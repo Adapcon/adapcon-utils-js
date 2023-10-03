@@ -35,11 +35,23 @@ describe('lambdaResp', () => {
         statusCode: 404,
         body: 'not found!'
       }
+    },
+    {
+      input: {
+        statusCode: 200,
+        body: '',
+        headers: { 'total-count': 42069 }
+      },
+      output: {
+        statusCode: 200,
+        body: '',
+        headers: { 'total-count': 42069 }
+      }
     }
   ]
 
   test.each(data)('Should return an response Object, with statusCode and body props', (param) => {
-    expect(lambdaResp(param.input.statusCode, param.input.body)).toStrictEqual(param.output)
+    expect(lambdaResp(param.input.statusCode, param.input.body, param.input.headers)).toStrictEqual(param.output)
   })
 })
 
