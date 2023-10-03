@@ -8,7 +8,7 @@ export const formattedResponse = ({ StatusCode, Payload }: { StatusCode?: number
   return {
     status: payloadFormatted.statusCode || StatusCode,
     body: payloadFormatted.body ? JSON.parse(payloadFormatted.body) : {},
-    ...(payloadFormatted.headers ? { headers: JSON.parse(payloadFormatted.headers) } : null)
+    ...(payloadFormatted.headers ? { headers: payloadFormatted.headers } : null)
   }
 }
 
