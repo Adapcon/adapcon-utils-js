@@ -2,11 +2,12 @@ import { kebabCaseToCamelCase } from './../string/formatters'
 export const lambdaGetParameters = (event: object, eventParams: object): { [key: string]: any } => {
   const fedParams = {}
 
-  for (const element in eventParams) {
+  for (const element of Object.keys(eventParams)) {
     const path: string = eventParams[element]
 
     if (path in event) {
       const eventPathObject: object = event[path]
+      if (!eventPathObject) continue
       const fedParam: any = path === 'body' ? eventPathObject : eventPathObject[element]
       let paramKey: string = element
       if (path === 'headers') {
