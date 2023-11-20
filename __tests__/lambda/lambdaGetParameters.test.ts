@@ -29,6 +29,24 @@ describe('lambdaGetParameters', () => {
           auth: 'xyz',
           app: 'theAppId'
         },
+        queryStringParameters: null
+      },
+      eventParams: {
+        auth: 'pathParameters',
+        app: 'pathParameters',
+        date: 'queryStringParameters'
+      },
+      output: {
+        auth: 'xyz',
+        app: 'theAppId'
+      }
+    },
+    {
+      event: {
+        pathParameters: {
+          auth: 'xyz',
+          app: 'theAppId'
+        },
         queryParameters: {
           date: 1639423222426
         }

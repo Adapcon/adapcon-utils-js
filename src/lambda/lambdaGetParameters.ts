@@ -7,6 +7,7 @@ export const lambdaGetParameters = (event: object, eventParams: object): { [key:
 
     if (path in event) {
       const eventPathObject: object = event[path]
+      if (!eventPathObject) continue
       const fedParam: any = path === 'body' ? eventPathObject : eventPathObject[element]
       let paramKey: string = element
       if (path === 'headers') {
