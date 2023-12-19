@@ -16,7 +16,7 @@ export interface lambdaParameters {
   region?: string
   httpMethod?: string
   functionName: string
-  invocationType?: string
+  invocationType?: 'RequestResponse' | 'Event' | 'DryRun'
   headers?: {[key: string]: any}
   body?: {[key: string]: any} | string
   pathParameters?: {[key: string]: any}
