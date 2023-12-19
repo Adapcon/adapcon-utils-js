@@ -11,12 +11,18 @@ export type Headers = {
   [header: string]: string | number | boolean
 }
 
+export enum InvokeType {
+  RequestResponse = 'RequestResponse',
+  Event = 'Event',
+  DryRun = 'DryRun',
+}
+
 export interface lambdaParameters {
   port?: string
   region?: string
   httpMethod?: string
   functionName: string
-  invocationType?: string
+  invocationType?: InvokeType
   headers?: {[key: string]: any}
   body?: {[key: string]: any} | string
   pathParameters?: {[key: string]: any}
