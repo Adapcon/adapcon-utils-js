@@ -1,5 +1,5 @@
 import { lambdaGetParameters } from './lambdaGetParameters'
-import { APIGatewayEvent } from 'aws-lambda'
+import type { APIGatewayEvent } from 'aws-lambda'
 import { error } from '../error'
 import { getDefaultResponse, HttpNames } from '../http'
 import { CrudInputParams } from '../'
