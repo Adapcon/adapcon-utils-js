@@ -1,6 +1,6 @@
 {
   "name": "adapcon-utils-js",
-  "version": "0.16.8",
+  "version": "1.0.0",
   "description": "Utils library for Javascript",
   "keywords": [],
   "author": {
@@ -37,14 +37,16 @@
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
+    "@aws-sdk/client-lambda": "^3.496.0",
+    "@aws-sdk/client-secrets-manager": "^3.496.0",
+    "@aws-sdk/client-ses": "^3.496.0",
     "@types/aws-lambda": "^8.10.85",
     "@types/aws-sdk": "^2.7.0",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.18.11",
-    "@typescript-eslint/eslint-plugin": "^5.1.0",
-    "aws-sdk": "^2.1010.0",
+    "@typescript-eslint/eslint-plugin": "^4.0.1",
     "dotenv": "^10.0.0",
-    "eslint": "^8.0.1",
+    "eslint": "^7.0.0",
     "eslint-config-standard-with-typescript": "^21.0.1",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-node": "^11.1.0",

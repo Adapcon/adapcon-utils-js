@@ -1,4 +1,4 @@
-import AWS from 'aws-sdk'
+import SES from 'aws-sdk/clients/ses'
 import { SecretManager } from '..'
 
 import { error } from '../error'
@@ -29,7 +29,7 @@ const send = async ({
   } = serviceSecretArn ? await SecretManager.getValue({ region, secretId: serviceSecretArn }) : {}
 
   return new Promise((resolve, reject) => {
-    const ses = new AWS.SES({ region, ...secretValue })
+    const ses = new SES({ region, ...secretValue })
 
     ses.sendEmail({
       Destination: {

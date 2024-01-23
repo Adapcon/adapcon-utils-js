@@ -1,4 +1,4 @@
-import AWS from 'aws-sdk'
+import Lambda from 'aws-sdk/clients/lambda'
 
 import { formattedResponse } from './formatters'
 import { SecretManager } from './../secretsManager'
@@ -40,7 +40,7 @@ const executeInvoke = async ({
   accessKeyId?: string
   secretAccessKey?: string
 } & lambdaParameters) => {
-  const lambda = new AWS.Lambda({
+  const lambda = new Lambda({
     region,
     accessKeyId,
     secretAccessKey,

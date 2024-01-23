@@ -1,9 +1,9 @@
-import AWS from 'aws-sdk'
+import AWSSecretsManager from 'aws-sdk/clients/secretsmanager'
 import { AccessKey, AccessKeyParam } from '.'
 
 export const SecretManager = {
   getValue: async ({ region = 'sa-east-1', secretId }) => {
-    const client = new AWS.SecretsManager({ region })
+    const client = new AWSSecretsManager({ region })
 
     // The SDK can also return a promise calling `promise`
     const secret = await client.getSecretValue({ SecretId: secretId }).promise()

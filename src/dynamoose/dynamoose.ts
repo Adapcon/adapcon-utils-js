@@ -10,7 +10,7 @@ import {
   DynamooseEventFunctionType,
   DynamooseInputIndexes
 } from './interfaces'
-import { QueryResponse } from 'aws-sdk/clients/timestreamquery'
+import type { QueryResponse } from 'aws-sdk/clients/timestreamquery'
 
 export const dynamooseCrudHandler = async (
   crudInputParams: DynamooseCrudInputParams,
