@@ -3,11 +3,13 @@ import jsonBigInt from 'json-bigint'
 import { isObject } from '../object'
 
 export const formattedResponse = <T>({ StatusCode, Payload }: { StatusCode?: number, Payload?: string }): { status: number, body: T } => {
-  const payloadFormatted = JSON.parse(Payload || '{}')
+
+const payloadFormatted = JSON.parse(Payload || '{}')
 
   return {
     status: payloadFormatted.statusCode || StatusCode,
-    body: payloadFormatted.body ? JSON.parse(payloadFormatted.body) : {}
+    body: payloadFormatted.body ? JSON.parse(payloadFormatted.body) : {},
+    ...(payloadFormatted.headers ? { headers: payloadFormatted.headers } : null)
   }
 }
 

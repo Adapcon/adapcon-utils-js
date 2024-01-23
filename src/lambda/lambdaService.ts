@@ -2,7 +2,7 @@ import AWS from 'aws-sdk'
 
 import { formattedResponse } from './formatters'
 import { SecretManager } from './../secretsManager'
-import { lambdaParameters } from '.'
+import { lambdaParameters, InvokeType } from '.'
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class LambdaService {
@@ -25,7 +25,7 @@ const executeInvoke = async <T>({
   port = '',
   region = 'sa-east-1',
   functionName,
-  invocationType = 'RequestResponse',
+  invocationType = InvokeType.RequestResponse,
   headers = {},
   body = {},
   pathParameters = {},
