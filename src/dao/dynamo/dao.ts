@@ -21,12 +21,10 @@ import type {
   BatchWriteCommandOutput
 } from '@aws-sdk/lib-dynamodb'
 import { DynamoDB } from '@aws-sdk/client-dynamodb'
-import type { DynamoDBClientConfig } from '@aws-sdk/client-dynamodb'
 
-const getOptions = (options: DynamoDBClientConfig = {}) => {
-  if (options) return options
-  else if (process.env.IS_OFFLINE) return { region: 'localhost', endpoint: 'http://localhost:8000' }
-  else return { region: 'sa-east-1' }
+const getOptions = () => {
+  if (process.env.IS_OFFLINE) return { region: 'localhost', endpoint: 'http://localhost:8000' }
+  return { region: 'sa-east-1' }
 }
 const dynamoInstance = new DynamoDB(getOptions())
 const documentInstance = DynamoDBDocument.from(dynamoInstance)
