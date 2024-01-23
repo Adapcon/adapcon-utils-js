@@ -31,14 +31,15 @@
     "test:coverage": "npm t -- --coverage"
   },
   "dependencies": {
-    "aws-dynamodb-factory-js": "^2.0.3",
     "json-bigint": "^1.0.0",
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
+    "@aws-sdk/client-dynamodb": "^3.496.0",
     "@aws-sdk/client-lambda": "^3.496.0",
     "@aws-sdk/client-secrets-manager": "^3.496.0",
     "@aws-sdk/client-ses": "^3.496.0",
+    "@aws-sdk/lib-dynamodb": "^3.496.0",
     "@aws-sdk/types": "^3.496.0",
     "@types/aws-lambda": "^8.10.85",
     "@types/jest": "^27.0.1",

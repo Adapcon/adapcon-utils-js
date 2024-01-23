@@ -1,4 +1,4 @@
-import SES from 'aws-sdk/clients/ses'
+import { SES } from '@aws-sdk/client-ses'
 import { SecretManager } from '..'
 
 import { error } from '../error'
