@@ -4,5 +4,8 @@
     "hotmail",
     "portaldocliente",
     "simplificamais"
+  ],
+  "conventionalCommits.scopes": [
+    "lambda"
   ]
 }
