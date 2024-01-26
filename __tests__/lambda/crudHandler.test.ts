@@ -1,5 +1,5 @@
 import { lambdaCrudHandler } from '../../src/lambda'
-import { APIGatewayEvent } from 'aws-lambda'
+import type { APIGatewayEvent } from 'aws-lambda'
 
 const defaultValueEvent = {
   isBase64Encoded: false,

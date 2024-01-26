@@ -1,0 +1,22 @@
+{
+  "name": "Adapcon/adapcon-utils-js (Node.js & TypeScript)",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+  "updateContentCommand": "npm i",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "aaron-bond.better-comments",
+        "usernamehw.errorlens",
+        "streetsidesoftware.code-spell-checker-portuguese-brazilian",
+        "vivaxy.vscode-conventional-commits",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode",
+        "editorconfig.editorconfig",
+        "dbaeumer.vscode-eslint"
+      ]
+    },
+    "openFiles": [
+      "README.md"
+    ]
+  }
+}

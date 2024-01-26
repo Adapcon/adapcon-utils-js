@@ -1,16 +1,16 @@
-import AWS from 'aws-sdk'
+import { Lambda, LambdaClientConfig } from '@aws-sdk/client-lambda'
 
 import { formattedResponse } from './formatters'
-import { SecretManager } from './../secretsManager'
+import { SecretManager } from '../secretsManager'
 import { lambdaParameters, InvokeType } from '.'
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class LambdaService {
-  static async invoke (lambdaParameters: lambdaParameters): Promise<object> {
+  static async invoke<T>(lambdaParameters: lambdaParameters) {
     try {
-      return executeInvoke({
+      return executeInvoke<T>({
         ...lambdaParameters,
-        ...await SecretManager.getAccessKey(lambdaParameters)
+        ...(await SecretManager.getAccessKey(lambdaParameters))
       })
     } catch (error) {
       console.log('Error LambdaService invoke', error)
@@ -19,7 +19,7 @@ export class LambdaService {
   }
 }
 
-const executeInvoke = async ({
+const executeInvoke = async <T>({
   accessKeyId,
   secretAccessKey,
   port = '',
@@ -40,17 +40,8 @@ const executeInvoke = async ({
   accessKeyId?: string
   secretAccessKey?: string
 } & lambdaParameters) => {
-  const lambda = new AWS.Lambda({
-    region,
-    accessKeyId,
-    secretAccessKey,
-    ...(isOffline
-      ? {
-          region: 'localhost',
-          endpoint: `http://localhost:${port}`
-        }
-      : {})
-  })
+  const lambdaSettings: LambdaClientConfig = getLambdaConfig(region, accessKeyId, secretAccessKey, isOffline, port)
+  const lambda = new Lambda(lambdaSettings)
 
   const response = await lambda.invoke({
     FunctionName: functionName,
@@ -72,7 +63,22 @@ const executeInvoke = async ({
         }, {})
       })
     )
-  }).promise()
+  })
 
-  return formattedResponse(response)
+  return formattedResponse<T>(response)
+}
+
+const getLambdaConfig = (region: string, accessKeyId: string | undefined, secretAccessKey: string | undefined, isOffline: boolean, port: string) => {
+  const lambdaSettings: LambdaClientConfig = { region }
+  if (accessKeyId && secretAccessKey) {
+    lambdaSettings.credentials = {
+      accessKeyId,
+      secretAccessKey
+    }
+  }
+  if (isOffline) {
+    lambdaSettings.region = 'localhost'
+    lambdaSettings.endpoint = `http://localhost:${port}`
+  }
+  return lambdaSettings
 }

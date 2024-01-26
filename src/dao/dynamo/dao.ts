@@ -1,46 +1,62 @@
 import { isObject } from '../../object'
-import dbClient from 'aws-dynamodb-factory-js'
 import { error } from '../../error'
-import type { DynamodbParams, DynamodbResponseBatch } from './types'
+import type { DynamodbParams } from './types'
+import {
+  DynamoDBDocument,
+  GetCommand,
+  QueryCommand,
+  BatchGetCommand,
+  PutCommand,
+  UpdateCommand,
+  DeleteCommand,
+  BatchWriteCommand
+} from '@aws-sdk/lib-dynamodb'
+import type {
+  GetCommandInput,
+  QueryCommandInput,
+  PutCommandInput,
+  UpdateCommandInput,
+  DeleteCommandInput,
+  BatchWriteCommandInput,
+  BatchWriteCommandOutput
+} from '@aws-sdk/lib-dynamodb'
+import { DynamoDB } from '@aws-sdk/client-dynamodb'
+
+const getOptions = () => {
+  if (process.env.IS_OFFLINE) return { region: 'localhost', endpoint: 'http://localhost:8000' }
+  return { region: 'sa-east-1' }
+}
+const dynamoInstance = new DynamoDB(getOptions())
+const documentInstance = DynamoDBDocument.from(dynamoInstance)
 
 const get = async ({
   params,
   fields = []
-}: { params: DynamodbParams, fields?: string[] }): Promise<object> => {
-  const { Item } = await dbClient.doc().get({
-    ...params,
-    ...mountProjectionExpression({ fields, options: params })
-  }).promise()
+}: { params: GetCommandInput, fields?: string[] }): Promise<Record<string, any> | undefined> => {
+  const command = new GetCommand({ ...params, ...mountProjectionExpression({ fields }) })
 
+  const { Item } = await documentInstance.send(command)
   return Item
 }
-
-const query = async ({
+const query = async <T>({
   params, fields = [], _items = [], stopOnLimit = false
-}: { params: DynamodbParams, fields?: string[], _items?: object[], stopOnLimit?: boolean }): Promise<object[]> => {
-  const { Items, LastEvaluatedKey } = await dbClient.doc().query({
-    ...params,
-    ...mountProjectionExpression({ fields, options: params })
-  }).promise()
+}: { params: { Limit: number } & QueryCommandInput, fields?: string[], _items?: Array<Record<string, any>>, stopOnLimit?: boolean }): Promise<Array<Record<string, T>>> => {
+  const command = new QueryCommand({ ...params, ...mountProjectionExpression({ fields }) })
+  const { Items = [], LastEvaluatedKey } = await documentInstance.send(command)
 
-  const newItemsList = (Array.isArray(Items) && Items.length > 0)
-    ? _items.concat(Items)
-    : _items
+  const items = [..._items, ...Items]
 
-  if (stopOnLimit && params.Limit && newItemsList.length >= params.Limit) return newItemsList
-
-  if (LastEvaluatedKey) {
+  if (stopOnLimit && items.length >= params.Limit) return items
+  else if (LastEvaluatedKey) {
     return query({
+      params: { ...params, ExclusiveStartKey: LastEvaluatedKey },
       fields,
-      params: {
-        ...params,
-        ExclusiveStartKey: LastEvaluatedKey
-      },
-      _items: newItemsList
+      _items: items,
+      stopOnLimit
     })
   }
 
-  return newItemsList
+  return items
 }
 
 const getAll = async ({ params, list, fields = [] }: { params: DynamodbParams, list: object[], fields?: string[] }) => {
@@ -58,7 +74,7 @@ const getAll = async ({ params, list, fields = [] }: { params: DynamodbParams, l
     return acc
   }, [])
 
-  const data = await Promise.all(packs.map(keys => {
+  const data = await Promise.all(packs.map(async keys => {
     const opts = {
       RequestItems: {
         [params.TableName]: {
@@ -68,17 +84,18 @@ const getAll = async ({ params, list, fields = [] }: { params: DynamodbParams, l
       }
     }
 
-    return dbClient.doc().batchGet(opts)
-      .promise()
-      .then(({ Responses }) => Responses[params.TableName])
+    const command = new BatchGetCommand(opts)
+    const response = await documentInstance.send(command)
+    return response[params.TableName]
   }))
 
   return data.reduce((acc: any, i) => acc.concat(i), [])
 }
 
-const put = async ({ params }: { params: DynamodbParams }): Promise<object> => {
+const put = async ({ params }: { params: PutCommandInput}): Promise<object> => {
   try {
-    await dbClient.doc().put(params).promise()
+    const command = new PutCommand(params)
+    await documentInstance.send(command)
 
     return {}
   } catch (err) {
@@ -88,18 +105,20 @@ const put = async ({ params }: { params: DynamodbParams }): Promise<object> => {
   }
 }
 
-const update = async ({ params }: { params: DynamodbParams }): Promise<any> => {
+const update = async ({ params }: { params: UpdateCommandInput}): Promise<any> => {
   try {
-    await dbClient.doc().update(params).promise()
+    const command = new UpdateCommand(params)
+    return await documentInstance.send(command)
   } catch (err) {
     // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw error(500, err.message)
   }
 }
 
-const deleteOne = async ({ params }: { params: DynamodbParams }): Promise<object> => {
+const deleteOne = async ({ params }: { params: DeleteCommandInput}): Promise<Record<string, any> | undefined> => {
   try {
-    await dbClient.doc().delete(params).promise()
+    const command = new DeleteCommand(params)
+    await documentInstance.send(command)
 
     return params.Key
   } catch (err) {
@@ -136,7 +155,7 @@ const deleteBatch = async ({ params, list }: { params: DynamodbParams, list: obj
   await executeBatch(packs)
 }
 
-const deleteAll = async (params: DynamodbParams[] = []): Promise<object[]> => {
+const deleteAll = async (params: DeleteCommandInput[] = []): Promise<Array<Record<string, any> | undefined>> => {
   return Promise.all(
     params.map(async param => deleteOne({
       params: param
@@ -172,27 +191,30 @@ const putBatch = async ({ params, list }: { params: DynamodbParams, list: object
   await executeBatch(packs)
 }
 
-const executeBatch = async (packs: object[] = []): Promise<void> => {
-  const results = await Promise.all(packs.map(pack => dbClient.doc().batchWrite(pack).promise()))
+const executeBatch = async (packs: BatchWriteCommandInput[] = []): Promise<void> => {
+  const results = await Promise.all(packs.map(async pack => {
+    const command = new BatchWriteCommand(pack)
+    return documentInstance.send(command)
+  }))
 
   const newPacks = getUnprocessedItems(results)
 
   if (Array.isArray(newPacks) && newPacks.length > 0) { await executeBatch(newPacks) }
 }
 
-const getUnprocessedItems = async (responseBatch: DynamodbResponseBatch[]): Promise<object[]> => {
+const getUnprocessedItems = async (responseBatch: BatchWriteCommandOutput[]): Promise<object[]> => {
   let idx = 0
 
   return responseBatch.reduce((acc: any, value) => {
     if (!isObject(value) || !isObject(value.UnprocessedItems)) return acc
 
     // ? Our batches use only 1 table each time
-    const tableName = Object.keys(value.UnprocessedItems)[0]
+    const tableName = Object.keys(value.UnprocessedItems ?? [])[0]
 
     // ? there is no unprocessed item
     if (!tableName) return acc
 
-    const processList = value.UnprocessedItems[tableName]
+    const processList = value.UnprocessedItems?.[tableName] ?? []
 
     processList.forEach(process => {
       if (acc[idx] && acc[idx].RequestItems[tableName].length >= 25) idx++
@@ -216,7 +238,7 @@ const dynamicUpdate = async ({
   object,
   removeAttributes,
   params
-}: { object: object, removeAttributes?: string[], params: DynamodbParams }): Promise<any> => {
+}: { object: object, removeAttributes?: string[], params: UpdateCommandInput }): Promise<any> => {
   try {
     const updateExpressionItems: string[] = []
     const removeExpressionItems: string[] = []
@@ -246,7 +268,7 @@ const dynamicUpdate = async ({
         ${removeExpressionItems.length ? `REMOVE ${removeExpressionItems.join(', ')}` : ''}\
       `
 
-    const updateParams = {
+    const updateParams: UpdateCommandInput = {
       ...params,
       UpdateExpression,
       ExpressionAttributeValues,
@@ -254,7 +276,8 @@ const dynamicUpdate = async ({
       ReturnValues: 'UPDATED_NEW'
     }
 
-    return await dbClient.doc().update(updateParams).promise()
+    const command = new UpdateCommand(updateParams)
+    return await documentInstance.send(command)
   } catch (err) {
     if (err && err.code === 'ConditionalCheckFailedException') return {}
     // eslint-disable-next-line @typescript-eslint/no-throw-literal

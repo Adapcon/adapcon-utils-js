@@ -1,6 +1,6 @@
 import { isNumber } from '../number'
 import { objToStr } from '../object'
-import { ProxyResult } from 'aws-lambda'
+import type { ProxyResult } from 'aws-lambda'
 import type { Error, Headers } from './interfaces'
 
 export const lambdaResp = (statusCode: number, body?: object | string, headers?: Headers): ProxyResult => ({
