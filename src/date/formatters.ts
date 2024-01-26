@@ -1,4 +1,4 @@
-export const formatDate = (date: string | Date, format: string = 'DD/MM/YYYY'): string => {
+export const formatDate = (date: string | Date, format = 'DD/MM/YYYY'): string => {
   let year: string | number = ''
   let month: string | number = ''
   let day: string | number = ''
