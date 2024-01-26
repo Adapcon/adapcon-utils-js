@@ -10,7 +10,6 @@ import {
   DynamooseEventFunctionType,
   DynamooseInputIndexes
 } from './interfaces'
-import { QueryResponse } from 'aws-sdk/clients/timestreamquery'
 
 export const dynamooseCrudHandler = async (
   crudInputParams: DynamooseCrudInputParams,
@@ -136,7 +135,7 @@ export const prepareDynamoIndexes = (
   }
 }
 
-export const getDynamooseStatusCode = <dynamooseEntity>(method: DynamooseOutputParams['method'], dynamooseResult: dynamooseEntity | null | QueryResponse): {
+export const getDynamooseStatusCode = <dynamooseEntity>(method: DynamooseOutputParams['method'], dynamooseResult: dynamooseEntity | null): {
   statusCode: HttpStatuses
   result: dynamooseEntity | null | {data: dynamooseEntity[], lastKey: object}
 } => {
