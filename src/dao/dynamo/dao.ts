@@ -59,7 +59,7 @@ const query = async <T>({
   return items
 }
 
-const scan = async ({ params }) => {
+const scan = async (params) => {
   const command = new ScanCommand(params)
   return documentInstance.send(command)
 }
