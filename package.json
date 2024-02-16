@@ -33,9 +33,11 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.496.0",
     "@aws-sdk/client-lambda": "^3.496.0",
+    "@aws-sdk/client-s3": "^3.515.0",
     "@aws-sdk/client-secrets-manager": "^3.496.0",
     "@aws-sdk/client-ses": "^3.496.0",
     "@aws-sdk/lib-dynamodb": "^3.496.0",
+    "@aws-sdk/s3-request-presigner": "^3.515.0",
     "json-bigint": "^1.0.0",
     "rimraf": "^3.0.2"
   },
