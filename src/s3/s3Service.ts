@@ -2,7 +2,7 @@ import {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
-  DeleteBucketCommand
+  DeleteObjectCommand
 } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
@@ -15,8 +15,8 @@ export class S3Service {
     metadata,
     storageClass,
     tagging,
-    contentType = '',
-    contentEncoding = '',
+    contentType,
+    contentEncoding,
     region = 'sa-east-1'
   }) {
     const client = new S3Client({ region })
@@ -50,11 +50,12 @@ export class S3Service {
     return data
   }
 
-  static async deleteObject ({ bucket, region = 'sa-east-1' }) {
+  static async deleteObject ({ bucket, key, region = 'sa-east-1' }) {
     const client = new S3Client({ region })
 
-    const command = new DeleteBucketCommand({
-      Bucket: bucket
+    const command = new DeleteObjectCommand({
+      Bucket: bucket,
+      Key: key
     })
 
     const data = await client.send(command)
@@ -63,14 +64,19 @@ export class S3Service {
   }
 
   static async getSignedUrl ({
-    bucket, key, contentType = '', region = 'sa-east-1', expiresIn = 60
+    bucket, key, expiresIn, contentType = '', region = 'sa-east-1', type = 'getObject'
   }) {
     const client = new S3Client({ region })
 
-    const command = new GetObjectCommand({
+    const typeOfSignedUrl = {
+      getObject: GetObjectCommand,
+      putObject: PutObjectCommand
+    }
+
+    const command = new typeOfSignedUrl[type]({
       Bucket: bucket,
       Key: key,
-      ResponseContentType: contentType
+      ContentType: contentType
     })
 
     const url = await getSignedUrl(client, command, { expiresIn })
