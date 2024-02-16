@@ -61,17 +61,7 @@ const query = async <T>({
 
 const scan = async ({ params }) => {
   const command = new ScanCommand(params)
-  const { Items = [], LastEvaluatedKey } = await documentInstance.send(command)
-
-  const items = [...Items]
-
-  if (LastEvaluatedKey) {
-    return scan({
-      params: { ...params, ExclusiveStartKey: LastEvaluatedKey }
-    })
-  }
-
-  return items
+  return documentInstance.send(command)
 }
 
 const getAll = async ({ params, list, fields = [] }: { params: DynamodbParams, list: object[], fields?: string[] }) => {
