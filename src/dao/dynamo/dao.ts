@@ -20,7 +20,7 @@ import type {
   BatchWriteCommandInput,
   BatchWriteCommandOutput
 } from '@aws-sdk/lib-dynamodb'
-import { DynamoDB } from '@aws-sdk/client-dynamodb'
+import { DynamoDB, ScanCommand } from '@aws-sdk/client-dynamodb'
 
 const getOptions = () => {
   if (process.env.IS_OFFLINE) return { region: 'localhost', endpoint: 'http://localhost:8000' }
@@ -53,6 +53,21 @@ const query = async <T>({
       fields,
       _items: items,
       stopOnLimit
+    })
+  }
+
+  return items
+}
+
+const scan = async ({ params }) => {
+  const command = new ScanCommand(params)
+  const { Items = [], LastEvaluatedKey } = await documentInstance.send(command)
+
+  const items = [...Items]
+
+  if (LastEvaluatedKey) {
+    return scan({
+      params: { ...params, ExclusiveStartKey: LastEvaluatedKey }
     })
   }
 
@@ -338,6 +353,7 @@ const mountProjectionExpression = ({ fields = [], options }: { fields?: string[]
 export const dynamoDBGenericDao = {
   get,
   query,
+  scan,
   getAll,
   put,
   update,
