@@ -1,43 +1,44 @@
 import { formattedResponse, getBody } from '../../src/lambda'
+const encodeAscii = (str: string) => Buffer.from(str, 'ascii')
 
 describe('invoke', () => {
   it('Should returns response formatted with status code 401', () => {
     expect(formattedResponse({
       StatusCode: 200,
-      Payload: '{"statusCode":401,"body":"{\\"error\\":\\"Invalid Session\\"}"}'
+      Payload: encodeAscii('{"statusCode":401,"body":"{\\"error\\":\\"Invalid Session\\"}"}')
     })).toEqual({ body: { error: 'Invalid Session' }, status: 401 })
   })
 
   it('Should returns response formatted with headers', () => {
     expect(formattedResponse({
       StatusCode: 200,
-      Payload: '{"headers": {"total-count":"20"}}'
+      Payload: encodeAscii('{"headers": {"total-count":"20"}}')
     })).toEqual({ headers: { 'total-count': '20' }, status: 200, body: {} })
   })
 
   it('Should returns response formatted with headers and body', () => {
     expect(formattedResponse({
       StatusCode: 200,
-      Payload: '{"headers": {"total-count":"20"},"body": "{\\"name\\":\\"John Doe\\"}"}'
+      Payload: encodeAscii('{"headers": {"total-count":"20"},"body": "{\\"name\\":\\"John Doe\\"}"}')
     })).toEqual({ headers: { 'total-count': '20' }, status: 200, body: { name: 'John Doe' } })
   })
 
   it('Should returns response formatted with status code 200', () => {
     expect(formattedResponse({
       StatusCode: 200,
-      Payload: '{"body":"{\\"error\\":\\"Invalid Session\\"}"}'
+      Payload: encodeAscii('{"body":"{\\"error\\":\\"Invalid Session\\"}"}')
     })).toEqual({ body: { error: 'Invalid Session' }, status: 200 })
   })
 
   it('Should returns response formatted without status code and message', () => {
     expect(formattedResponse({
-      Payload: '{"error":"Invalid Session"}'
+      Payload: encodeAscii('{"error":"Invalid Session"}')
     })).toEqual({ body: {}, status: undefined })
   })
 
   it('Should returns response formatted without status code', () => {
     expect(formattedResponse({
-      Payload: '{"body":"{\\"error\\":\\"Invalid Session\\"}"}'
+      Payload: encodeAscii('{"body":"{\\"error\\":\\"Invalid Session\\"}"}')
     })).toEqual({ body: { error: 'Invalid Session' }, status: undefined })
   })
 
