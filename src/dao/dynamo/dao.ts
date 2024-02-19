@@ -27,7 +27,9 @@ const getOptions = () => {
   return { region: 'sa-east-1' }
 }
 const dynamoInstance = new DynamoDB(getOptions())
-const documentInstance = DynamoDBDocument.from(dynamoInstance)
+const documentInstance = DynamoDBDocument.from(dynamoInstance, {
+  marshallOptions: { removeUndefinedValues: true }
+})
 
 const get = async ({
   params,
