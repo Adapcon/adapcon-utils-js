@@ -42,13 +42,13 @@ const get = async ({
 }
 const query = async <T>({
   params, fields = [], _items = [], stopOnLimit = false
-}: { params: { Limit: number } & QueryCommandInput, fields?: string[], _items?: Array<Record<string, any>>, stopOnLimit?: boolean }): Promise<Array<Record<string, T>>> => {
+}: { params: { Limit?: number } & QueryCommandInput, fields?: string[], _items?: Array<Record<string, any>>, stopOnLimit?: boolean }): Promise<Array<Record<string, T>>> => {
   const command = new QueryCommand({ ...params, ...mountProjectionExpression({ fields }) })
   const { Items = [], LastEvaluatedKey } = await documentInstance.send(command)
 
   const items = [..._items, ...Items]
 
-  if (stopOnLimit && items.length >= params.Limit) return items
+  if (stopOnLimit && items.length >= (params.Limit ?? 0)) return items
   else if (LastEvaluatedKey) {
     return query({
       params: { ...params, ExclusiveStartKey: LastEvaluatedKey },
