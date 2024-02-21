@@ -92,8 +92,8 @@ const getAll = async ({ params, list, fields = [] }: { params: DynamodbParams, l
     }
 
     const command = new BatchGetCommand(opts)
-    const response = await documentInstance.send(command)
-    return response[params.TableName]
+    const { Responses } = await documentInstance.send(command)
+    return Responses?.[params.TableName]
   }))
 
   return data.reduce((acc: any, i) => acc.concat(i), [])
