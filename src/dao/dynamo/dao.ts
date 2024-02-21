@@ -43,7 +43,7 @@ const get = async ({
 const query = async <T>({
   params, fields = [], _items = [], stopOnLimit = false
 }: { params: { Limit?: number } & QueryCommandInput, fields?: string[], _items?: Array<Record<string, any>>, stopOnLimit?: boolean }): Promise<Array<Record<string, T>>> => {
-  const command = new QueryCommand({ ...params, ...mountProjectionExpression({ fields }) })
+  const command = new QueryCommand({ ...params, ...mountProjectionExpression({ fields, expressionAttributeNames: params.ExpressionAttributeNames }) })
   const { Items = [], LastEvaluatedKey } = await documentInstance.send(command)
 
   const items = [..._items, ...Items]
@@ -92,14 +92,14 @@ const getAll = async ({ params, list, fields = [] }: { params: DynamodbParams, l
     }
 
     const command = new BatchGetCommand(opts)
-    const response = await documentInstance.send(command)
-    return response[params.TableName]
+    const { Responses } = await documentInstance.send(command)
+    return Responses?.[params.TableName]
   }))
 
   return data.reduce((acc: any, i) => acc.concat(i), [])
 }
 
-const put = async ({ params }: { params: PutCommandInput}): Promise<object> => {
+const put = async ({ params }: { params: PutCommandInput }): Promise<object> => {
   try {
     const command = new PutCommand(params)
     await documentInstance.send(command)
@@ -112,7 +112,7 @@ const put = async ({ params }: { params: PutCommandInput}): Promise<object> => {
   }
 }
 
-const update = async ({ params }: { params: UpdateCommandInput}): Promise<any> => {
+const update = async ({ params }: { params: UpdateCommandInput }): Promise<any> => {
   try {
     const command = new UpdateCommand(params)
     return await documentInstance.send(command)
@@ -122,7 +122,7 @@ const update = async ({ params }: { params: UpdateCommandInput}): Promise<any> =
   }
 }
 
-const deleteOne = async ({ params }: { params: DeleteCommandInput}): Promise<Record<string, any> | undefined> => {
+const deleteOne = async ({ params }: { params: DeleteCommandInput }): Promise<Record<string, any> | undefined> => {
   try {
     const command = new DeleteCommand(params)
     await documentInstance.send(command)
@@ -328,10 +328,14 @@ const dynamicFilters = ({
   }
 }
 
-const mountProjectionExpression = ({ fields = [], options }: { fields?: string[], options?: DynamodbParams }): object => {
+const mountProjectionExpression = ({ fields = [], expressionAttributeNames, options }: {
+  fields?: string[]
+  expressionAttributeNames?: QueryCommandInput['ExpressionAttributeNames']
+  options?: DynamodbParams
+}): object => {
   if (fields.length > 0) {
     const ProjectionExpression = fields.map((_, index) => `#Projection_${index}`).join(',')
-    const { ExpressionAttributeNames = {} } = options ?? {}
+    const { ExpressionAttributeNames = expressionAttributeNames ?? {} } = options ?? {}
 
     fields.forEach((i, index) => {
       ExpressionAttributeNames[`#Projection_${index}`] = i
