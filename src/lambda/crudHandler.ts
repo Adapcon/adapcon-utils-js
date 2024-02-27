@@ -1,8 +1,8 @@
 import { lambdaGetParameters } from './lambdaGetParameters'
-import type { APIGatewayEvent } from 'aws-lambda'
 import { error } from '../error'
 import { getDefaultResponse, HttpNames } from '../http'
 import { CrudInputParams } from '../'
+import type { APIGatewayEvent } from 'aws-lambda/trigger/api-gateway-proxy'
 
 export const lambdaCrudHandler = (
   event: APIGatewayEvent,
