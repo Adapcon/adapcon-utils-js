@@ -20,7 +20,7 @@ import type {
   BatchWriteCommandInput,
   BatchWriteCommandOutput
 } from '@aws-sdk/lib-dynamodb'
-import { DynamoDB, ScanCommand } from '@aws-sdk/client-dynamodb'
+import { DynamoDB, ScanCommand, ScanCommandInput } from '@aws-sdk/client-dynamodb'
 
 const getOptions = () => {
   if (process.env.IS_OFFLINE) return { region: 'localhost', endpoint: 'http://localhost:8000' }
@@ -61,7 +61,7 @@ const query = async <T>({
   return items
 }
 
-const scan = async (params) => {
+const scan = async (params: ScanCommandInput) => {
   const command = new ScanCommand(params)
   return documentInstance.send(command)
 }
