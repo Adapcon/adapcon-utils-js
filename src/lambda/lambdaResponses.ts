@@ -1,15 +1,14 @@
-import type { ProxyResult } from 'aws-lambda/trigger/api-gateway-proxy'
 import { isNumber } from '../number'
 import { objToStr } from '../object'
 import type { Error, Headers } from './interfaces'
 
-export const lambdaResp = (statusCode: number, body?: object | string, headers?: Headers): ProxyResult => ({
+export const lambdaResp = (statusCode: number, body?: object | string, headers?: Headers) => ({
   statusCode,
   ...(body ? { body: objToStr(body) } : { body: '' }),
   ...(headers ? { headers } : null)
 })
 
-export const lambdaRespError = (err: Error): ProxyResult => {
+export const lambdaRespError = (err: Error) => {
   err.statusCode = err.status ?? err.statusCode
   err.message = err.error ?? err.message
 
