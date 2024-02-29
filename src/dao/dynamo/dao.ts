@@ -18,7 +18,8 @@ import type {
   UpdateCommandInput,
   DeleteCommandInput,
   BatchWriteCommandInput,
-  BatchWriteCommandOutput
+  BatchWriteCommandOutput,
+  QueryCommandOutput
 } from '@aws-sdk/lib-dynamodb'
 import { DynamoDB, ScanCommand } from '@aws-sdk/client-dynamodb'
 
@@ -31,20 +32,23 @@ const documentInstance = DynamoDBDocument.from(dynamoInstance, {
   marshallOptions: { removeUndefinedValues: true }
 })
 
-const get = async ({
+const get = async<T> ({
   params,
   fields = []
-}: { params: GetCommandInput, fields?: string[] }): Promise<Record<string, any> | undefined> => {
+}: { params: GetCommandInput, fields?: string[] }): Promise<T| undefined> => {
   const command = new GetCommand({ ...params, ...mountProjectionExpression({ fields }) })
 
-  const { Item } = await documentInstance.send(command)
+  const { Item } = await documentInstance.send(command) as { Item: T }
   return Item
 }
+
 const query = async <T>({
   params, fields = [], _items = [], stopOnLimit = false
-}: { params: { Limit?: number } & QueryCommandInput, fields?: string[], _items?: Array<Record<string, any>>, stopOnLimit?: boolean }): Promise<Array<Record<string, T>>> => {
+}: { params: { Limit?: number } & QueryCommandInput, fields?: string[], _items?: T[], stopOnLimit?: boolean }): Promise<T[]> => {
+  if (!Number(params.Limit) || Number.isNaN(params.Limit)) delete params.Limit
+
   const command = new QueryCommand({ ...params, ...mountProjectionExpression({ fields, expressionAttributeNames: params.ExpressionAttributeNames }) })
-  const { Items = [], LastEvaluatedKey } = await documentInstance.send(command)
+  const { Items = [], LastEvaluatedKey } = await documentInstance.send(command) as QueryCommandOutput & { Items: T[] }
 
   const items = [..._items, ...Items]
 
