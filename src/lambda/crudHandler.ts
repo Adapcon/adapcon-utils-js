@@ -2,16 +2,15 @@ import { lambdaGetParameters } from './lambdaGetParameters'
 import { error } from '../error'
 import { getDefaultResponse, HttpNames } from '../http'
 import { CrudInputParams } from '../'
-import type { APIGatewayEvent } from 'aws-lambda/trigger/api-gateway-proxy'
 
 export const lambdaCrudHandler = (
-  event: APIGatewayEvent,
+  event: any,
   customParameters: {[key: string]: string} = {}
 ): CrudInputParams => {
   return switchMethod(event, customParameters)
 }
 
-const switchMethod = (event: APIGatewayEvent, customParameters): CrudInputParams => {
+const switchMethod = (event: any, customParameters): CrudInputParams => {
   const { httpMethod } = event
 
   switch (httpMethod) {
@@ -35,7 +34,7 @@ const switchMethod = (event: APIGatewayEvent, customParameters): CrudInputParams
   }
 }
 
-const getEvent = (event: APIGatewayEvent, customParameters): CrudInputParams => {
+const getEvent = (event: any, customParameters): CrudInputParams => {
   const parameters = lambdaGetParameters(event,
     {
       sort: 'headers',
@@ -61,7 +60,7 @@ const getEvent = (event: APIGatewayEvent, customParameters): CrudInputParams => 
   }
 }
 
-const postEvent = (event: APIGatewayEvent, customParameters): CrudInputParams => {
+const postEvent = (event: any, customParameters): CrudInputParams => {
   const parameters: {body?: string} = lambdaGetParameters(event, {
     body: 'body'
 
@@ -78,7 +77,7 @@ const postEvent = (event: APIGatewayEvent, customParameters): CrudInputParams =>
   }
 }
 
-const putEvent = (event: APIGatewayEvent, customParameters): CrudInputParams => {
+const putEvent = (event: any, customParameters): CrudInputParams => {
   const parameters: {body?: string} = lambdaGetParameters(event,
     {
       body: 'body'
@@ -96,7 +95,7 @@ const putEvent = (event: APIGatewayEvent, customParameters): CrudInputParams => 
   }
 }
 
-const deleteEvent = (event: APIGatewayEvent, customParameters): CrudInputParams => {
+const deleteEvent = (event: any, customParameters): CrudInputParams => {
   const parameters = lambdaGetParameters(event,
     {
 
