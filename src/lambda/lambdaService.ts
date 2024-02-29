@@ -65,6 +65,8 @@ const executeInvoke = async <T>({
     )
   })
 
+  if (invocationType === InvokeType.Event) return { StatusCode: response.StatusCode }
+
   return formattedResponse<T>(response)
 }
 
