@@ -11,10 +11,10 @@ export const SecretManager = {
     if (!secret) throw new Error('Secret not found!')
     if (!secret.SecretString) throw new Error('Secret without a value!')
 
-    return JSON.parse(secret.SecretString)
+    return secret as unknown as AccessKey
   },
 
-  getAccessKey: async ({ region, serviceSecretArn: secretId, isOffline }: AccessKeyParam): Promise<AccessKey> => {
+  getAccessKey: async ({ region, serviceSecretArn: secretId, isOffline }: AccessKeyParam): Promise<AccessKey|object> => {
     return (secretId && !isOffline)
       ? await SecretManager.getValue({
         region,
