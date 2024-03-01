@@ -14,7 +14,7 @@ export const SecretManager = {
     return secret as unknown as AccessKey
   },
 
-  getAccessKey: async ({ region, serviceSecretArn: secretId, isOffline }: AccessKeyParam): Promise<AccessKey|{}> => {
+  getAccessKey: async ({ region, serviceSecretArn: secretId, isOffline }: AccessKeyParam): Promise<AccessKey|object> => {
     return (secretId && !isOffline)
       ? await SecretManager.getValue({
         region,
