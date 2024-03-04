@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - 'master'
-      - '^v-\d+\.\d+\.\d+$' # v-0.0.0
-
+      - '^v-\d+\.\d+(\.\d+)?$' # v-0.0.0, v-0.0
 
 jobs:
   publish:
@@ -29,8 +28,9 @@ jobs:
           if [[ "${{ steps.get-branch.outputs.branch }}" == "master" ]]; then
             echo "::set-output name=tag::latest"
           else
-            branch_name=$(echo "${{ steps.get-branch.outputs.branch }}" | sed 's/^v-//')
-            echo "::set-output name=tag::$branch_name"
+            version=$(jq -r '.version' package.json)
+            branch_name=$(echo "${{ steps.branch-name.outputs.branch }}" | sed 's/^v-//')
+            echo "::set-output name=tag::${branch_name:-$version}"
           fi
 
       - name: npm install
