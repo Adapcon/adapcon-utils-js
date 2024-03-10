@@ -2,7 +2,9 @@ name: CI
 
 on:
   push:
-    branches: master
+    branches:
+      - 'master'
+      - '^v-\d+\.\d+(\.\d+)?$' # v-0.0.0, v-0.0
 
 jobs:
   publish:
@@ -16,6 +18,21 @@ jobs:
         with:
           node-version: 20
 
+      - name: Get branch name
+        id: get-branch
+        run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
+
+      - name: Get release tag
+        id: get-tag
+        run: |
+          if [[ "${{ steps.get-branch.outputs.branch }}" == "master" ]]; then
+            echo "::set-output name=tag::latest"
+          else
+            version=$(jq -r '.version' package.json)
+            branch_name=$(echo "${{ steps.branch-name.outputs.branch }}" | sed 's/^v-//')
+            echo "::set-output name=tag::${branch_name:-$version}"
+          fi
+
       - name: npm install
         run: npm ci
 
@@ -26,3 +43,4 @@ jobs:
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
+          tag: ${{ steps.get-tag.outputs.tag }}
