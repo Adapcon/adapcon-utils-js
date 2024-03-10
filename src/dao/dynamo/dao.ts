@@ -32,13 +32,13 @@ const documentInstance = DynamoDBDocument.from(dynamoInstance, {
   marshallOptions: { removeUndefinedValues: true }
 })
 
-const get = async<T> ({
+const get = async<T>({
   params,
   fields = []
-}: { params: GetCommandInput, fields?: string[] }): Promise<T| undefined> => {
+}: { params: GetCommandInput, fields?: string[] }): Promise<T | undefined> => {
   const command = new GetCommand({ ...params, ...mountProjectionExpression({ fields }) })
 
-  const { Item } = await documentInstance.send(command) as { Item: T }
+  const { Item } = await documentInstance.send(command) as Omit<QueryCommandOutput, 'Item'> & { Item: T } ?? {}
   return Item
 }
 
