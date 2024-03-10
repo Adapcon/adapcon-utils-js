@@ -38,7 +38,7 @@ const get = async<T> ({
 }: { params: GetCommandInput, fields?: string[] }): Promise<T| undefined> => {
   const command = new GetCommand({ ...params, ...mountProjectionExpression({ fields }) })
 
-  const { Item } = await documentInstance.send(command) as { Item: T }
+  const { Item } = await documentInstance.send(command) as Omit<QueryCommandOutput, 'Item'> & { Item: T } ?? {}
   return Item
 }
 
