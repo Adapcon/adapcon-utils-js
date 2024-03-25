@@ -2,10 +2,8 @@ import jsonBigInt from 'json-bigint'
 
 import { isObject } from '../object'
 
-const ascii = new TextDecoder('ascii')
-
 export const formattedResponse = <T>({ StatusCode, Payload }: { StatusCode?: number, Payload?: any }): { status: number, body: T } => {
-  const payloadFormatted = Payload ? JSON.parse(ascii.decode(Payload)) : {}
+  const payloadFormatted = Payload ? JSON.parse(Buffer.from(Payload, 'ascii').toString('utf8')) : {}
 
   return {
     status: payloadFormatted.statusCode || StatusCode,
