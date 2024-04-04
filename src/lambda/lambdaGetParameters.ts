@@ -4,6 +4,15 @@ import { APIGatewayEvent } from 'aws-lambda'
 import { error } from '../error/index'
 import { Docfy, DocfySettings } from '.'
 
+interface Params {
+  [key: string]: string | number | boolean
+}
+
+interface Errs {
+
+  [key: string]: string
+}
+
 export const lambdaGetParameters = (event: object, eventParams: object): { [key: string]: any } => {
   const fedParams = {}
 
@@ -81,14 +90,6 @@ export const lambdaSettingsGetParameters = <T>(docfy: Docfy, evt: APIGatewayEven
   Object.assign(parameters, requestContext.params)
   Object.assign(errs, requestContext.errs)
 
-  interface Params {
-    [key: string]: string | number | boolean
-  }
-
-  interface Errs {
-
-    [key: string]: string
-  }
   if (docfy.body) {
     try {
       const evtobj = {
