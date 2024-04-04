@@ -2,7 +2,7 @@ import { HttpStatuses } from '../http/enums'
 import { kebabCaseToCamelCase } from './../string/formatters'
 import { APIGatewayEvent } from 'aws-lambda'
 import { error } from '../error/index'
-import { Docfy, DocfySettings } from './'
+import { Docfy, DocfySettings } from '.'
 
 export const lambdaGetParameters = (event: object, eventParams: object): { [key: string]: any } => {
   const fedParams = {}
