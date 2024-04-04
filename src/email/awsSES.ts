@@ -63,7 +63,6 @@ const checkParameters = (parameters: {
   const errors: { to?: string } = { ...lambdaCheckParameters(parameters, Object.keys(parameters)) }
   if (!parameters.to || parameters.to.length === 0) errors.to = 'is empty'
 
-  // eslint-disable-next-line @typescript-eslint/no-throw-literal
   if (Object.keys(errors).length > 0) throw error(400, errors)
 }
 
