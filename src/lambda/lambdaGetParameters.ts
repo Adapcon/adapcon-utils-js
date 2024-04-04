@@ -2,7 +2,7 @@ import { HttpStatuses } from '../http/enums'
 import { kebabCaseToCamelCase } from './../string/formatters'
 import { APIGatewayEvent } from 'aws-lambda'
 import { error } from '../error/index'
-import { Docfy, DocfySettings } from '../lambda/interfaces'
+import { Docfy, DocfySettings } from '../lambda'
 
 export const lambdaGetParameters = (event: object, eventParams: object): { [key: string]: any } => {
   const fedParams = {}
@@ -81,12 +81,20 @@ export const lambdaSettingsGetParameters = <T>(docfy: Docfy, evt: APIGatewayEven
   Object.assign(parameters, requestContext.params)
   Object.assign(errs, requestContext.errs)
 
+  interface Params {
+    [key: string]: string | number | boolean
+  }
+
+  interface Errs {
+
+    [key: string]: string
+  }
   if (docfy.body) {
     try {
       const evtobj = {
         body: JSON.parse(get(evt, 'body'))
       }
-      const requestBody: { params: any, errs: any } = extractParams(docfy, 'body', evtobj as APIGatewayEvent)
+      const requestBody: { params: Params, errs: Errs } = extractParams(docfy, 'body', evtobj as APIGatewayEvent)
       Object.assign(parameters, requestBody.params)
       Object.assign(errs, requestBody.errs)
     } catch (err) {
