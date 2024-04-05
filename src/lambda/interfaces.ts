@@ -54,7 +54,7 @@ export type DocfySettings = {
 }
 
 export type Docfy = {
-  type: string
+  type: 'screen' | 'integration' | 'public' | 'session'
   description: string
   pathParameters?: { [key: string]: DocfySettings }
   body?: { [key: string]: DocfySettings }
