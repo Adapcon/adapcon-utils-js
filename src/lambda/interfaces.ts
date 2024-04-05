@@ -47,3 +47,16 @@ export type CrudInputParams = {
   keys?: {[key: string]: any}
   customParameters?: {[key: string]: any}
 }
+export type DocfySettings = {
+  label: string
+  required?: boolean
+  translate?: string
+}
+
+export type Docfy = {
+  type: 'screen' | 'integration' | 'public' | 'session'
+  description: string
+  pathParameters?: { [key: string]: DocfySettings }
+  body?: { [key: string]: DocfySettings }
+  headers?: { [key: string]: DocfySettings }
+}

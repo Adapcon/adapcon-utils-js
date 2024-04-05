@@ -181,7 +181,6 @@ const verifyBlockedMethods = (httpMethod: CrudHttpMethods, blockedMethods?: Bloc
         ? message
         : HttpMessages.notImplemented
 
-      // eslint-disable-next-line @typescript-eslint/no-throw-literal
       throw error(HttpStatuses.notImplemented, blockMessage)
     }
   }

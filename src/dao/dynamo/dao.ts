@@ -111,7 +111,6 @@ const put = async ({ params }: { params: PutCommandInput }): Promise<object> => 
     return {}
   } catch (err) {
     if (err && err.code === 'ConditionalCheckFailedException') return {}
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw error(500, err.message)
   }
 }
@@ -121,7 +120,6 @@ const update = async ({ params }: { params: UpdateCommandInput }): Promise<any> 
     const command = new UpdateCommand(params)
     return await documentInstance.send(command)
   } catch (err) {
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw error(500, err.message)
   }
 }
@@ -133,7 +131,6 @@ const deleteOne = async ({ params }: { params: DeleteCommandInput }): Promise<Re
 
     return params.Key
   } catch (err) {
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw error(500, err.message)
   }
 }
@@ -291,7 +288,6 @@ const dynamicUpdate = async ({
     return await documentInstance.send(command)
   } catch (err) {
     if (err && err.code === 'ConditionalCheckFailedException') return {}
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw error(500, err.message)
   }
 }

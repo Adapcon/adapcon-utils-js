@@ -28,7 +28,6 @@ const switchMethod = (event: any, customParameters): CrudInputParams => {
 
     default: {
       const notImplemented = getDefaultResponse('notImplemented' as HttpNames)
-      // eslint-disable-next-line @typescript-eslint/no-throw-literal
       throw error(notImplemented.statusCode, notImplemented.message)
     }
   }
