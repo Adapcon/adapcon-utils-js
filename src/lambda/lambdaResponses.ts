@@ -16,3 +16,25 @@ export const lambdaRespError = (err: Error) => {
 
   return lambdaResp(500, (err.message) ? { error: err.message } : undefined)
 }
+
+export const lambdaProcessError = <T>({
+  type = 'session', functionName, context, err
+}) => {
+  console.error(`${type} ${functionName as string} - ERROR: `, err)
+  const metadata = { logStreamName: context?.logStreamName, functionName }
+
+  if (err.statusCode) {
+    const errorResponse: {
+      $metadata: { logStreamName: string, functionName: string }
+      message?: string
+      error?: string | number | object | boolean | null | undefined | T
+    } = { $metadata: metadata }
+
+    if (err.message) errorResponse.message = err.message
+    if (err.error) errorResponse.error = err.error
+
+    return lambdaResp(err.statusCode, errorResponse)
+  }
+
+  return lambdaRespError({ error: { $metadata: metadata, message: 'Internal Server Error' } })
+}
