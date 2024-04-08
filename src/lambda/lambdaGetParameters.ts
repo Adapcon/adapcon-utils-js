@@ -92,10 +92,10 @@ export const lambdaSettingsGetParameters = <T>(docfy: Docfy, evt: APIGatewayEven
 
   if (docfy.body) {
     try {
-      const evtobj = {
+      const evtObj = {
         body: JSON.parse(get(evt, 'body'))
       }
-      const requestBody: { params: Params, errs: Errs } = extractParams(docfy, 'body', evtobj as APIGatewayEvent)
+      const requestBody: { params: Params, errs: Errs } = extractParams(docfy, 'body', evtObj as APIGatewayEvent)
       Object.assign(parameters, requestBody.params)
       Object.assign(errs, requestBody.errs)
     } catch (err) {
