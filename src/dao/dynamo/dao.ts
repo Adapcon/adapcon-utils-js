@@ -1,6 +1,6 @@
 import { isObject } from '../../object'
 import { error } from '../../error'
-import type { DynamodbParams } from './types'
+import type { DynamodbParams, ScanOutput } from './types'
 import {
   DynamoDBDocument,
   GetCommand,
@@ -9,7 +9,8 @@ import {
   PutCommand,
   UpdateCommand,
   DeleteCommand,
-  BatchWriteCommand
+  BatchWriteCommand,
+  ScanCommandInput
 } from '@aws-sdk/lib-dynamodb'
 import type {
   GetCommandInput,
@@ -22,6 +23,7 @@ import type {
   QueryCommandOutput
 } from '@aws-sdk/lib-dynamodb'
 import { DynamoDB, ScanCommand } from '@aws-sdk/client-dynamodb'
+import { unmarshall } from '@aws-sdk/util-dynamodb'
 
 const getOptions = () => {
   if (process.env.IS_OFFLINE) return { region: 'localhost', endpoint: 'http://localhost:8000' }
@@ -65,9 +67,16 @@ const query = async <T>({
   return items
 }
 
-const scan = async (params) => {
+async function scan<T>(params: ScanCommandInput): Promise<ScanOutput<T>> {
   const command = new ScanCommand(params)
-  return documentInstance.send(command)
+  const result = await documentInstance.send(command)
+
+  const Items = result.Items?.map(item => unmarshall(item)) as T[] | undefined
+
+  return {
+    Items,
+    LastEvaluatedKey: result.LastEvaluatedKey
+  }
 }
 
 const getAll = async ({ params, list, fields = [] }: { params: DynamodbParams, list: object[], fields?: string[] }) => {

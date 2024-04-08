@@ -1,3 +1,5 @@
+import { AttributeValue } from '@aws-sdk/client-dynamodb'
+
 export enum ConditionsExpressions {
   EQUAL = '=',
   NOT_EQUAL = '<>',
@@ -27,3 +29,5 @@ export interface DynamodbParams {
 export interface DynamodbResponseBatch {
   UnprocessedItems: object
 }
+
+export type ScanOutput<T> = { Items: T[] | undefined, LastEvaluatedKey: Record<string, AttributeValue> | undefined }
