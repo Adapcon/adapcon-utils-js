@@ -54,9 +54,11 @@ export type DocfySettings = {
 }
 
 export type Docfy = {
-  type: 'screen' | 'integration' | 'public' | 'session'
+  type: 'screen' | 'integration' | 'public' | 'session' | 'hybrid'
   description: string
   pathParameters?: { [key: string]: DocfySettings }
-  body?: { [key: string]: DocfySettings }
+  queryStringParameters: { [key: string]: DocfySettings }
   headers?: { [key: string]: DocfySettings }
+  body?: { [key: string]: DocfySettings }
+  requestContext?: { [key: string]: DocfySettings }
 }
