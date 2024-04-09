@@ -49,16 +49,19 @@ export type CrudInputParams = {
 }
 export type DocfySettings = {
   label: string
+  description?: string
   required?: boolean
   translate?: string
+  default?: any
 }
 
 export type Docfy = {
   type: 'screen' | 'integration' | 'public' | 'session' | 'hybrid'
   description: string
-  pathParameters?: { [key: string]: DocfySettings }
-  queryStringParameters: { [key: string]: DocfySettings }
+  pathParameters?: { [key: string]: Omit<DocfySettings, 'required'> }
+  queryStringParameters?: { [key: string]: DocfySettings }
   headers?: { [key: string]: DocfySettings }
   body?: { [key: string]: DocfySettings }
   requestContext?: { [key: string]: DocfySettings }
+  fromEvent?: { [key: string]: DocfySettings }
 }

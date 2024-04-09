@@ -48,9 +48,15 @@ const extractParams = (docfy: Docfy, parameter: string, evt: APIGatewayEvent) =>
 
   for (const [key, value] of Object.entries(docfy[parameter] ?? {}) as Array<[key: string, value: DocfySettings]>) {
     const identity = value.translate ?? key
-    const param = get(evt, `${parameter}.${key}`)
+    const param = get(evt, `${parameter}.${key}`) ?? value.default
 
-    if (value.required && !param) { errs[key] = `Missing(${parameter}) ${value.label}` } else if (param !== 'undefined') params[identity] = param
+    const alreadyExist = value.translate && !params[value.translate]
+    const isRequired = value.required ?? parameter === 'pathParameters'
+    if (isRequired && !param && alreadyExist) {
+      errs[key] = `Missing(${parameter}) ${value.label}`
+    } else if (param !== 'undefined' && !params[identity]) {
+      params[identity] = param
+    }
   }
   return { params, errs }
 }
@@ -89,6 +95,10 @@ export const lambdaSettingsGetParameters = <T>(docfy: Docfy, evt: APIGatewayEven
   const requestContext = extractParams(docfy, 'requestContext', evt)
   Object.assign(parameters, requestContext.params)
   Object.assign(errs, requestContext.errs)
+
+  const fromEvent = extractParams(docfy, 'fromEvent', { ...evt })
+  Object.assign(parameters, fromEvent.params)
+  Object.assign(errs, fromEvent.errs)
 
   if (docfy.body) {
     try {
