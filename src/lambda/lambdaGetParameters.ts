@@ -56,7 +56,7 @@ const extractParams = (docfy: Docfy, parameter: string, evt: APIGatewayEvent) =>
     const hasValue = param && param !== 'undefined'
     const isRequired = value.required ?? parameter === 'pathParameters'
 
-    if (isRequired && (!hasValue || !hasParamValue)) {
+    if (isRequired && !hasValue && !hasParamValue) {
       errs[keyBase] = `Missing(${parameter}) ${value.label}`
     } else {
       params[identity] = param
