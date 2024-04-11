@@ -58,10 +58,10 @@ export type DocfySettings = {
 export type Docfy = {
   type: 'screen' | 'integration' | 'public' | 'session' | 'hybrid'
   description: string
-  pathParameters?: { [key: string]: Omit<DocfySettings, 'required'> }
-  queryStringParameters?: { [key: string]: DocfySettings }
-  headers?: { [key: string]: DocfySettings }
-  body?: { [key: string]: DocfySettings }
-  requestContext?: { [key: string]: DocfySettings }
-  fromEvent?: { [key: string]: DocfySettings }
+  pathParameters?: Record<string, Omit<DocfySettings, 'required'>>
+  queryStringParameters?: Record<string, DocfySettings>
+  headers?: Record<string, DocfySettings>
+  body?: Record<string, DocfySettings>
+  requestContext?: Record<string, DocfySettings>
+  fromEvent?: Record<string, DocfySettings>
 }

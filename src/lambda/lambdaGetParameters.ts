@@ -46,15 +46,19 @@ const extractParams = (docfy: Docfy, parameter: string, evt: APIGatewayEvent) =>
   const params = {}
   const errs = {}
 
-  for (const [key, value] of Object.entries(docfy[parameter] ?? {}) as Array<[key: string, value: DocfySettings]>) {
-    const identity = value.translate ?? key
+  for (const [keyBase, value] of Object.entries(docfy[parameter] ?? {}) as Array<[key: string, value: DocfySettings]>) {
+    const key = parameter === 'headers' ? keyBase.toLowerCase() : keyBase
+
+    const identity = value.translate ?? keyBase
     const param = get(evt, `${parameter}.${key}`) ?? value.default
 
-    const alreadyExist = value.translate && !params[value.translate]
+    const hasParamValue = params[identity]
+    const hasValue = param && param !== 'undefined'
     const isRequired = value.required ?? parameter === 'pathParameters'
-    if (isRequired && !param && alreadyExist) {
-      errs[key] = `Missing(${parameter}) ${value.label}`
-    } else if (param !== 'undefined' && !params[identity]) {
+
+    if (isRequired && !hasValue && !hasParamValue) {
+      errs[keyBase] = `Missing(${parameter}) ${value.label}`
+    } else {
       params[identity] = param
     }
   }
