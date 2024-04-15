@@ -100,7 +100,8 @@ export const lambdaSettingsGetParameters = <T>(docfy: Docfy, evt: APIGatewayEven
   Object.assign(parameters, requestContext.params)
   Object.assign(errs, requestContext.errs)
 
-  const fromEvent = extractParams(docfy, 'fromEvent', { ...evt })
+  const fromEvt = { fromEvent: evt } as unknown as APIGatewayEvent
+  const fromEvent = extractParams(docfy, 'fromEvent', fromEvt)
   Object.assign(parameters, fromEvent.params)
   Object.assign(errs, fromEvent.errs)
 
