@@ -58,7 +58,7 @@ const extractParams = (docfy: Docfy, parameter: string, evt: APIGatewayEvent) =>
 
     if (isRequired && !hasValue && !hasParamValue) {
       errs[keyBase] = `Missing(${parameter}) ${value.label}`
-    } else {
+    } else if (hasValue) {
       params[identity] = param
     }
   }
