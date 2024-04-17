@@ -325,7 +325,7 @@ const dynamicFilters = ({
         filterExpression.push(`#filter_${index} ${operator} (${values})`)
 
         newExpressionAttributeNames[`#filter_${index}`] = field
-        value.forEach((v: any, i: number) => {
+        value.forEach((v: string, i: number) => {
           newExpressionAttributeValues[`:filter_in_${index}_${i}`] = v
         })
       } else {
