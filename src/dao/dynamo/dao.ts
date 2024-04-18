@@ -67,7 +67,7 @@ const query = async <T>({
   return items
 }
 
-async function scan<T>(params: ScanCommandInput): Promise<ScanOutput<T>> {
+async function scan<T> (params: ScanCommandInput): Promise<ScanOutput<T>> {
   const command = new ScanCommand(params)
   const result = await documentInstance.send(command)
 
@@ -319,6 +319,15 @@ const dynamicFilters = ({
         newExpressionAttributeNames[`#filter_${index}`] = field
         newExpressionAttributeValues[`:filter_between_0_${index}`] = start
         newExpressionAttributeValues[`:filter_between_1_${index}`] = end
+      } else if (operator === 'IN') {
+        const inValues = value.map((_, i: number) => `:filter_in_${index}_${i}`)
+        const values: string = inValues.join(', ')
+        filterExpression.push(`#filter_${index} ${operator} (${values})`)
+
+        newExpressionAttributeNames[`#filter_${index}`] = field
+        value.forEach((v: string, i: number) => {
+          newExpressionAttributeValues[`:filter_in_${index}_${i}`] = v
+        })
       } else {
         filterExpression.push(`#filter_${index} ${operator} :filter_${index}`)
 
