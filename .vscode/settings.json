@@ -4,11 +4,13 @@
     "cnpj",
     "Docfy",
     "hotmail",
+    "ittn",
     "portaldocliente",
     "simplificamais"
   ],
   "conventionalCommits.scopes": [
     "lambda",
-    "dynamodb-dao"
+    "dynamodb-dao",
+    "internationalization"
   ]
 }
