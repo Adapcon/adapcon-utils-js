@@ -1,5 +1,7 @@
 import { Sentence } from './interfaces'
 
+export const defaultLang = 'pt-br'
+
 /**
  * Internationalization translation to nation
  */
@@ -16,5 +18,3 @@ export const ittn = (sentence: Sentence, lang = defaultLang) => {
 
   return sentence[langs[0]]
 }
-
-export const defaultLang = 'pt-br'
