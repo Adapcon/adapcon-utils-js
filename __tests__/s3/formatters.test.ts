@@ -25,6 +25,4 @@ describe('streamToString', () => {
     const result = await streamToString(readable)
     expect(result).toEqual(jsonString)
   })
-
-
 })

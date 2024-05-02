@@ -1,4 +1,4 @@
-import { Readable } from 'stream';
+import { Readable } from 'stream'
 
 export const streamToString = async (stream: Readable) => new Promise((resolve, reject) => {
   const chunks: any[] = []

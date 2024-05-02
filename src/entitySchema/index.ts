@@ -1,24 +1,25 @@
 export const EntitySchema = {
-  assembleEntitySchema(solicitation: any, entitySchema: any): object {
-  const defaultObject = {};
-  const properties = Object.keys(solicitation);
+  assembleEntitySchema (solicitation: any, entitySchema: any): object {
+    const defaultObject = {}
+    const properties = Object.keys(solicitation)
 
-  properties.forEach(key => {
-    if (entitySchema === undefined) return;
-    const haveChildren = typeof solicitation[key] === 'object';
-    const property = entitySchema[key];
+    properties.forEach(key => {
+      if (entitySchema === undefined) return
+      const haveChildren = typeof solicitation[key] === 'object'
+      const property = entitySchema[key]
 
-    if (property === undefined) return;
+      if (property === undefined) return
 
-    if (haveChildren) {
-      defaultObject[key] = {
-        ...property,
-        contentObject: {
-          ...EntitySchema.assembleEntitySchema(solicitation[key], property.contentObject || property.contentArray),
-        },
-      };
-    } else defaultObject[key] = property;
-  });
+      if (haveChildren) {
+        defaultObject[key] = {
+          ...property,
+          contentObject: {
+            ...EntitySchema.assembleEntitySchema(solicitation[key], property.contentObject || property.contentArray)
+          }
+        }
+      } else defaultObject[key] = property
+    })
 
-  return defaultObject;
-}}
+    return defaultObject
+  }
+}
