@@ -1,4 +1,4 @@
-import { HttpStatuses } from ".."
+import { HttpStatuses } from '..'
 
 abstract class CustomError extends Error {
   abstract statusCode: number
@@ -10,13 +10,13 @@ abstract class CustomError extends Error {
    * @returns {string}
   */
   public toString(): string {
-    return `${this.kind}: ${this.message}${this.stack ? `\n${this.stack}` : ""}`
+    return `${this.kind}: ${this.message}${this.stack ? `\n${this.stack}` : ''}`
   }
 
   /**
    * Returns a lambda response object
    * should be used for returning errors in lambda functions
-   * after a "instanceof" check -> if (err instanceof CustomError) ...
+   * after a 'instanceof' check -> if (err instanceof CustomError) ...
    * @returns {{statusCode: number, body: string}}
   */
   public toLambdaResponse(): { statusCode: number, body: string } {
@@ -29,12 +29,12 @@ abstract class CustomError extends Error {
 
 class BadRequestError extends CustomError {
   statusCode = HttpStatuses.badRequest
-  kind = "Bad Request Error"
+  kind = 'Bad Request Error'
 }
 
 class IntegrationError extends CustomError {
   statusCode = HttpStatuses.integrationError
-  kind = "Integration Error"
+  kind = 'Integration Error'
   protected customMessage: string
 
   constructor(protected integration: string, protected errorMessage?: string) {
@@ -46,19 +46,19 @@ class IntegrationError extends CustomError {
 
 class InternalError extends CustomError {
   statusCode = HttpStatuses.internalError
-  kind = "Internal Error"
+  kind = 'Internal Error'
 
   constructor(error: unknown) {
-    super("An internal error occurred")
+    super('An internal error occurred')
 
-    if (typeof error === "string") {
+    if (typeof error === 'string') {
       this.message = error
     }
-    else if (typeof error === "object" && "message" in error! && "statusCode" in error!) {
+    else if (typeof error === 'object' && 'message' in error! && 'statusCode' in error!) {
       this.message = error.message as string
       this.statusCode = error.statusCode as HttpStatuses
     }
-    else if (typeof error === "object" && "message" in error!) {
+    else if (typeof error === 'object' && 'message' in error!) {
       this.message = error.message as string
     }
   }
@@ -66,12 +66,12 @@ class InternalError extends CustomError {
 
 class NotFoundError extends CustomError {
   statusCode = HttpStatuses.notFound
-  kind = "Not Found Error"
+  kind = 'Not Found Error'
 }
 
 class UnauthorizedError extends CustomError {
   statusCode = HttpStatuses.unauthorized
-  kind = "Unauthorized Error"
+  kind = 'Unauthorized Error'
 }
 
 export {
