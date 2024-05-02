@@ -1,6 +1,6 @@
 import { HttpStatuses } from ".."
+// skipcq: JS-C1003
 import * as Errors from "./customErrors"
-
 
 describe("CustomError", () => {
   describe("InternalError", () => {
@@ -16,7 +16,7 @@ describe("CustomError", () => {
     it("should return string containing correct items on toString() call", () => {
       const error = new Errors.InternalError(new Error("throwing error"))
 
-      expect(error.toString()).toContain(`Internal Error: throwing error`)
+      expect(error.toString()).toContain("Internal Error: throwing error")
     })
 
     it("should return correct lambdaResponse on toLambdaResponse() call", () => {
@@ -73,7 +73,7 @@ describe("CustomError", () => {
       const integrationName = "microservice1"
       const error = new Errors.IntegrationError(integrationName, "microservice1 is offline")
 
-      expect(error.toString()).toContain(`Integration Error: microservice1 is offline`)
+      expect(error.toString()).toContain("Integration Error: microservice1 is offline")
     })
 
     it("should return correct lambdaResponse on toLambdaResponse() call with customError message", () => {
