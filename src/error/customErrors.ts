@@ -42,8 +42,9 @@ class IntegrationError extends CustomError {
   protected customMessage: string
 
   constructor(protected integration: string, protected errorMessage?: string) {
-    super(errorMessage ?? `Could not integration with ${integration}`)
-    this.customMessage = errorMessage ?? `Could not integration with ${integration}`
+    const message = errorMessage ?? `Could not integration with ${integration}`
+    super(message)
+    this.customMessage = message
   }
 }
 
