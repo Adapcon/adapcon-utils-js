@@ -9,7 +9,7 @@ abstract class CustomError extends Error {
    * should be used for logging
    * @returns {string}
   */
-  public toString(): string {
+  public toString (): string {
     return `${this.kind}: ${this.message}${this.stack ? `\n${this.stack}` : ''}`
   }
 
@@ -19,7 +19,7 @@ abstract class CustomError extends Error {
    * after a 'instanceof' check -> if (err instanceof CustomError) ...
    * @returns {{statusCode: number, body: string}}
   */
-  public toLambdaResponse(): { statusCode: number, body: string } {
+  public toLambdaResponse (): { statusCode: number, body: string } {
     return {
       statusCode: this.statusCode,
       body: JSON.stringify({ message: this.message })
@@ -37,7 +37,7 @@ class IntegrationError extends CustomError {
   kind = 'Integration Error'
   protected customMessage: string
 
-  constructor(protected integration: string, protected errorMessage?: string) {
+  constructor (protected integration: string, protected errorMessage?: string) {
     const message = errorMessage ?? `Could not integration with ${integration}`
     super(message)
     this.customMessage = message
@@ -48,17 +48,15 @@ class InternalError extends CustomError {
   statusCode = HttpStatuses.internalError
   kind = 'Internal Error'
 
-  constructor(error: unknown) {
+  constructor (error: unknown) {
     super('An internal error occurred')
 
     if (typeof error === 'string') {
       this.message = error
-    }
-    else if (typeof error === 'object' && 'message' in error! && 'statusCode' in error!) {
+    } else if (typeof error === 'object' && 'message' in error! && 'statusCode' in error) {
       this.message = error.message as string
       this.statusCode = error.statusCode as HttpStatuses
-    }
-    else if (typeof error === 'object' && 'message' in error!) {
+    } else if (typeof error === 'object' && 'message' in error!) {
       this.message = error.message as string
     }
   }
@@ -80,5 +78,5 @@ export {
   IntegrationError,
   InternalError,
   NotFoundError,
-  UnauthorizedError,
+  UnauthorizedError
 }
