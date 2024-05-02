@@ -76,4 +76,3 @@ describe('getDiffDays', () => {
     expect(getDiffDays(param.date)).toBe(param.output)
   })
 })
-

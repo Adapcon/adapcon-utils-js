@@ -1,4 +1,4 @@
-import { EntitySchema } from '../../src/entitySchema';
+import { EntitySchema } from '../../src/entitySchema'
 
 describe('assembleEntitySchema', () => {
   const validDefaultsObjects = [
@@ -6,15 +6,15 @@ describe('assembleEntitySchema', () => {
       solicitation: {
         appId: true,
         jsonData: {
-          address: true,
-        },
+          address: true
+        }
       },
       entitySchema: {
         appId: {
           type: 'string',
           occult: false,
           required: true,
-          label: 'Portal',
+          label: 'Portal'
         },
         jsonData: {
           type: 'object',
@@ -26,7 +26,7 @@ describe('assembleEntitySchema', () => {
               type: 'string',
               occult: false,
               required: true,
-              label: 'Ocorrência',
+              label: 'Ocorrência'
             },
             address: {
               type: 'object',
@@ -38,17 +38,17 @@ describe('assembleEntitySchema', () => {
                   type: 'string',
                   occult: false,
                   required: true,
-                  label: 'Estado',
+                  label: 'Estado'
                 },
                 city: {
                   type: 'string',
                   occult: false,
                   required: true,
-                  label: 'Cidade',
-                },
-              },
-            },
-          },
+                  label: 'Cidade'
+                }
+              }
+            }
+          }
         },
         test: {
           type: 'array',
@@ -59,16 +59,16 @@ describe('assembleEntitySchema', () => {
             type: 'string',
             occult: false,
             required: true,
-            label: 'Ocorrência',
-          },
-        },
+            label: 'Ocorrência'
+          }
+        }
       },
       returnExpected: {
         appId: {
           type: 'string',
           occult: false,
           required: true,
-          label: 'Portal',
+          label: 'Portal'
         },
         jsonData: {
           type: 'object',
@@ -86,46 +86,46 @@ describe('assembleEntitySchema', () => {
                   type: 'string',
                   occult: false,
                   required: true,
-                  label: 'Estado',
+                  label: 'Estado'
                 },
                 city: {
                   type: 'string',
                   occult: false,
                   required: true,
-                  label: 'Cidade',
-                },
-              },
-            },
-          },
-        },
-      },
+                  label: 'Cidade'
+                }
+              }
+            }
+          }
+        }
+      }
     },
     {
       solicitation: {
-        jsonData: true,
+        jsonData: true
       },
       entitySchema: {
         appId: {
           type: 'string',
           occult: false,
           required: true,
-          label: 'Portal',
-        },
+          label: 'Portal'
+        }
       },
-      returnExpected: {},
+      returnExpected: {}
     },
     {
       solicitation: {
-        appId: true,
+        appId: true
       },
       entitySchema: undefined,
-      returnExpected: {},
+      returnExpected: {}
     },
     {
       solicitation: {
         test: {
-          children1: true,
-        },
+          children1: true
+        }
       },
       entitySchema: {
         test: {
@@ -138,51 +138,51 @@ describe('assembleEntitySchema', () => {
               type: 'string',
               occult: false,
               required: true,
-              label: 'teste',
+              label: 'teste'
             },
             children2: {
               type: 'string',
               occult: false,
               required: true,
-              label: 'teste',
-            },
-          },
-        },
+              label: 'teste'
+            }
+          }
+        }
       },
       returnExpected: {
         test: {
           contentArray: {
             children1: {
-              label: "teste",
+              label: 'teste',
               occult: false,
               required: true,
-              type: "string",
+              type: 'string'
             },
             children2: {
-              label: "teste",
+              label: 'teste',
               occult: false,
               required: true,
-              type: "string",
-            },
+              type: 'string'
+            }
           },
           contentObject: {
             children1: {
-              label: "teste",
+              label: 'teste',
               occult: false,
               required: true,
-              type: "string",
-            },
+              type: 'string'
+            }
           },
-          label: "teste",
+          label: 'teste',
           occult: false,
           required: true,
-          type: "array",
-        },
-      },
-    },
-  ];
+          type: 'array'
+        }
+      }
+    }
+  ]
 
   test.each(validDefaultsObjects)('should returns validation of the provided specific entity schema', ({ solicitation, entitySchema, returnExpected }) => {
-    expect(EntitySchema.assembleEntitySchema(solicitation, entitySchema)).toEqual(returnExpected);
-  });
-});
+    expect(EntitySchema.assembleEntitySchema(solicitation, entitySchema)).toEqual(returnExpected)
+  })
+})
