@@ -1,5 +1,5 @@
 import { HttpStatuses } from '..'
-import { InternalError, BadRequestError, NotFoundError, IntegrationError, UnauthorizedError, } from './customErrors'
+import { InternalError, BadRequestError, NotFoundError, IntegrationError, UnauthorizedError } from './customErrors'
 
 describe('CustomError', () => {
   describe('InternalError', () => {
