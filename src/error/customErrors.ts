@@ -4,10 +4,6 @@ abstract class CustomError extends Error {
   abstract statusCode: number
   abstract kind: string
 
-  constructor(message: string) {
-    super(message)
-  }
-
   /**
    * Returns a string representation of the error
    * should be used for logging
@@ -71,19 +67,11 @@ class InternalError extends CustomError {
 class NotFoundError extends CustomError {
   statusCode = HttpStatuses.notFound
   kind = "Not Found Error"
-
-  constructor(message: string) {
-    super(message)
-  }
 }
 
 class UnauthorizedError extends CustomError {
   statusCode = HttpStatuses.unauthorized
   kind = "Unauthorized Error"
-
-  constructor(message: string) {
-    super(message)
-  }
 }
 
 export {
