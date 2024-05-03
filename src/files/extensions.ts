@@ -1,6 +1,7 @@
 export enum FILE_EXTENSIONS {
   'video/mp4' = 'mp4',
   'audio/ogg; codecs=opus' = 'ogg',
+  'audio/mpeg' = 'mp3',
   'image/gif' = 'gif',
   'image/jpeg' = 'jpg',
   'image/svg+xml' = 'svg',
