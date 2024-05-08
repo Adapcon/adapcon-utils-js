@@ -1,4 +1,5 @@
 import crypto from 'crypto'
+import { InternalError } from '..'
 
 export function encryptPassword (passwordToEncrypt, encryptionKey) {
   const salt = crypto.randomBytes(16).toString('hex')
@@ -11,11 +12,15 @@ export function encryptPassword (passwordToEncrypt, encryptionKey) {
 }
 
 export function decryptPassword (storedPassword, encryptionKey) {
-  const [salt, encryptedPassword] = storedPassword.split(':')
-  const key = crypto.scryptSync(encryptionKey, salt, 24)
-  const iv = Buffer.alloc(16, 0)
-  const decipher = crypto.createDecipheriv('aes-192-cbc', key, iv)
-  let decryptedPassword = decipher.update(encryptedPassword, 'hex', 'utf8')
-  decryptedPassword += decipher.final('utf8')
-  return decryptedPassword
+  try {
+    const [salt, encryptedPassword] = storedPassword.split(':')
+    const key = crypto.scryptSync(encryptionKey, salt, 24)
+    const iv = Buffer.alloc(16, 0)
+    const decipher = crypto.createDecipheriv('aes-192-cbc', key, iv)
+    let decryptedPassword = decipher.update(encryptedPassword, 'hex', 'utf8')
+    decryptedPassword += decipher.final('utf8')
+    return decryptedPassword
+  } catch (error) {
+    throw new InternalError('Invalid Master Key')
+  }
 }
