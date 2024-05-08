@@ -7,7 +7,7 @@ export function encryptPassword (passwordToEncrypt, encryptionKey) {
   const cipher = crypto.createCipheriv('aes-192-cbc', key, iv)
   let encryptedPassword = cipher.update(passwordToEncrypt, 'utf8', 'hex')
   encryptedPassword += cipher.final('hex')
-  return salt + ':' + encryptedPassword
+  return `${salt}:${encryptedPassword}`
 }
 
 export function decryptPassword (storedPassword, encryptionKey) {
