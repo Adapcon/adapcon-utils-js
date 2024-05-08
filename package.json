@@ -38,6 +38,7 @@
     "@aws-sdk/client-ses": "^3.496.0",
     "@aws-sdk/lib-dynamodb": "^3.496.0",
     "@aws-sdk/s3-request-presigner": "^3.515.0",
+    "crypto": "^1.0.1",
     "json-bigint": "^1.0.0",
     "rimraf": "^3.0.2"
   },
