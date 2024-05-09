@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 import { InternalError } from '..'
 
-export function encryptPassword (passwordToEncrypt, encryptionKey) {
+export function encryptPassword (passwordToEncrypt: string, encryptionKey: string): string {
   const salt = crypto.randomBytes(16).toString('hex')
   const key = crypto.scryptSync(encryptionKey, salt, 24)
   const iv = Buffer.alloc(16, 0)
