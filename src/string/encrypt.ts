@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 import { InternalError } from '..'
 
-export function encryptPassword (passwordToEncrypt: string, encryptionKey: string) {
+export function encryptPassword (passwordToEncrypt: string, encryptionKey: string): string {
   const salt = crypto.randomBytes(16).toString('hex')
   const cipher = getCipher(encryptionKey, salt)
   let encryptedPassword = cipher.update(passwordToEncrypt, 'utf8', 'hex')
@@ -9,7 +9,7 @@ export function encryptPassword (passwordToEncrypt: string, encryptionKey: strin
   return `${salt}:${encryptedPassword}`
 }
 
-export function decryptPassword (storedPassword: string, encryptionKey: string) {
+export function decryptPassword (storedPassword: string, encryptionKey: string): string {
   try {
     const [salt, encryptedPassword] = storedPassword.split(':')
     const cipher = getCipher(encryptionKey, salt)
