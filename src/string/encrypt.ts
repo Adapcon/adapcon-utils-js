@@ -11,7 +11,7 @@ export function encryptPassword (passwordToEncrypt: string, encryptionKey: strin
   return `${salt}:${encryptedPassword}`
 }
 
-export function decryptPassword (storedPassword, encryptionKey) {
+export function decryptPassword (storedPassword: string, encryptionKey: string): string {
   try {
     const [salt, encryptedPassword] = storedPassword.split(':')
     const key = crypto.scryptSync(encryptionKey, salt, 24)
