@@ -1,4 +1,4 @@
-import { isObject, objToStr, isObjEqual, hasOwnProperty, compareJsonDiff } from '../../src/object'
+import { isObject, objToStr, isObjEqual, hasOwnProperty, compareJsonDiff, mergeObjectChanges  } from '../../src/object'
 
 const objectA = {
   name: 'adapcon',
@@ -122,5 +122,90 @@ describe('isObjEqual', () => {
 
   it('Should return false to different keys', () => {
     expect(isObjEqual(null, null)).toEqual(true)
+  })
+})
+
+
+describe("Merge Objects Changes tests", () => {
+  it("should merge two objects", () => {
+    const obj1 = { a: 1, b: 2 }
+    const obj2 = { a: 1, b: 4 }
+    const result = mergeObjectChanges(obj1, obj2)
+    expect(result).toMatchObject({ a: 1, b: 4 })
+  })
+
+  it("should merge two objects with nested objects", () => {
+    const obj1 = { a: 1, b: { c: 2, d: 3 } }
+    const obj2 = { a: 1, b: { c: 4, d: 3 } }
+    const result = mergeObjectChanges(obj1, obj2)
+    expect(result).toMatchObject({ a: 1, b: { c: 4, d: 3 } })
+  })
+
+  it("should merge two objects with nested objects and arrays", () => {
+    const obj1 = { a: 1, b: { c: 2, d: [1, 2] } }
+    const obj2 = { a: 1, b: { c: 4, d: [1, 3] } }
+    const result = mergeObjectChanges(obj1, obj2)
+    expect(result).toMatchObject({ a: 1, b: { c: 4, d: [1, 3] } })
+  })
+
+  it("should merge two objects with same type but diff keys and same values on keys that are in both", <T>() => {
+    const obj1 = { a: 1, b: 2 } as T
+    const obj2 = { a: 1, c: 3 } as T
+    const result = mergeObjectChanges(obj1, obj2, {
+      useOldKeysIfNotPresentInNew: true
+    })
+    expect(result).toMatchObject({ a: 1, b: 2, c: 3 })
+  })
+
+  it("should merge two objects with same type but diff keys and diff values on keys that are in both", <T>() => {
+    const obj1 = { a: 1, b: 2 } as T
+    const obj2 = { a: 2, c: 3 } as T
+    const result = mergeObjectChanges(obj1, obj2, {
+      useOldKeysIfNotPresentInNew: true
+    })
+    expect(result).toMatchObject({ a: 2, b: 2, c: 3 })
+  })
+
+  it("should merge two objects with new values if key is present on newObj and not on oldObj with useOldKeysIfNotPresentInNew param as true", () => {
+    const obj1 = { a: 1 }
+    const obj2 = { a: 1, b: 2 }
+    const result = mergeObjectChanges(obj1, obj2, {
+      useOldKeysIfNotPresentInNew: true
+    })
+    expect(result).toMatchObject({ a: 1, b: 2 })
+  })
+
+  it("should merge two objects with new values if key is present on newObj and not on oldObj with useOldKeysIfNotPresentInNew param as false", () => {
+    const obj1 = { a: 1 }
+    const obj2 = { a: 1, b: 2 }
+    const result = mergeObjectChanges(obj1, obj2, {
+      useOldKeysIfNotPresentInNew: false
+    })
+    expect(result).toMatchObject({ a: 1, b: 2 })
+  })
+
+  it("should merge two objects with old values if keys not present on new with useOldKeysIfNotPresentInNew param", () => {
+    const obj1 = { a: 1, b: 2 }
+    const obj2 = { a: 1 }
+    const result = mergeObjectChanges(obj1, obj2, {
+      useOldKeysIfNotPresentInNew: true
+    })
+    expect(result).toMatchObject({ a: 1, b: 2 })
+  })
+
+  it("should merge two objects with undefined values with not present on new object without useOldKeysIfNotPresentInNew param", () => {
+    const obj1 = { a: 1, b: 2 }
+    const obj2 = { a: 1 }
+    const result = mergeObjectChanges(obj1, obj2, {
+      useOldKeysIfNotPresentInNew: false
+    })
+    expect(result).toMatchObject({ a: 1, b: undefined })
+  })
+
+  it("should merge two objects with undefined values with not present on new object without options param", () => {
+    const obj1 = { a: 1, b: 2 }
+    const obj2 = { a: 1 }
+    const result = mergeObjectChanges(obj1, obj2)
+    expect(result).toMatchObject({ a: 1, b: undefined })
   })
 })
