@@ -65,27 +65,25 @@ export function mergeObjectChanges<T> (
   const result = {} as T
 
   function checkKeys (obj: T) {
-    if (oldObj !== newObj) {
-      for (const key in obj) {
-        if (Array.isArray(oldObj[key]) && Array.isArray(newObj[key])) {
-          result[key] = newObj[key]
-        } else if (typeof oldObj[key] === 'object' && typeof newObj[key] === 'object') {
-          result[key] = mergeObjectChanges(oldObj[key], newObj[key])
-          continue
-        }
+    for (const key in obj) {
+      if (Array.isArray(oldObj[key]) && Array.isArray(newObj[key])) {
+        result[key] = newObj[key]
+      } else if (typeof oldObj[key] === 'object' && typeof newObj[key] === 'object') {
+        result[key] = mergeObjectChanges(oldObj[key], newObj[key])
+        continue
+      }
 
-        if (!hasOwnProperty(newObj, key) && hasOwnProperty(oldObj, key) && options.useOldKeysIfNotPresentInNew) {
-          result[key] = oldObj[key]
-          continue
-        } else if (!hasOwnProperty(oldObj, key) && hasOwnProperty(newObj, key) && options.addNewKeys) {
+      if (!hasOwnProperty(newObj, key) && hasOwnProperty(oldObj, key) && options.useOldKeysIfNotPresentInNew) {
+        result[key] = oldObj[key]
+        continue
+      } else if (!hasOwnProperty(oldObj, key) && hasOwnProperty(newObj, key) && options.addNewKeys) {
+        result[key] = newObj[key]
+        continue
+      } else if (hasOwnProperty(newObj, key) && hasOwnProperty(oldObj, key)) {
+        if (oldObj[key] !== newObj[key]) {
           result[key] = newObj[key]
-          continue
-        } else if (hasOwnProperty(newObj, key) && hasOwnProperty(oldObj, key)) {
-          if (oldObj[key] !== newObj[key]) {
-            result[key] = newObj[key]
-          } else {
-            result[key] = oldObj[key]
-          }
+        } else {
+          result[key] = oldObj[key]
         }
       }
     }
