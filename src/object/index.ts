@@ -66,18 +66,25 @@ export function mergeObjectChanges<T>(
 
   function checkKeys(obj: T) {
     for (const key in obj) {
-      if ((newObj[key] == undefined || newObj[key] == null) && options.useOldKeysIfNotPresentInNew) {
+      if (Array.isArray(oldObj[key]) && Array.isArray(newObj[key])) {
+        result[key] = newObj[key]
+      } else if (typeof oldObj[key] === 'object' && typeof newObj[key] === 'object') {
+        result[key] = mergeObjectChanges(oldObj[key], newObj[key])
+        continue
+      }
+
+      if (!hasOwnProperty(newObj, key) && hasOwnProperty(oldObj, key) && options.useOldKeysIfNotPresentInNew) {
         result[key] = oldObj[key]
-      } else if (oldObj[key] !== newObj[key]) {
-        if (Array.isArray(oldObj[key]) && Array.isArray(newObj[key])) {
+        continue
+      } else if (!hasOwnProperty(oldObj, key) && hasOwnProperty(newObj, key) && options.addNewKeys) {
+        result[key] = newObj[key]
+        continue
+      } else if (hasOwnProperty(newObj, key) && hasOwnProperty(oldObj, key)) {
+        if (oldObj[key] !== newObj[key]) {
           result[key] = newObj[key]
-        } else if (typeof oldObj[key] === 'object' && typeof newObj[key] === 'object') {
-          result[key] = mergeObjectChanges(oldObj[key], newObj[key])
-        } else if (options.addNewKeys && newObj[key] !== undefined && newObj[key] !== null) {
-          result[key] = newObj[key]
+        } else {
+          result[key] = oldObj[key]
         }
-      } else {
-        result[key] = oldObj[key]
       }
     }
   }
