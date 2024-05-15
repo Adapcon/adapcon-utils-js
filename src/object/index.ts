@@ -48,15 +48,20 @@ export const compareJsonDiff = ({ baseObject, compareObject }: { baseObject: obj
 }
 
 type MergeObjectChangesOptions = {
-  useOldKeysIfNotPresentInNew: boolean
+  useOldKeysIfNotPresentInNew?: boolean
+  addNewKeys?: boolean
 }
 export function mergeObjectChanges<T>(
   oldObj: T,
   newObj: T,
   options: MergeObjectChangesOptions = {
-    useOldKeysIfNotPresentInNew: false
+    useOldKeysIfNotPresentInNew: false,
+    addNewKeys: true
   }
 ): T {
+  options.useOldKeysIfNotPresentInNew = options.useOldKeysIfNotPresentInNew ?? false
+  options.addNewKeys = options.addNewKeys ?? true
+
   const result = {} as T
 
   function checkKeys(obj: T) {
@@ -68,7 +73,7 @@ export function mergeObjectChanges<T>(
           result[key] = newObj[key]
         } else if (typeof oldObj[key] === 'object' && typeof newObj[key] === 'object') {
           result[key] = mergeObjectChanges(oldObj[key], newObj[key])
-        } else {
+        } else if (options.addNewKeys && newObj[key] !== undefined && newObj[key] !== null) {
           result[key] = newObj[key]
         }
       } else {
