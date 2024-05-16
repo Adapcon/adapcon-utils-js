@@ -133,11 +133,19 @@ describe('Merge Objects Changes tests', () => {
       const result = mergeObjectChanges(obj1, obj2)
       expect(result).toStrictEqual({ a: 1, b: 4 })
     })
+
     it('should merge two objects with nested objects', () => {
       const obj1 = { a: 1, b: { c: 2, d: 3 } }
       const obj2 = { a: 1, b: { c: 4, d: 3 } }
       const result = mergeObjectChanges(obj1, obj2)
       expect(result).toStrictEqual({ a: 1, b: { c: 4, d: 3 } })
+    })
+
+    it('should merge two objects with nested objects on old and undefined on new', <T>() => {
+      const obj1 = { a: 1, b: { c: 2, d: 3 } } as T
+      const obj2 = { a: 1, b: undefined } as T
+      const result = mergeObjectChanges(obj1, obj2)
+      expect(result).toStrictEqual({ a: 1 })
     })
 
     it('should merge two objects with nested objects and arrays', () => {
@@ -200,6 +208,15 @@ describe('Merge Objects Changes tests', () => {
       const result = mergeObjectChanges(obj1, obj2)
       expect(result).toStrictEqual({ a: 2 })
     })
+
+    it('should merge two objects with nested objects on old and undefined on new', <T>() => {
+      const obj1 = { a: 1, b: { c: 2, d: 3 } } as T
+      const obj2 = { a: 1, b: undefined } as T
+      const result = mergeObjectChanges(obj1, obj2, {
+        useOldKeysIfNotPresentInNew: true
+      })
+      expect(result).toStrictEqual({ a: 1, b: { c: 2, d: 3 } })
+    })
   })
 
   describe('Merge Objects Changes tests with addNewKeys param', () => {
@@ -226,6 +243,24 @@ describe('Merge Objects Changes tests', () => {
       const obj2 = { a: 1, b: 2 }
       const result = mergeObjectChanges(obj1, obj2)
       expect(result).toStrictEqual({ a: 1, b: 2 })
+    })
+
+    it('should merge two objects with nested objects on old and undefined on new', <T>() => {
+      const obj1 = { a: 1, b: undefined } as T
+      const obj2 = { a: 1, b: { c: 2, d: 3 } } as T
+      const result = mergeObjectChanges(obj1, obj2, {
+        addNewKeys: true
+      })
+      expect(result).toStrictEqual({ a: 1, b: { c: 2, d: 3 } })
+    })
+
+    it('should merge two objects with nested objects on old and undefined on new', <T>() => {
+      const obj1 = { a: 1, b: undefined } as T
+      const obj2 = { a: 1, b: { c: 2, d: 3 } } as T
+      const result = mergeObjectChanges(obj1, obj2, {
+        addNewKeys: false
+      })
+      expect(result).toStrictEqual({ a: 1 })
     })
   })
 
@@ -271,7 +306,7 @@ describe('Merge Objects Changes tests', () => {
     expect(result).toStrictEqual({ a: 1 })
   })
 
-  it('shoulde merge objects with keys present singly in new and old but not in both with useOldKeysIfNotPresentInNew and addNewKeys params ', <T>() => {
+  it('should merge objects with keys present singly in new and old but not in both with useOldKeysIfNotPresentInNew and addNewKeys params ', <T>() => {
     const obj1 = { a: 1, b: 2 } as T
     const obj2 = { a: 1, c: 2 } as T
     const result = mergeObjectChanges(obj1, obj2, {
@@ -279,5 +314,55 @@ describe('Merge Objects Changes tests', () => {
       addNewKeys: true
     })
     expect(result).toStrictEqual({ a: 1, b: 2, c: 2 })
+  })
+
+  it('should merge two objects with nested objects on old and undefined on new', <T>() => {
+    const obj1 = { a: 1, b: { c: 2, d: 3 } } as T
+    const obj2 = { a: 1, b: undefined, e: 4 } as T
+    const result = mergeObjectChanges(obj1, obj2, {
+      useOldKeysIfNotPresentInNew: true,
+      addNewKeys: true
+    })
+    expect(result).toStrictEqual({ a: 1, b: { c: 2, d: 3 }, e: 4 })
+  })
+
+  it('should merge two objects with nested objects on old and undefined on new', <T>() => {
+    const obj1 = { a: 1, b: { c: 2, d: 3 } } as T
+    const obj2 = { a: 1, b: undefined } as T
+    const result = mergeObjectChanges(obj1, obj2, {
+      useOldKeysIfNotPresentInNew: true,
+      addNewKeys: false
+    })
+    expect(result).toStrictEqual({ a: 1, b: { c: 2, d: 3 } })
+  })
+
+  it('should merge two objects with nested objects on old and undefined on new', <T>() => {
+    const obj1 = { a: 1, b: { c: 2, d: 3 } } as T
+    const obj2 = { a: 1, b: undefined, e: 5 } as T
+    const result = mergeObjectChanges(obj1, obj2, {
+      useOldKeysIfNotPresentInNew: false,
+      addNewKeys: true
+    })
+    expect(result).toStrictEqual({ a: 1, e: 5 })
+  })
+
+  it('should merge two objects with nested objects on old and undefined on new', <T>() => {
+    const obj1 = { a: 1, b: { c: 2, d: 3 } } as T
+    const obj2 = { a: 1, b: undefined, e: 4 } as T
+    const result = mergeObjectChanges(obj1, obj2, {
+      useOldKeysIfNotPresentInNew: false,
+      addNewKeys: false
+    })
+    expect(result).toStrictEqual({ a: 1 })
+  })
+
+  it('should merge two objects with nested objects on old and undefined on new', <T>() => {
+    const obj1 = { a: 1, b: { c: 2, d: 3 } } as T
+    const obj2 = { a: 1, b: undefined, e: 4 } as T
+    const result = mergeObjectChanges(obj1, obj2, {
+      useOldKeysIfNotPresentInNew: false,
+      addNewKeys: true
+    })
+    expect(result).toStrictEqual({ a: 1, e: 4 })
   })
 })

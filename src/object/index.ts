@@ -73,13 +73,27 @@ export function mergeObjectChanges<T> (
         continue
       }
 
-      if (!hasOwnProperty(newObj, key) && hasOwnProperty(oldObj, key) && options.useOldKeysIfNotPresentInNew) {
+      if (
+        // has key with value on old but not on new
+        (newObj[key] === undefined || newObj[key] === null) &&
+        (oldObj[key] !== undefined && oldObj[key] !== null) &&
+        options.useOldKeysIfNotPresentInNew
+      ) {
         result[key] = oldObj[key]
         continue
-      } else if (!hasOwnProperty(oldObj, key) && hasOwnProperty(newObj, key) && options.addNewKeys) {
+      } else if (
+        // has key with value on new but not on old
+        (newObj[key] !== undefined && newObj[key] !== null) &&
+        (oldObj[key] === undefined || oldObj[key] === null) &&
+          options.addNewKeys
+      ) {
         result[key] = newObj[key]
         continue
-      } else if (hasOwnProperty(newObj, key) && hasOwnProperty(oldObj, key)) {
+      } else if (
+        // has key with value on both
+        (newObj[key] !== undefined && newObj[key] !== null) &&
+        (oldObj[key] !== undefined && oldObj[key] !== null)
+      ) {
         if (oldObj[key] !== newObj[key]) {
           result[key] = newObj[key]
         } else {
