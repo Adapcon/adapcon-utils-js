@@ -1,5 +1,5 @@
 import { HttpStatuses } from '..'
-import { InternalError, BadRequestError, NotFoundError, IntegrationError, UnauthorizedError } from './customErrors'
+import { InternalError, BadRequestError, NotFoundError, IntegrationError, UnauthorizedError, PreconditionFailedError } from './customErrors'
 
 describe('CustomError', () => {
   describe('InternalError', () => {
@@ -168,6 +168,35 @@ describe('CustomError', () => {
 
       expect(error.toLambdaResponse()).toMatchObject({
         statusCode: HttpStatuses.unauthorized,
+        body: JSON.stringify({ message: errorMessage })
+      })
+    })
+  })
+
+  describe('PreconditionFailedError', () => {
+    it('should return a PreconditionFailedError with correct message and statusCode', () => {
+      const errorMessage = 'precondition failed'
+      const error = new PreconditionFailedError(errorMessage)
+
+      expect(error).toMatchObject({
+        message: errorMessage,
+        statusCode: HttpStatuses.preconditionFailed
+      })
+    })
+
+    it('should return string containing correct items on toString() call', () => {
+      const errorMessage = 'precondition failed'
+      const error = new PreconditionFailedError(errorMessage)
+
+      expect(error.toString()).toContain(`Precondition Failed Error: ${errorMessage}`)
+    })
+
+    it('should return correct lambdaResponse on toLambdaResponse() call', () => {
+      const errorMessage = 'precondition failed'
+      const error = new PreconditionFailedError(errorMessage)
+
+      expect(error.toLambdaResponse()).toMatchObject({
+        statusCode: HttpStatuses.preconditionFailed,
         body: JSON.stringify({ message: errorMessage })
       })
     })
