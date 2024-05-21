@@ -46,3 +46,65 @@ export const compareJsonDiff = ({ baseObject, compareObject }: { baseObject: obj
 
   return { diff, removed }
 }
+
+type MergeObjectChangesOptions = {
+  useOldKeysIfNotPresentInNew?: boolean
+  addNewKeys?: boolean
+}
+export function mergeObjectChanges<T> (
+  oldObj: T,
+  newObj: T,
+  options: MergeObjectChangesOptions = {
+    useOldKeysIfNotPresentInNew: false,
+    addNewKeys: true
+  }
+): T {
+  options.useOldKeysIfNotPresentInNew = options.useOldKeysIfNotPresentInNew ?? false
+  options.addNewKeys = options.addNewKeys ?? true
+
+  const result = {} as T
+
+  function checkKeys (obj: T) {
+    for (const key in obj) {
+      if (Array.isArray(oldObj[key]) && Array.isArray(newObj[key])) {
+        result[key] = newObj[key]
+      } else if (typeof oldObj[key] === 'object' && typeof newObj[key] === 'object') {
+        result[key] = mergeObjectChanges(oldObj[key], newObj[key])
+        continue
+      }
+
+      if (
+        // has key with value on old but not on new
+        (newObj[key] === undefined || newObj[key] === null) &&
+        (oldObj[key] !== undefined && oldObj[key] !== null) &&
+        options.useOldKeysIfNotPresentInNew
+      ) {
+        result[key] = oldObj[key]
+        continue
+      } else if (
+        // has key with value on new but not on old
+        (newObj[key] !== undefined && newObj[key] !== null) &&
+        (oldObj[key] === undefined || oldObj[key] === null) &&
+          options.addNewKeys
+      ) {
+        result[key] = newObj[key]
+        continue
+      } else if (
+        // has key with value on both
+        (newObj[key] !== undefined && newObj[key] !== null) &&
+        (oldObj[key] !== undefined && oldObj[key] !== null)
+      ) {
+        if (oldObj[key] !== newObj[key]) {
+          result[key] = newObj[key]
+        } else {
+          result[key] = oldObj[key]
+        }
+      }
+    }
+  }
+
+  checkKeys(oldObj)
+  checkKeys(newObj)
+
+  return result
+}
