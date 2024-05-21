@@ -72,11 +72,17 @@ class UnauthorizedError extends CustomError {
   kind = 'Unauthorized Error'
 }
 
+class PreconditionFailedError extends CustomError {
+  statusCode = HttpStatuses.preconditionFailed
+  kind = 'Precondition Failed Error'
+}
+
 export {
   BadRequestError,
   CustomError,
   IntegrationError,
   InternalError,
   NotFoundError,
-  UnauthorizedError
+  UnauthorizedError,
+  PreconditionFailedError
 }
