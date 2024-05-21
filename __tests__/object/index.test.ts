@@ -287,13 +287,13 @@ describe('Merge Objects Changes tests', () => {
   })
 
   it('should merge two objects with new values if key is present on newObj and not on oldObj with useOldKeysIfNotPresentInNew param as false and addNewKeys as true', () => {
-    const obj1 = { a: 1 }
-    const obj2 = { a: 1, b: 2 }
+    const obj1 = { a: 'um' }
+    const obj2 = { a: 'dois', b: 2 }
     const result = mergeObjectChanges(obj1, obj2, {
       useOldKeysIfNotPresentInNew: false,
       addNewKeys: true
     })
-    expect(result).toStrictEqual({ a: 1, b: 2 })
+    expect(result).toStrictEqual({ a: 'dois', b: 2 })
   })
 
   it('should merge two objects with new values if key is present on newObj and not on oldObj with useOldKeysIfNotPresentInNew param as false and addNewKeys as false', () => {
