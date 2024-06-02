@@ -18,10 +18,10 @@ export const lambdaRespError = (err: Error) => {
 }
 
 export const lambdaProcessError = <T>({
-  type = 'session', functionName, context, err
+  type = 'session', context, err
 }) => {
-  console.error(`${type} ${functionName as string} - ERROR: `, err)
-  const metadata = { logStreamName: context?.logStreamName, functionName }
+  console.error(`${type} ${context.functionName as string} - ERROR: `, err)
+  const metadata = { logStreamName: context?.logStreamName, functionName: context.functionName }
 
   if (err.statusCode) {
     const errorResponse: {
