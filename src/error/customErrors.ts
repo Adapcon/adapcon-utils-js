@@ -77,6 +77,11 @@ class PreconditionFailedError extends CustomError {
   kind = 'Precondition Failed Error'
 }
 
+class tooManyRequestsError extends CustomError {
+  statusCode = HttpStatuses.tooManyRequests
+  kind = 'Too Many Requests Error'
+}
+
 export {
   BadRequestError,
   CustomError,
@@ -84,5 +89,6 @@ export {
   InternalError,
   NotFoundError,
   UnauthorizedError,
-  PreconditionFailedError
+  PreconditionFailedError,
+  tooManyRequestsError
 }
