@@ -31,6 +31,7 @@ export enum HttpStatuses {
   preconditionFailed = 412,
   teaPot = 418,
   unprocessableEntity = 422,
+  tooManyRequests = 429,
   internalError = 500,
   notImplemented = 501
 }
