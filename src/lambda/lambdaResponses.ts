@@ -1,6 +1,7 @@
+import { Context } from 'aws-lambda'
 import { isNumber } from '../number'
 import { objToStr } from '../object'
-import type { Error, Headers } from './interfaces'
+import type { Error, Headers, LambdaFunctionTypes } from './interfaces'
 
 export const lambdaResp = (statusCode: number, body?: object | string, headers?: Headers) => ({
   statusCode,
@@ -17,11 +18,16 @@ export const lambdaRespError = (err: Error) => {
   return lambdaResp(500, (err.message) ? { error: err.message } : undefined)
 }
 
+type LambdaProcessErrorParams = {
+  type?: LambdaFunctionTypes
+  context: Context
+  err: Error
+}
 export const lambdaProcessError = <T>({
-  type = 'session', functionName, context, err
-}) => {
-  console.error(`${type} ${functionName as string} - ERROR: `, err)
-  const metadata = { logStreamName: context?.logStreamName, functionName }
+  type = 'session', context, err
+}: LambdaProcessErrorParams) => {
+  console.error(`${type} ${context.functionName} - ERROR: `, err)
+  const metadata = { logStreamName: context?.logStreamName, functionName: context.functionName }
 
   if (err.statusCode) {
     const errorResponse: {
