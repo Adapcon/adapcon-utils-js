@@ -53,7 +53,7 @@ const extractParams = (docfy: Docfy, parameter: string, evt: APIGatewayEvent) =>
     const param = get(evt, `${parameter}.${key}`) ?? value.default
 
     const hasParamValue = params[identity]
-    const hasValue = param && param !== 'undefined'
+    const hasValue = (param && param !== 'undefined') || typeof param === 'boolean'
     const isRequired = value.required ?? parameter === 'pathParameters'
 
     if (isRequired && !hasValue && !hasParamValue) {
