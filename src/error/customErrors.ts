@@ -72,6 +72,11 @@ class UnauthorizedError extends CustomError {
   kind = 'Unauthorized Error'
 }
 
+class ForbiddenError extends CustomError {
+  statusCode = HttpStatuses.forbidden
+  kind = 'Forbidden Error'
+}
+
 class PreconditionFailedError extends CustomError {
   statusCode = HttpStatuses.preconditionFailed
   kind = 'Precondition Failed Error'
@@ -89,6 +94,7 @@ export {
   InternalError,
   NotFoundError,
   UnauthorizedError,
+  ForbiddenError,
   PreconditionFailedError,
   tooManyRequestsError
 }
