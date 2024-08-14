@@ -1,7 +1,5 @@
 export interface AccessKey {
-  accessKeyId: string
-  secretAccessKey: string
-  region?: string
+  SecretString?: string
 }
 
 export interface AccessKeyParam {
