@@ -15,15 +15,13 @@ describe('streamToString', () => {
   })
 
   it('should convert a JSON stream to a string', async () => {
-    const TEST_TIMEOUT = 10000
-    jest.setTimeout(TEST_TIMEOUT)
-
     const json = { name: 'John Doe', age: 30 }
     const jsonString = JSON.stringify(json)
     const readable = new stream.Readable()
 
     readable._read = () => {}
     readable.push(jsonString)
+    readable.push(null)
 
     const result = await streamToString(readable)
     expect(result).toEqual(jsonString)
