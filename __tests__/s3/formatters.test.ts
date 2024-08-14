@@ -21,6 +21,7 @@ describe('streamToString', () => {
 
     readable._read = () => {}
     readable.push(jsonString)
+    readable.push(null)
 
     const result = await streamToString(readable)
     expect(result).toEqual(jsonString)
