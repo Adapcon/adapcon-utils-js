@@ -1,8 +1,8 @@
 import { SecretsManager } from '@aws-sdk/client-secrets-manager'
-import { AccessKey, AccessKeyParam } from '.'
+import { AccessKeyParam } from '.'
 
 export const SecretManager = {
-  getValue: async ({ region = 'sa-east-1', secretId }) => {
+  getValue: async <T>({ region = 'sa-east-1', secretId }) => {
     const client = new SecretsManager({ region })
 
     // The SDK can also return a promise calling `promise`
@@ -11,10 +11,10 @@ export const SecretManager = {
     if (!secret) throw new Error('Secret not found!')
     if (!secret.SecretString) throw new Error('Secret without a value!')
 
-    return secret as AccessKey
+    return JSON.parse(secret.SecretString) as T
   },
 
-  getAccessKey: async ({ region, serviceSecretArn: secretId, isOffline }: AccessKeyParam): Promise<AccessKey|object> => {
+  getAccessKey: async <T>({ region, serviceSecretArn: secretId, isOffline }: AccessKeyParam): Promise<T|object> => {
     return (secretId && !isOffline)
       ? await SecretManager.getValue({
         region,
