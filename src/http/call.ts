@@ -29,4 +29,6 @@ export async function callHttpWithRetry<T> (
       await new Promise(resolve => setTimeout(resolve, timeoutBetweenRetries ?? 500))
     }
   }
+
+  return undefined
 }
