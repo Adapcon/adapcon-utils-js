@@ -19,8 +19,8 @@ export async function callHttpWithRetry<T> (
 
   for (let i = 0; i < retries; i++) {
     try {
-      const { data } = await axios(url, axiosOptions)
-      return data as T
+      const { data } = await axios<T>(url, axiosOptions)
+      return data
     } catch (error) {
       if (i === retries - 1) {
         throw error
