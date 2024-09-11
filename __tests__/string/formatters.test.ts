@@ -19,10 +19,17 @@ describe('kebabCaseToCamelCase', () => {
 })
 
 describe('removeSpecialCharacters', () => {
-  const data = [{ input: 'teste-adapcon', output: 'testeadapcon' }, { input: 'Feijão', output: 'Feijo' }, { input: '^^^^^~~~', output: '' }]
+  const data = [
+    { input: 'teste-adapcon', output: 'testeadapcon' },
+    { input: 'Feijão', output: 'Feijo', fullClean: true },
+    { input: '^^^^^~~~', output: '' },
+    { input: 'Jaraguá do Sul', output: 'Jaraguá do Sul' },
+    { input: 'Jaraguá do Sul/-!', output: 'Jaraguá do Sul' },
+    { input: 'Jaraguá do Sul/-!', output: 'Jaragu do Sul', fullClean: true }
+  ]
 
   test.each(data)('Should return string without special characters', (param) => {
-    expect(removeSpecialCharacters(param.input)).toBe(param.output)
+    expect(removeSpecialCharacters(param.input, param.fullClean)).toBe(param.output)
   })
 })
 
