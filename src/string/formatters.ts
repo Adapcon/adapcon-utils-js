@@ -16,7 +16,7 @@ const FULL_CLEAR_REGEX = /[^a-zA-Z0-9 ]/gu
  * @example removeSpecialCharacters('Jaraguá do Sul/-!') // 'Jaraguá do Sul'
  * @example removeSpecialCharacters('Jaraguá do Sul/-!', true) // 'Jaragu do Sul'
  */
-export function removeSpecialCharacters (str: string, fullClean = false): string {
+export function removeSpecialCharacters (str: string, fullClean = true): string {
   return str.replace(fullClean ? FULL_CLEAR_REGEX : CLEAR_REGEX, '')
 }
 
