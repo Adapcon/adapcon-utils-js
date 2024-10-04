@@ -14,7 +14,7 @@ export const SecretManager = {
     return JSON.parse(secret.SecretString) as T
   },
 
-  getStringValue: async ({ region = 'sa-east-1', secretId }: { region?: string, secretId: string }) => {
+  getStringValue: async ({ region = 'sa-east-1', secretId }: { region?: string, secretId: string }): Promise<string> => {
     const client = new SecretsManager({ region })
 
     // The SDK can also return a promise calling `promise`
