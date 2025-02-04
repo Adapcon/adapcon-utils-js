@@ -29,7 +29,7 @@ export interface lambdaParameters {
   queryStringParameters?: {[key: string]: any}
   multiValueQueryStringParameters?: {[key: string]: any}
   isOffline?: boolean
-  isDocker?: boolean
+  customHost?: string
   serviceSecretArn?: string
   path?: string
   requestContext?: object

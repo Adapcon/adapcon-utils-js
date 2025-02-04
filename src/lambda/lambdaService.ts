@@ -32,7 +32,7 @@ const executeInvoke = async <T>({
   queryStringParameters = {},
   multiValueQueryStringParameters = {},
   isOffline = false,
-  isDocker = false,
+  customHost,
   httpMethod = '',
   path,
   requestContext = {},
@@ -41,7 +41,7 @@ const executeInvoke = async <T>({
   accessKeyId?: string
   secretAccessKey?: string
 } & lambdaParameters) => {
-  const lambdaSettings: LambdaClientConfig = getLambdaConfig(region, accessKeyId, secretAccessKey, isOffline, port, isDocker)
+  const lambdaSettings: LambdaClientConfig = getLambdaConfig(region, accessKeyId, secretAccessKey, isOffline, port, customHost)
   const lambda = new Lambda(lambdaSettings)
 
   const response = await lambda.invoke({
@@ -77,7 +77,7 @@ const getLambdaConfig = (
   secretAccessKey: string | undefined,
   isOffline: boolean,
   port: string,
-  isDocker: boolean
+  customHost: string
 ) => {
   const lambdaSettings: LambdaClientConfig = { region }
   if (accessKeyId && secretAccessKey) {
@@ -88,7 +88,7 @@ const getLambdaConfig = (
   }
   if (isOffline) {
     lambdaSettings.region = 'localhost'
-    lambdaSettings.endpoint = isDocker ? `http://host.docker.internal:${port}` : `http://localhost:${port}`
+    lambdaSettings.endpoint = customHost ? `http://${customHost}:${port}` : `http://localhost:${port}`
   }
 
   return lambdaSettings
