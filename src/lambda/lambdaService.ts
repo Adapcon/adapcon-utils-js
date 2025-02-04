@@ -77,7 +77,7 @@ const getLambdaConfig = (
   secretAccessKey: string | undefined,
   isOffline: boolean,
   port: string,
-  customHost: string
+  customHost?: string
 ) => {
   const lambdaSettings: LambdaClientConfig = { region }
   if (accessKeyId && secretAccessKey) {
