@@ -32,6 +32,7 @@ const executeInvoke = async <T>({
   queryStringParameters = {},
   multiValueQueryStringParameters = {},
   isOffline = false,
+  customHost,
   httpMethod = '',
   path,
   requestContext = {},
@@ -40,7 +41,7 @@ const executeInvoke = async <T>({
   accessKeyId?: string
   secretAccessKey?: string
 } & lambdaParameters) => {
-  const lambdaSettings: LambdaClientConfig = getLambdaConfig(region, accessKeyId, secretAccessKey, isOffline, port)
+  const lambdaSettings: LambdaClientConfig = getLambdaConfig(region, accessKeyId, secretAccessKey, isOffline, port, customHost)
   const lambda = new Lambda(lambdaSettings)
 
   const response = await lambda.invoke({
@@ -70,7 +71,14 @@ const executeInvoke = async <T>({
   return formattedResponse<T>(response)
 }
 
-const getLambdaConfig = (region: string, accessKeyId: string | undefined, secretAccessKey: string | undefined, isOffline: boolean, port: string) => {
+const getLambdaConfig = (
+  region: string,
+  accessKeyId: string | undefined,
+  secretAccessKey: string | undefined,
+  isOffline: boolean,
+  port: string,
+  customHost?: string
+) => {
   const lambdaSettings: LambdaClientConfig = { region }
   if (accessKeyId && secretAccessKey) {
     lambdaSettings.credentials = {
@@ -80,7 +88,8 @@ const getLambdaConfig = (region: string, accessKeyId: string | undefined, secret
   }
   if (isOffline) {
     lambdaSettings.region = 'localhost'
-    lambdaSettings.endpoint = `http://localhost:${port}`
+    lambdaSettings.endpoint = customHost ? `http://${customHost}:${port}` : `http://localhost:${port}`
   }
+
   return lambdaSettings
 }
