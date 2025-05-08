@@ -61,7 +61,7 @@ export type LambdaFunctionTypes = 'screen' | 'integration' | 'public' | 'session
 export type Docfy = {
   type: LambdaFunctionTypes
   description: string
-  pathParameters?: Record<string, Omit<DocfySettings, 'required'>>
+  pathParameters?: Record<string, DocfySettings>
   queryStringParameters?: Record<string, DocfySettings>
   headers?: Record<string, DocfySettings>
   body?: Record<string, DocfySettings>
