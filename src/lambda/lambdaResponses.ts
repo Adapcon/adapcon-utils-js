@@ -9,22 +9,24 @@ export const lambdaResp = (statusCode: number, body?: object | string, headers?:
   ...(headers ? { headers } : null)
 })
 
-export const lambdaRespError = (err: Error) => {
+export const lambdaRespError = (err: Error, headers?: Headers) => {
   err.statusCode = err.status ?? err.statusCode
   err.message = err.error ?? err.message
 
-  if (err && isNumber(err.statusCode)) return lambdaResp(Number(err.statusCode), (err.message) ? { error: err.message } : undefined)
+  if (err && isNumber(err.statusCode)) return lambdaResp(Number(err.statusCode), (err.message) ? { error: err.message } : undefined, headers)
 
-  return lambdaResp(500, (err.message) ? { error: err.message } : undefined)
+  return lambdaResp(500, (err.message) ? { error: err.message } : undefined, headers)
 }
 
 type LambdaProcessErrorParams = {
   type?: LambdaFunctionTypes
   context: Context
   err: Error
+  headers?: Headers
 }
+
 export const lambdaProcessError = <T>({
-  type = 'session', context, err
+  type = 'session', context, err, headers,
 }: LambdaProcessErrorParams) => {
   console.error(`${type} ${context.functionName} - ERROR: `, err)
   const metadata = { logStreamName: context?.logStreamName, functionName: context.functionName }
@@ -39,8 +41,8 @@ export const lambdaProcessError = <T>({
     if (err.message) errorResponse.message = err.message
     if (err.error) errorResponse.error = err.error
 
-    return lambdaResp(err.statusCode, errorResponse)
+    return lambdaResp(err.statusCode, errorResponse, headers)
   }
 
-  return lambdaRespError({ error: { $metadata: metadata, message: 'Internal Server Error' } })
+  return lambdaRespError({ error: { $metadata: metadata, message: 'Internal Server Error' } }, headers)
 }
