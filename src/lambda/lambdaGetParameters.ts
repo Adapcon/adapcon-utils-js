@@ -70,7 +70,7 @@ const extractParams = (docfy: Docfy, parameter: string, evt: APIGatewayEvent) =>
  */
 const formatHeadersCase = (evt: APIGatewayEvent) => {
   const headers = {}
-  for (const [key, value] of Object.entries(evt.headers)) {
+  for (const [key, value] of Object.entries(evt?.headers ?? {})) {
     headers[key.toLowerCase()] = value
   }
   return { ...evt, headers }
