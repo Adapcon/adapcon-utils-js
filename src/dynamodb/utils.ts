@@ -1,10 +1,10 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb"
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb"
 
-export function getDynamoDBClient() {
+export function getDynamoDBClient(port: number = 8000) {
   const dynamoInstance = new DynamoDBClient({
     ...(process.env.IS_OFFLINE ? {
-      endpoint: 'http://localhost:8000',
+      endpoint: `http://localhost:${port}`,
       region: 'localhost'
     } : {})
   })
