@@ -24,3 +24,8 @@ export type QueryResponse<T> = {
   lastKey?: Record<string, any>,
   count?: number
 }
+
+export type ScanResponse<T> = {
+  items: T[],
+  lastKey?: Record<string, any>,
+}
