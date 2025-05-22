@@ -1,5 +1,5 @@
-import { DeleteCommand, DynamoDBDocument, GetCommand, GetCommandInput, PutCommand, QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
-import { IDynamoDBFactory, Recordable, TableKeys, ProjectedResult, ProjectionFields, QueryResponse } from "./dynamodb.types";
+import { DeleteCommand, DynamoDBDocument, GetCommand, GetCommandInput, PutCommand, QueryCommand, QueryCommandInput, ScanCommand, ScanCommandInput } from "@aws-sdk/lib-dynamodb";
+import { IDynamoDBFactory, Recordable, TableKeys, ProjectedResult, ProjectionFields, QueryResponse, ScanResponse } from "./dynamodb.types";
 
 export class DynamoDBFactory<T extends Recordable, K extends TableKeys> implements IDynamoDBFactory<T, K> {
   public readonly client: DynamoDBDocument
@@ -76,6 +76,20 @@ export class DynamoDBFactory<T extends Recordable, K extends TableKeys> implemen
       items: Items as T[],
       lastKey: LastEvaluatedKey,
       count: Count,
+    }
+  }
+
+  async scan(params: Omit<ScanCommandInput, 'TableName'>): Promise<ScanResponse<T>> {
+    const command = new ScanCommand({
+      TableName: this.tableName,
+      ...params,
+    })
+
+    const { Items, LastEvaluatedKey } = await this.client.send(command)
+
+    return {
+      items: Items as T[],
+      lastKey: LastEvaluatedKey,
     }
   }
 }
