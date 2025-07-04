@@ -28,6 +28,7 @@ export enum HttpStatuses {
   notFound = 404,
   userNotFound = 404,
   integrationError = 406,
+  conflict = 409,
   preconditionFailed = 412,
   teaPot = 418,
   unprocessableEntity = 422,
