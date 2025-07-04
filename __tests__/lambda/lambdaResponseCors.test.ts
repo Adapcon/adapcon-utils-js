@@ -1,8 +1,16 @@
-import { lambdaResponseCorsHeaders } from '../../../src/lambda/lambdaResponseCors'
+import { lambdaResponseCorsHeaders } from '../../src/lambda/lambdaResponseCors'
 import { APIGatewayProxyEvent } from 'aws-lambda'
-import MockEvent from './mock.json'
 
 describe('lambdaResponseCorsHeaders', () => {
+
+  const MockEvent = {
+    event: {
+      headers: {
+        origin: 'https://admin.homologacao.online',
+      },
+    },
+  } as unknown as { event: APIGatewayProxyEvent }
+
   it('returns CORS headers when origin matches an allowed URL with domain placeholder replacement', () => {
     const response = lambdaResponseCorsHeaders({
       event: MockEvent.event as APIGatewayProxyEvent,
