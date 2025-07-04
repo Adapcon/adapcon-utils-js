@@ -87,6 +87,11 @@ class tooManyRequestsError extends CustomError {
   kind = 'Too Many Requests Error'
 }
 
+class ConflictError extends CustomError {
+  statusCode = HttpStatuses.conflict
+  kind = 'Conflict Error'
+}
+
 export {
   BadRequestError,
   CustomError,
@@ -96,5 +101,6 @@ export {
   UnauthorizedError,
   ForbiddenError,
   PreconditionFailedError,
-  tooManyRequestsError
+  tooManyRequestsError,
+  ConflictError,
 }

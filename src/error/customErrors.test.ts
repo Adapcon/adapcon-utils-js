@@ -1,5 +1,5 @@
 import { HttpStatuses } from '..'
-import { InternalError, BadRequestError, NotFoundError, IntegrationError, UnauthorizedError, PreconditionFailedError } from './customErrors'
+import { InternalError, BadRequestError, NotFoundError, IntegrationError, UnauthorizedError, PreconditionFailedError, ConflictError } from './customErrors'
 
 describe('CustomError', () => {
   describe('InternalError', () => {
@@ -197,6 +197,35 @@ describe('CustomError', () => {
 
       expect(error.toLambdaResponse()).toMatchObject({
         statusCode: HttpStatuses.preconditionFailed,
+        body: JSON.stringify({ message: errorMessage })
+      })
+    })
+  })
+
+  describe('ConflictError', () => {
+    it('should return a ConflictError with correct message and statusCode', () => {
+      const errorMessage = 'conflict'
+      const error = new ConflictError(errorMessage)
+
+      expect(error).toMatchObject({
+        message: errorMessage,
+        statusCode: HttpStatuses.conflict
+      })
+    })
+
+    it('should return string containing correct items on toString() call', () => {
+      const errorMessage = 'conflict'
+      const error = new ConflictError(errorMessage)
+
+      expect(error.toString()).toContain(`Conflict Error: ${errorMessage}`)
+    })
+
+    it('should return correct lambdaResponse on toLambdaResponse() call', () => {
+      const errorMessage = 'conflict'
+      const error = new ConflictError(errorMessage)
+
+      expect(error.toLambdaResponse()).toMatchObject({
+        statusCode: HttpStatuses.conflict,
         body: JSON.stringify({ message: errorMessage })
       })
     })
