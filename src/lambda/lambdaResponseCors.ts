@@ -3,23 +3,24 @@ import { URL } from 'url'
 
 type EnumAllowedMethods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS'
 
-function getDomain (event: APIGatewayProxyEvent): { domain: string, origin: string } {
-  const headers = event.headers || {}
-  const origin = headers.origin
+const URL_ALLOWED_ORIGIN = 'https://*.simplificamais.com.br,https://*.portaldocliente.online,https://*.homologacao.online'
 
-  if (!origin) {
-    return { domain: '', origin: '' }
+/**
+ * Return the origin from the event headers.
+ */
+function getOriginAndDomainFromEvent (event: APIGatewayProxyEvent): URL {
+  const originHeader = event.headers?.origin ?? event.headers?.Origin
+
+  if (!originHeader) throw new Error('Origin header is missing in the event')
+
+  try {
+    return new URL(originHeader)
+  } catch (error) {
+    throw new Error(`Invalid origin header CORS: ${originHeader}`)
   }
-
-  const { hostname } = new URL(origin)
-
-  const domain = hostname.split('.')[0]
-
-  return { domain, origin }
 }
 
 /**
- *
  * @param event - The API Gateway event
  * @param AllowedMethods - Array of allowed HTTP methods for CORS
  * @param urlsAllowed - Comma-separated list of allowed URLs for CORS
@@ -34,29 +35,36 @@ function getDomain (event: APIGatewayProxyEvent): { domain: string, origin: stri
 export function lambdaResponseCorsHeaders ({
   event,
   allowedMethods = ['GET'],
-  urlsAllowed = '*',
+  urlsAllowed = null,
   accessControlAllowHeaders = '*',
   accessControlMaxAge = '0'
 }: {
   event: APIGatewayProxyEvent
   allowedMethods?: EnumAllowedMethods[]
-  urlsAllowed?: string
+  urlsAllowed?: string | null
   accessControlAllowHeaders?: string
   accessControlMaxAge?: string
 }) {
   if (!event) throw new Error('Event is required for CORS headers')
-  if (!urlsAllowed) throw new Error('No URLs allowed for CORS')
+  if (urlsAllowed === '*') throw new Error('URLs allowed cannot be * for CORS')
 
-  allowedMethods.push('OPTIONS')
-
+  const url: URL = getOriginAndDomainFromEvent(event)
   let corsOrigin = ''
 
-  if (urlsAllowed === '*') {
-    corsOrigin = '*'
+  if (!allowedMethods.includes('OPTIONS')) allowedMethods.push('OPTIONS')
+
+  const domain = url.hostname.split('.')[0] ?? ''
+
+  const urlsAllowedOrigin = urlsAllowed ? `${URL_ALLOWED_ORIGIN},${urlsAllowed}` : URL_ALLOWED_ORIGIN
+
+  const urlsAllowedWithDomain = urlsAllowedOrigin.replace(/\*/g, domain)
+
+  const allowedOrigins = urlsAllowedWithDomain.split(',').map(url => url.trim())
+
+  if (url.origin && allowedOrigins.includes(url.origin)) {
+    corsOrigin = url.origin
   } else {
-    const { domain, origin } = getDomain(event)
-    const urlsAllowedFormatted = urlsAllowed.replace(/\*/g, domain).split(',')
-    corsOrigin = urlsAllowedFormatted.find(url => url.includes(origin)) ?? ''
+    corsOrigin = ''
   }
 
   return {

@@ -1,19 +1,16 @@
 import { lambdaResponseCorsHeaders } from '../../../src/lambda/lambdaResponseCors'
-
 import { APIGatewayProxyEvent } from 'aws-lambda'
-
-// Mocking
 import MockEvent from './mock.json'
 
-describe('Verifica o cabeçalho CORS da resposta da Lambda', () => {
-  it('Verifica o cabeçalho CORS e retorna o headers', () => {
-    const responseCors = lambdaResponseCorsHeaders({
+describe('lambdaResponseCorsHeaders', () => {
+  it('returns CORS headers when origin matches an allowed URL with domain placeholder replacement', () => {
+    const response = lambdaResponseCorsHeaders({
       event: MockEvent.event as APIGatewayProxyEvent,
       allowedMethods: ['GET', 'POST'],
-      urlsAllowed: 'https://*.example.com,https://*.another-example.com,https://third-example.com,https://*.homologacao.online',
+      urlsAllowed: 'https://*.example.com,https://*.another-example.com,https://third-example.com',
     })
 
-    expect(responseCors).toEqual({
+    expect(response).toEqual({
       'Access-Control-Allow-Origin': 'https://admin.homologacao.online',
       'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
       'Access-Control-Allow-Headers': '*',
@@ -21,46 +18,45 @@ describe('Verifica o cabeçalho CORS da resposta da Lambda', () => {
     })
   })
 
-  it('Verifica o cabeçalho CORS e retorna o headers com origin vazio', () => {
-    const responseCors = lambdaResponseCorsHeaders({
+  it('returns CORS headers using default allowed URLs when no additional ones are provided', () => {
+    const response = lambdaResponseCorsHeaders({
       event: MockEvent.event as APIGatewayProxyEvent,
-      allowedMethods: ['GET', 'POST'],
-      urlsAllowed: 'https://*.example.com,https://*.another-example.com,https://third-example.com',
     })
 
-    expect(responseCors).toEqual({
-      'Access-Control-Allow-Origin': '',
-      'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
-      'Access-Control-Allow-Headers': '*',
-      'Access-Control-Max-Age': '0',
-    })
-  })
-
-  it('Verifica o cabeçalho CORS e retorna o headers com urlsAllowed como *', () => {
-    const responseCors = lambdaResponseCorsHeaders({
-      event: MockEvent.event as APIGatewayProxyEvent,
-      allowedMethods: ['GET']
-    })
-
-    expect(responseCors).toEqual({
-      'Access-Control-Allow-Origin': '*',
+    expect(response).toEqual({
+      'Access-Control-Allow-Origin': 'https://admin.homologacao.online',
       'Access-Control-Allow-Methods': 'GET,OPTIONS',
       'Access-Control-Allow-Headers': '*',
       'Access-Control-Max-Age': '0',
     })
   })
 
-  it('Verifica o cabeçalho CORS e retorna erro se urlsAllowed for vazio', () => {
+  it('returns CORS headers when the origin exactly matches a custom allowed URL', () => {
+    const response = lambdaResponseCorsHeaders({
+      event: MockEvent.event as APIGatewayProxyEvent,
+      allowedMethods: ['GET', 'POST'],
+      urlsAllowed: 'https://admin.homologacao.online',
+    })
+
+    expect(response).toEqual({
+      'Access-Control-Allow-Origin': 'https://admin.homologacao.online',
+      'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+      'Access-Control-Allow-Headers': '*',
+      'Access-Control-Max-Age': '0',
+    })
+  })
+
+  it('throws an error when urlsAllowed is set to "*" which is not allowed', () => {
     expect(() => {
       lambdaResponseCorsHeaders({
         event: MockEvent.event as APIGatewayProxyEvent,
         allowedMethods: ['GET', 'POST'],
-        urlsAllowed: '',
+        urlsAllowed: '*',
       })
-    }).toThrow('No URLs allowed for CORS')
+    }).toThrow('URLs allowed cannot be * for CORS')
   })
 
-  it('Verifica o cabeçalho CORS e retorna erro se event for undefined', () => {
+  it('throws an error when the event is not provided', () => {
     expect(() => {
       lambdaResponseCorsHeaders({
         event: undefined as unknown as APIGatewayProxyEvent,
@@ -68,5 +64,58 @@ describe('Verifica o cabeçalho CORS da resposta da Lambda', () => {
         urlsAllowed: 'https://*.example.com,https://*.another-example.com',
       })
     }).toThrow('Event is required for CORS headers')
+  })
+
+  it('returns empty origin when the origin is not included in the allowed list', () => {
+    const modifiedEvent = {
+      ...MockEvent.event,
+      headers: {
+        ...MockEvent.event.headers,
+        origin: 'https://teste.com',
+      },
+    } as APIGatewayProxyEvent
+
+    const response = lambdaResponseCorsHeaders({
+      event: modifiedEvent,
+      allowedMethods: ['GET'],
+    })
+
+    expect(response).toEqual({
+      'Access-Control-Allow-Origin': '',
+      'Access-Control-Allow-Methods': 'GET,OPTIONS',
+      'Access-Control-Allow-Headers': '*',
+      'Access-Control-Max-Age': '0',
+    })
+  })
+
+  it('throws an error when the origin header is missing from the request', () => {
+    const modifiedEvent = {
+      ...MockEvent.event,
+      headers: {},
+    } as APIGatewayProxyEvent
+
+    expect(() => {
+      lambdaResponseCorsHeaders({
+        event: modifiedEvent,
+        allowedMethods: ['GET'],
+      })
+    }).toThrow('Origin header is missing in the event')
+  })
+
+  it('throws an error when the origin header is invalid', () => {
+    const modifiedEvent = {
+      ...MockEvent.event,
+      headers: {
+        ...MockEvent.event.headers,
+        origin: 'teste.com.br',
+      },
+    } as APIGatewayProxyEvent
+
+    expect(() => {
+      lambdaResponseCorsHeaders({
+        event: modifiedEvent,
+        allowedMethods: ['GET'],
+      })
+    }).toThrow('Invalid origin header CORS: teste.com.br')
   })
 })
