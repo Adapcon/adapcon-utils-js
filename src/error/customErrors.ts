@@ -1,3 +1,4 @@
+import { ProxyResult } from 'aws-lambda'
 import { HttpStatuses } from '..'
 
 abstract class CustomError extends Error {
@@ -19,10 +20,13 @@ abstract class CustomError extends Error {
    * after a 'instanceof' check -> if (err instanceof CustomError) ...
    * @returns {{statusCode: number, body: string}}
   */
-  public toLambdaResponse (): { statusCode: number, body: string } {
+  public toLambdaResponse (
+    headers?: { [key: string]: string | number | boolean }
+  ): ProxyResult {
     return {
       statusCode: this.statusCode,
-      body: JSON.stringify({ message: this.message })
+      body: JSON.stringify({ message: this.message }),
+      headers,
     }
   }
 }
@@ -87,6 +91,11 @@ class tooManyRequestsError extends CustomError {
   kind = 'Too Many Requests Error'
 }
 
+class ConflictError extends CustomError {
+  statusCode = HttpStatuses.conflict
+  kind = 'Conflict Error'
+}
+
 export {
   BadRequestError,
   CustomError,
@@ -96,5 +105,6 @@ export {
   UnauthorizedError,
   ForbiddenError,
   PreconditionFailedError,
-  tooManyRequestsError
+  tooManyRequestsError,
+  ConflictError,
 }
