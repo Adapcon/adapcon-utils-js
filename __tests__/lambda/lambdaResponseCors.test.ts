@@ -96,18 +96,23 @@ describe('lambdaResponseCorsHeaders', () => {
     })
   })
 
-  it('throws an error when the origin header is missing from the request', () => {
+  it('returns empty origin when the origin header is missing from the request', () => {
     const modifiedEvent = {
       ...MockEvent.event,
       headers: {},
     } as APIGatewayProxyEvent
 
-    expect(() => {
-      lambdaResponseCorsHeaders({
-        event: modifiedEvent,
-        allowedMethods: ['GET'],
-      })
-    }).toThrow('Origin header is missing in the event')
+    const response = lambdaResponseCorsHeaders({
+      event: modifiedEvent,
+      allowedMethods: ['GET'],
+    })
+
+    expect(response).toEqual({
+      'Access-Control-Allow-Origin': '',
+      'Access-Control-Allow-Methods': 'GET,OPTIONS',
+      'Access-Control-Allow-Headers': '*',
+      'Access-Control-Max-Age': '0',
+    })
   })
 
   it('throws an error when the origin header is invalid', () => {
