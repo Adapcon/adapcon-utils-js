@@ -3,18 +3,32 @@ import { URL } from 'url'
 
 type EnumAllowedMethods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS'
 
+type OriginDomainResponse = {
+  origin: string
+  domain: string
+}
+
 const URL_ALLOWED_ORIGIN = 'https://*.simplificamais.com.br,https://*.portaldocliente.online,https://*.homologacao.online'
 
 /**
  * Return the origin from the event headers.
  */
-function getOriginAndDomainFromEvent (event: APIGatewayProxyEvent): URL {
+function getOriginAndDomainFromEvent (event: APIGatewayProxyEvent): OriginDomainResponse {
   const originHeader = event.headers?.origin ?? event.headers?.Origin
 
-  if (!originHeader) throw new Error('Origin header is missing in the event')
+  if (!originHeader) return {
+    origin: '',
+    domain: '',
+  }
 
   try {
-    return new URL(originHeader)
+    const url = new URL(originHeader);
+    const [domain] = url.hostname.split('.');
+
+    return {
+      origin: originHeader,
+      domain,
+    }
   } catch (error) {
     throw new Error(`Invalid origin header CORS: ${originHeader}`)
   }
@@ -48,12 +62,10 @@ export function lambdaResponseCorsHeaders ({
   if (!event) throw new Error('Event is required for CORS headers')
   if (urlsAllowed === '*') throw new Error('URLs allowed cannot be * for CORS')
 
-  const url: URL = getOriginAndDomainFromEvent(event)
+  const { origin, domain } = getOriginAndDomainFromEvent(event)
   let corsOrigin = ''
 
   if (!allowedMethods.includes('OPTIONS')) allowedMethods.push('OPTIONS')
-
-  const domain = url.hostname.split('.')[0] ?? ''
 
   const urlsAllowedOrigin = urlsAllowed ? `${URL_ALLOWED_ORIGIN},${urlsAllowed}` : URL_ALLOWED_ORIGIN
 
@@ -61,8 +73,8 @@ export function lambdaResponseCorsHeaders ({
 
   const allowedOrigins = urlsAllowedWithDomain.split(',').map(url => url.trim())
 
-  if (url.origin && allowedOrigins.includes(url.origin)) {
-    corsOrigin = url.origin
+  if (origin && allowedOrigins.includes(origin)) {
+    corsOrigin = origin
   } else {
     corsOrigin = ''
   }
